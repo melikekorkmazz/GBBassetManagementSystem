@@ -1,0 +1,11 @@
+/Users/melikekorkmaz/GBBassetManagementSystem/GBBassetManagementSystem.Core/bin/Debug/net10.0/GBBassetManagementSystem.Core.deps.json
+/Users/melikekorkmaz/GBBassetManagementSystem/GBBassetManagementSystem.Core/bin/Debug/net10.0/GBBassetManagementSystem.Core.dll
+/Users/melikekorkmaz/GBBassetManagementSystem/GBBassetManagementSystem.Core/bin/Debug/net10.0/GBBassetManagementSystem.Core.pdb
+/Users/melikekorkmaz/GBBassetManagementSystem/GBBassetManagementSystem.Core/obj/Debug/net10.0/GBBassetManagementSystem.Core.GeneratedMSBuildEditorConfig.editorconfig
+/Users/melikekorkmaz/GBBassetManagementSystem/GBBassetManagementSystem.Core/obj/Debug/net10.0/GBBassetManagementSystem.Core.AssemblyInfoInputs.cache
+/Users/melikekorkmaz/GBBassetManagementSystem/GBBassetManagementSystem.Core/obj/Debug/net10.0/GBBassetManagementSystem.Core.AssemblyInfo.cs
+/Users/melikekorkmaz/GBBassetManagementSystem/GBBassetManagementSystem.Core/obj/Debug/net10.0/GBBassetManagementSystem.Core.csproj.CoreCompileInputs.cache
+/Users/melikekorkmaz/GBBassetManagementSystem/GBBassetManagementSystem.Core/obj/Debug/net10.0/GBBassetManagementSystem.Core.dll
+/Users/melikekorkmaz/GBBassetManagementSystem/GBBassetManagementSystem.Core/obj/Debug/net10.0/refint/GBBassetManagementSystem.Core.dll
+/Users/melikekorkmaz/GBBassetManagementSystem/GBBassetManagementSystem.Core/obj/Debug/net10.0/GBBassetManagementSystem.Core.pdb
+/Users/melikekorkmaz/GBBassetManagementSystem/GBBassetManagementSystem.Core/obj/Debug/net10.0/ref/GBBassetManagementSystem.Core.dll

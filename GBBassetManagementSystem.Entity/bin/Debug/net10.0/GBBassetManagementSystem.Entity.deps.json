@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "GBBassetManagementSystem.Entity/1.0.0": {
+        "dependencies": {
+          "GBBassetManagementSystem.Core": "1.0.0"
+        },
+        "runtime": {
+          "GBBassetManagementSystem.Entity.dll": {}
+        }
+      },
+      "GBBassetManagementSystem.Core/1.0.0": {
+        "runtime": {
+          "GBBassetManagementSystem.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "GBBassetManagementSystem.Entity/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "GBBassetManagementSystem.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

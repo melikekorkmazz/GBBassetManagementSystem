@@ -1,0 +1,8 @@
+<Solution>
+  <Project Path="GBBassetManagementSystem.Core/GBBassetManagementSystem.Core.csproj" />
+  <Project Path="GBBassetManagementSystem.Data/GBBassetManagementSystem.Data.csproj" />
+  <Project Path="GBBassetManagementSystem.Entity/GBBassetManagementSystem.Entity.csproj" />
+  <Project Path="GBBassetManagementSystem.Service/GBBassetManagementSystem.Service.csproj" />
+  <Project Path="GBBassetManagementSystem.Shared/GBBassetManagementSystem.Shared.csproj" />
+  <Project Path="GBBassetManagementSystem.Web/GBBassetManagementSystem.Web.csproj" />
+</Solution>
