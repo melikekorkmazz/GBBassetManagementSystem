@@ -1,6 +1,7 @@
 using GBBassetManagementSystem.Entity.Entities;
 using GBBassetManagementSystem.Entity.Enums;
 using GBBassetManagementSystem.Service.Interfaces;
+using GBBassetManagementSystem.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -11,15 +12,18 @@ public class AssetAssignmentsController : Controller
     private readonly IAssetAssignmentService _assignmentService;
     private readonly IAssetService _assetService;
     private readonly IPersonnelService _personnelService;
+    private readonly IRoomService _roomService;
 
     public AssetAssignmentsController(
         IAssetAssignmentService assignmentService,
         IAssetService assetService,
-        IPersonnelService personnelService)
+        IPersonnelService personnelService,
+        IRoomService roomService)
     {
         _assignmentService = assignmentService;
         _assetService = assetService;
         _personnelService = personnelService;
+        _roomService = roomService;
     }
 
     public async Task<IActionResult> Index()
@@ -29,13 +33,27 @@ public class AssetAssignmentsController : Controller
         return View(assignments);
     }
 
+    public async Task<IActionResult> Details(Guid id)
+    {
+        var assignment =
+            await _assignmentService.GetByIdAsync(id);
+
+        if (assignment is null)
+        {
+            return NotFound();
+        }
+
+        return View(assignment);
+    }
+
     public async Task<IActionResult> Create()
     {
         await LoadFormDataAsync();
 
         return View(new AssetAssignment
         {
-            AssignmentDate = DateTime.Today
+            AssignmentDate = DateTime.Today,
+            AssignmentType = AssignmentType.Personnel
         });
     }
 
@@ -48,7 +66,8 @@ public class AssetAssignmentsController : Controller
         {
             await LoadFormDataAsync(
                 assignment.AssetId,
-                assignment.PersonnelId);
+                assignment.PersonnelId,
+                assignment.RoomId);
 
             return View(assignment);
         }
@@ -57,23 +76,18 @@ public class AssetAssignmentsController : Controller
         {
             await _assignmentService.AssignAsync(assignment);
         }
-        catch (KeyNotFoundException exception)
+        catch (Exception exception)
+            when (exception is KeyNotFoundException
+                  or InvalidOperationException)
         {
-            ModelState.AddModelError(string.Empty, exception.Message);
+            ModelState.AddModelError(
+                string.Empty,
+                exception.Message);
 
             await LoadFormDataAsync(
                 assignment.AssetId,
-                assignment.PersonnelId);
-
-            return View(assignment);
-        }
-        catch (InvalidOperationException exception)
-        {
-            ModelState.AddModelError(string.Empty, exception.Message);
-
-            await LoadFormDataAsync(
-                assignment.AssetId,
-                assignment.PersonnelId);
+                assignment.PersonnelId,
+                assignment.RoomId);
 
             return View(assignment);
         }
@@ -84,19 +98,93 @@ public class AssetAssignmentsController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    public async Task<IActionResult> Return(Guid id)
+    {
+        var assignment =
+            await _assignmentService.GetByIdAsync(id);
+
+        if (assignment is null)
+        {
+            return NotFound();
+        }
+
+        if (!assignment.IsActive)
+        {
+            TempData["SuccessMessage"] =
+                "This asset has already been returned.";
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        var assignedTo =
+            assignment.AssignmentType == AssignmentType.Personnel
+                ? $"{assignment.Personnel?.FirstName} " +
+                  $"{assignment.Personnel?.LastName}"
+                : $"{assignment.Room?.Name} " +
+                  $"({assignment.Room?.RoomNumber})";
+
+        var model = new ReturnAssetViewModel
+        {
+            AssignmentId = assignment.Id,
+            AssetDisplayName =
+                $"{assignment.Asset?.AssetCode} - " +
+                $"{assignment.Asset?.Name}",
+            AssignedTo = assignedTo,
+            ReturnDate = DateTime.Today
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Return(
+        ReturnAssetViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        try
+        {
+            await _assignmentService.ReturnAsync(
+                model.AssignmentId,
+                model.ReceivedBy,
+                model.Condition,
+                model.DamageDescription,
+                model.Notes);
+        }
+        catch (Exception exception)
+            when (exception is KeyNotFoundException
+                  or InvalidOperationException)
+        {
+            ModelState.AddModelError(
+                string.Empty,
+                exception.Message);
+
+            return View(model);
+        }
+
+        TempData["SuccessMessage"] =
+            "Asset returned successfully.";
+
+        return RedirectToAction(nameof(Index));
+    }
+
     private async Task LoadFormDataAsync(
         Guid? selectedAssetId = null,
-        Guid? selectedPersonnelId = null)
+        Guid? selectedPersonnelId = null,
+        Guid? selectedRoomId = null)
     {
         var assets = await _assetService.GetAllAsync();
 
         var availableAssets = assets
-            .Where(asset => asset.Status == AssetStatus.Available)
-            .Select(asset => new
+            .Where(a => a.Status == AssetStatus.Available)
+            .Select(a => new
             {
-                asset.Id,
-                DisplayName =
-                    $"{asset.AssetCode} - {asset.Name}"
+                a.Id,
+                DisplayName = $"{a.AssetCode} - {a.Name}"
             })
             .ToList();
 
@@ -106,14 +194,14 @@ public class AssetAssignmentsController : Controller
             "DisplayName",
             selectedAssetId);
 
-        var personnel = await _personnelService.GetAllAsync();
+        var personnel =
+            await _personnelService.GetAllAsync();
 
         var personnelOptions = personnel
-            .Select(person => new
+            .Select(p => new
             {
-                person.Id,
-                FullName =
-                    $"{person.FirstName} {person.LastName}"
+                p.Id,
+                FullName = $"{p.FirstName} {p.LastName}"
             })
             .ToList();
 
@@ -122,5 +210,22 @@ public class AssetAssignmentsController : Controller
             "Id",
             "FullName",
             selectedPersonnelId);
+
+        var rooms = await _roomService.GetAllAsync();
+
+        var roomOptions = rooms
+            .Select(r => new
+            {
+                r.Id,
+                DisplayName =
+                    $"{r.Building} - {r.RoomNumber} - {r.Name}"
+            })
+            .ToList();
+
+        ViewBag.Rooms = new SelectList(
+            roomOptions,
+            "Id",
+            "DisplayName",
+            selectedRoomId);
     }
 }

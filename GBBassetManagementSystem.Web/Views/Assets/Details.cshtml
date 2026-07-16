@@ -1,0 +1,165 @@
+@model GBBassetManagementSystem.Web.Models.AssetDetailsViewModel
+
+@using GBBassetManagementSystem.Entity.Enums
+
+@{
+    ViewData["Title"] = "Asset Details";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Asset Details</h1>
+
+    <div>
+        <a asp-action="Edit"
+           asp-route-id="@Model.Asset.Id"
+           class="btn btn-warning">
+            Edit
+        </a>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+            Back
+        </a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <strong>
+            @Model.Asset.AssetCode - @Model.Asset.Name
+        </strong>
+    </div>
+
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Asset Code</dt>
+            <dd class="col-sm-9">@Model.Asset.AssetCode</dd>
+
+            <dt class="col-sm-3">Name</dt>
+            <dd class="col-sm-9">@Model.Asset.Name</dd>
+
+            <dt class="col-sm-3">Category</dt>
+            <dd class="col-sm-9">@Model.Asset.Category?.Name</dd>
+
+            <dt class="col-sm-3">Brand</dt>
+            <dd class="col-sm-9">@Model.Asset.Brand</dd>
+
+            <dt class="col-sm-3">Model</dt>
+            <dd class="col-sm-9">@Model.Asset.Model</dd>
+
+            <dt class="col-sm-3">Serial Number</dt>
+            <dd class="col-sm-9">@Model.Asset.SerialNumber</dd>
+
+            <dt class="col-sm-3">Purchase Date</dt>
+            <dd class="col-sm-9">
+                @Model.Asset.PurchaseDate.ToString("dd.MM.yyyy")
+            </dd>
+
+            <dt class="col-sm-3">Purchase Price</dt>
+            <dd class="col-sm-9">
+                @Model.Asset.PurchasePrice.ToString(
+                    "C",
+                    new System.Globalization.CultureInfo("tr-TR"))
+            </dd>
+
+            <dt class="col-sm-3">Warranty Expiration</dt>
+            <dd class="col-sm-9">
+                @Model.Asset.WarrantyExpirationDate?.ToString("dd.MM.yyyy")
+            </dd>
+
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9">@Model.Asset.Status</dd>
+
+            <dt class="col-sm-3">Location</dt>
+            <dd class="col-sm-9">@Model.Asset.Location</dd>
+
+            <dt class="col-sm-3">Notes</dt>
+            <dd class="col-sm-9">@Model.Asset.Notes</dd>
+        </dl>
+    </div>
+</div>
+
+<h2>Assignment History</h2>
+
+@if (!Model.AssignmentHistory.Any())
+{
+    <div class="alert alert-info">
+        This asset has never been assigned.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Assigned To</th>
+                <th>Type</th>
+                <th>Assignment Date</th>
+                <th>Return Date</th>
+                <th>Delivered By</th>
+                <th>Status</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var assignment in Model.AssignmentHistory)
+            {
+                <tr>
+                    <td>
+                        @if (assignment.AssignmentType == AssignmentType.Personnel)
+                        {
+                            <span>
+                                @assignment.Personnel?.FirstName
+                                @assignment.Personnel?.LastName
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                @assignment.Room?.Name
+                                (@assignment.Room?.RoomNumber)
+                            </span>
+                        }
+                    </td>
+
+                    <td>@assignment.AssignmentType</td>
+
+                    <td>
+                        @assignment.AssignmentDate.ToString("dd.MM.yyyy")
+                    </td>
+
+                    <td>
+                        @assignment.ReturnDate?.ToString("dd.MM.yyyy")
+                    </td>
+
+                    <td>@assignment.DeliveredBy</td>
+
+                    <td>
+                        @if (assignment.IsActive)
+                        {
+                            <span class="badge bg-success">
+                                Active
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">
+                                Returned
+                            </span>
+                        }
+                    </td>
+
+                    <td>
+                        <a asp-controller="AssetAssignments"
+                           asp-action="Details"
+                           asp-route-id="@assignment.Id"
+                           class="btn btn-info btn-sm">
+                            View
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

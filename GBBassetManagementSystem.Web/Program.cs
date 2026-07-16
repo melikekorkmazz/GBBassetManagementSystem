@@ -21,6 +21,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     builder.Services.AddScoped<IPersonnelService, PersonnelService>();
     builder.Services.AddScoped<IAssetAssignmentService, AssetAssignmentService>();
     builder.Services.AddScoped<IAssetService, AssetService>();
+    builder.Services.AddScoped<IRoomService, RoomService>();
 
 builder.Services.AddControllersWithViews();
 

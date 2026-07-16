@@ -1,0 +1,91 @@
+@model GBBassetManagementSystem.Web.Models.ReturnAssetViewModel
+
+@{
+    ViewData["Title"] = "Return Asset";
+}
+
+<h1>Return Asset</h1>
+
+<hr />
+
+<div class="alert alert-info">
+    <strong>Asset:</strong> @Model.AssetDisplayName
+    <br />
+    <strong>Assigned To:</strong> @Model.AssignedTo
+</div>
+
+<form asp-action="Return" method="post">
+    <input asp-for="AssignmentId" type="hidden" />
+    <input asp-for="AssetDisplayName" type="hidden" />
+    <input asp-for="AssignedTo" type="hidden" />
+
+    <div asp-validation-summary="All"
+         class="text-danger">
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ReturnDate"
+               class="form-label">
+            Return Date
+        </label>
+
+        <input asp-for="ReturnDate"
+               type="text"
+               class="form-control date-picker" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ReceivedBy"
+               class="form-label">
+            Received By
+        </label>
+
+        <input asp-for="ReceivedBy"
+               class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Condition"
+               class="form-label">
+            Condition
+        </label>
+
+        <select asp-for="Condition"
+                class="form-select">
+            <option value="Good">Good</option>
+            <option value="Damaged">Damaged</option>
+            <option value="Broken">Broken</option>
+            <option value="MissingParts">Missing Parts</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DamageDescription"
+               class="form-label">
+            Damage Description
+        </label>
+
+        <textarea asp-for="DamageDescription"
+                  rows="3"
+                  class="form-control"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Notes"
+               class="form-label"></label>
+
+        <textarea asp-for="Notes"
+                  rows="3"
+                  class="form-control"></textarea>
+    </div>
+
+    <button type="submit"
+            class="btn btn-success">
+        Confirm Return
+    </button>
+
+    <a asp-action="Index"
+       class="btn btn-secondary">
+        Cancel
+    </a>
+</form>

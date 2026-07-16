@@ -1,0 +1,68 @@
+@model IEnumerable<GBBassetManagementSystem.Entity.Entities.Room>
+
+@{
+    ViewData["Title"] = "Rooms";
+}
+
+@if (TempData["SuccessMessage"] is not null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Rooms</h1>
+
+    <a asp-action="Create" class="btn btn-primary">
+        Add Room
+    </a>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No rooms have been added yet.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Room Name</th>
+                <th>Room Number</th>
+                <th>Building</th>
+                <th>Floor</th>
+                <th>Department</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var room in Model)
+            {
+                <tr>
+                    <td>@room.Name</td>
+                    <td>@room.RoomNumber</td>
+                    <td>@room.Building</td>
+                    <td>@room.Floor</td>
+                    <td>@room.Department?.Name</td>
+                    <td>
+                        <a asp-action="Edit"
+                           asp-route-id="@room.Id"
+                           class="btn btn-warning btn-sm">
+                            Edit
+                        </a>
+
+                        <a asp-action="Delete"
+                           asp-route-id="@room.Id"
+                           class="btn btn-danger btn-sm">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,88 @@
+@model GBBassetManagementSystem.Entity.Entities.Room
+
+@{
+    ViewData["Title"] = "Edit Room";
+}
+
+<h1>Edit Room</h1>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+
+        <form asp-action="Edit" method="post">
+
+            <input asp-for="Id" type="hidden" />
+
+            <div asp-validation-summary="All"
+                 class="text-danger">
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="RoomNumber"
+                       class="form-label"></label>
+                <input asp-for="RoomNumber"
+                       class="form-control" />
+                <span asp-validation-for="RoomNumber"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Building"
+                       class="form-label"></label>
+                <input asp-for="Building"
+                       class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Floor"
+                       class="form-label"></label>
+                <input asp-for="Floor"
+                       class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DepartmentId"
+                       class="form-label">
+                    Department
+                </label>
+
+                <select asp-for="DepartmentId"
+                        asp-items="ViewBag.Departments"
+                        class="form-select">
+                    <option value="">
+                        Select Department
+                    </option>
+                </select>
+
+                <span asp-validation-for="DepartmentId"
+                      class="text-danger"></span>
+            </div>
+
+            <button type="submit"
+                    class="btn btn-success">
+                Save Changes
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Back
+            </a>
+
+        </form>
+
+    </div>
+</div>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

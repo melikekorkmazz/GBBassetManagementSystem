@@ -8,5 +8,14 @@ public interface IAssetAssignmentService
 
     Task<AssetAssignment?> GetByIdAsync(Guid id);
 
+    Task<List<AssetAssignment>> GetByAssetIdAsync(Guid assetId);
+
     Task AssignAsync(AssetAssignment assignment);
+
+    Task ReturnAsync(
+        Guid assignmentId,
+        string receivedBy,
+        string condition,
+        string? damageDescription,
+        string? notes);
 }

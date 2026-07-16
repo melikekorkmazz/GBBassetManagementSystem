@@ -1,0 +1,154 @@
+@model GBBassetManagementSystem.Entity.Entities.AssetAssignment
+
+@{
+    ViewData["Title"] = "New Asset Assignment";
+}
+
+<h1>New Asset Assignment</h1>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-7">
+        <form asp-action="Create" method="post">
+
+            <div asp-validation-summary="All"
+                 class="text-danger">
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="AssetId"
+                       class="form-label">
+                    Asset
+                </label>
+
+                <select asp-for="AssetId"
+                        asp-items="ViewBag.Assets"
+                        class="form-select">
+                    <option value="">Select Asset</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="AssignmentType"
+                       class="form-label">
+                    Assignment Type
+                </label>
+
+                <select asp-for="AssignmentType"
+                        id="assignmentType"
+                        class="form-select">
+                    <option value="1">Personnel</option>
+                    <option value="2">Room</option>
+                </select>
+            </div>
+
+            <div class="mb-3"
+                 id="personnelSection">
+
+                <label asp-for="PersonnelId"
+                       class="form-label">
+                    Personnel
+                </label>
+
+                <select asp-for="PersonnelId"
+                        asp-items="ViewBag.Personnel"
+                        class="form-select">
+                    <option value="">Select Personnel</option>
+                </select>
+            </div>
+
+            <div class="mb-3"
+                 id="roomSection"
+                 style="display:none;">
+
+                <label asp-for="RoomId"
+                       class="form-label">
+                    Room
+                </label>
+
+                <select asp-for="RoomId"
+                        asp-items="ViewBag.Rooms"
+                        class="form-select">
+                    <option value="">Select Room</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="DeliveredBy"
+                       class="form-label"></label>
+
+                <input asp-for="DeliveredBy"
+                       class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ReceivedBy"
+                       class="form-label"></label>
+
+                <input asp-for="ReceivedBy"
+                       class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="AssignmentDate"
+                       class="form-label"></label>
+
+                <input asp-for="AssignmentDate"
+                       type="date"
+                       class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ExpectedReturnDate"
+                       class="form-label"></label>
+
+                <input asp-for="ExpectedReturnDate"
+                       type="date"
+                       class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Notes"
+                       class="form-label"></label>
+
+                <textarea asp-for="Notes"
+                          rows="4"
+                          class="form-control"></textarea>
+            </div>
+
+            <button type="submit"
+                    class="btn btn-success">
+                Assign
+            </button>
+
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                Back
+            </a>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script>
+        const assignmentType = document.getElementById("assignmentType");
+        const personnelSection = document.getElementById("personnelSection");
+        const roomSection = document.getElementById("roomSection");
+
+        function updateAssignmentFields() {
+            if (assignmentType.value === "2") {
+                personnelSection.style.display = "none";
+                roomSection.style.display = "block";
+            } else {
+                personnelSection.style.display = "block";
+                roomSection.style.display = "none";
+            }
+        }
+
+        assignmentType.addEventListener("change", updateAssignmentFields);
+        updateAssignmentFields();
+    </script>
+}

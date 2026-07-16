@@ -1,6 +1,7 @@
 using GBBassetManagementSystem.Entity.Entities;
 using GBBassetManagementSystem.Entity.Enums;
 using GBBassetManagementSystem.Service.Interfaces;
+using GBBassetManagementSystem.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -10,24 +11,50 @@ public class AssetsController : Controller
 {
     private readonly IAssetService _assetService;
     private readonly ICategoryService _categoryService;
+    private readonly IAssetAssignmentService _assignmentService;
 
     public AssetsController(
         IAssetService assetService,
-        ICategoryService categoryService)
+        ICategoryService categoryService,
+        IAssetAssignmentService assignmentService)
     {
         _assetService = assetService;
         _categoryService = categoryService;
+        _assignmentService = assignmentService;
     }
 
     public async Task<IActionResult> Index()
     {
         var assets = await _assetService.GetAllAsync();
+
         return View(assets);
+    }
+
+    public async Task<IActionResult> Details(Guid id)
+    {
+        var asset = await _assetService.GetByIdAsync(id);
+
+        if (asset is null)
+        {
+            return NotFound();
+        }
+
+        var assignmentHistory =
+            await _assignmentService.GetByAssetIdAsync(id);
+
+        var model = new AssetDetailsViewModel
+        {
+            Asset = asset,
+            AssignmentHistory = assignmentHistory
+        };
+
+        return View(model);
     }
 
     public async Task<IActionResult> Create()
     {
         await LoadFormDataAsync();
+
         return View();
     }
 
@@ -37,13 +64,17 @@ public class AssetsController : Controller
     {
         if (!ModelState.IsValid)
         {
-            await LoadFormDataAsync(asset.CategoryId, asset.Status);
+            await LoadFormDataAsync(
+                asset.CategoryId,
+                asset.Status);
+
             return View(asset);
         }
 
         await _assetService.AddAsync(asset);
 
-        TempData["SuccessMessage"] = "Asset saved successfully.";
+        TempData["SuccessMessage"] =
+            "Asset saved successfully.";
 
         return RedirectToAction(nameof(Index));
     }
@@ -57,14 +88,18 @@ public class AssetsController : Controller
             return NotFound();
         }
 
-        await LoadFormDataAsync(asset.CategoryId, asset.Status);
+        await LoadFormDataAsync(
+            asset.CategoryId,
+            asset.Status);
 
         return View(asset);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(Guid id, Asset asset)
+    public async Task<IActionResult> Edit(
+        Guid id,
+        Asset asset)
     {
         if (id != asset.Id)
         {
@@ -73,7 +108,10 @@ public class AssetsController : Controller
 
         if (!ModelState.IsValid)
         {
-            await LoadFormDataAsync(asset.CategoryId, asset.Status);
+            await LoadFormDataAsync(
+                asset.CategoryId,
+                asset.Status);
+
             return View(asset);
         }
 
@@ -86,7 +124,8 @@ public class AssetsController : Controller
             return NotFound();
         }
 
-        TempData["SuccessMessage"] = "Asset updated successfully.";
+        TempData["SuccessMessage"] =
+            "Asset updated successfully.";
 
         return RedirectToAction(nameof(Index));
     }
@@ -116,7 +155,8 @@ public class AssetsController : Controller
             return NotFound();
         }
 
-        TempData["SuccessMessage"] = "Asset deleted successfully.";
+        TempData["SuccessMessage"] =
+            "Asset deleted successfully.";
 
         return RedirectToAction(nameof(Index));
     }
@@ -125,7 +165,8 @@ public class AssetsController : Controller
         Guid? selectedCategoryId = null,
         AssetStatus? selectedStatus = null)
     {
-        var categories = await _categoryService.GetAllAsync();
+        var categories =
+            await _categoryService.GetAllAsync();
 
         ViewBag.Categories = new SelectList(
             categories,
@@ -142,6 +183,8 @@ public class AssetsController : Controller
                 }),
             "Id",
             "Name",
-            selectedStatus is null ? null : (int)selectedStatus);
+            selectedStatus is null
+                ? null
+                : (int)selectedStatus);
     }
 }
