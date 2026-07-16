@@ -1,0 +1,113 @@
+@model GBBassetManagementSystem.Web.Models.InventoryViewModel
+
+@{
+    ViewData["Title"] = "Inventory";
+}
+
+<h1 class="mb-4">Warehouse Inventory</h1>
+
+<div class="row mb-4">
+    <div class="col-md-2">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <h2>@Model.TotalAssets</h2>
+                <span>Total Assets</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card text-center h-100 border-success">
+            <div class="card-body">
+                <h2>@Model.AvailableAssets</h2>
+                <span>Available</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card text-center h-100 border-primary">
+            <div class="card-body">
+                <h2>@Model.AssignedAssets</h2>
+                <span>Assigned</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card text-center h-100 border-danger">
+            <div class="card-body">
+                <h2>@Model.BrokenAssets</h2>
+                <span>Broken</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card text-center h-100 border-warning">
+            <div class="card-body">
+                <h2>@Model.UnderMaintenanceAssets</h2>
+                <span>Maintenance</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-2">
+        <div class="card text-center h-100 border-secondary">
+            <div class="card-body">
+                <h2>@Model.LostAssets</h2>
+                <span>Lost</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2>Categories</h2>
+
+@if (!Model.Categories.Any())
+{
+    <div class="alert alert-info">
+        No categories were found.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Total</th>
+                    <th>Available</th>
+                    <th>Assigned</th>
+                    <th>Broken</th>
+                    <th>Maintenance</th>
+                    <th>Lost</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var category in Model.Categories)
+                {
+                    <tr style="cursor:pointer;"
+                        onclick="window.location.href='@Url.Action(
+                            "CategoryDetails",
+                            "Inventory",
+                            new { id = category.CategoryId })'">
+
+                        <td>
+                            <strong>@category.CategoryName</strong>
+                        </td>
+
+                        <td>@category.Total</td>
+                        <td>@category.Available</td>
+                        <td>@category.Assigned</td>
+                        <td>@category.Broken</td>
+                        <td>@category.UnderMaintenance</td>
+                        <td>@category.Lost</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
