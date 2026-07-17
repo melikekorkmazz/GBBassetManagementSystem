@@ -48,7 +48,7 @@ public class PersonnelService : IPersonnelService
 
     existingPersonnel.FirstName = personnel.FirstName;
     existingPersonnel.LastName = personnel.LastName;
-    existingPersonnel.RegistrationNumber =personnel.RegistrationNumber;   
+    existingPersonnel.EmployeeNumber = personnel.EmployeeNumber;
     existingPersonnel.NationalIdentityNumber = personnel.NationalIdentityNumber;
     existingPersonnel.Email = personnel.Email;
     existingPersonnel.PhoneNumber = personnel.PhoneNumber;
