@@ -1,0 +1,157 @@
+@model GBBassetManagementSystem.Web.Models.PersonnelDetailsViewModel
+
+@{
+    ViewData["Title"] = "Personnel Details";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Personnel Details</h1>
+
+    <div>
+        <a asp-action="Edit"
+           asp-route-id="@Model.Personnel.Id"
+           class="btn btn-warning">
+            Edit
+        </a>
+
+        <a asp-action="Index"
+           class="btn btn-secondary">
+            Back
+        </a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Employee Number</dt>
+            <dd class="col-sm-9">@Model.Personnel.EmployeeNumber</dd>
+
+            <dt class="col-sm-3">Full Name</dt>
+            <dd class="col-sm-9">
+                @Model.Personnel.FirstName @Model.Personnel.LastName
+            </dd>
+
+            <dt class="col-sm-3">Department</dt>
+            <dd class="col-sm-9">
+                @Model.Personnel.Department?.Name
+            </dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Personnel.Email</dd>
+
+            <dt class="col-sm-3">Phone</dt>
+            <dd class="col-sm-9">@Model.Personnel.PhoneNumber</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3>@Model.TotalAssignments</h3>
+                <p class="mb-0">Total Assignments</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3>@Model.ActiveAssignments</h3>
+                <p class="mb-0">Active Assets</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3>@Model.ComputerAssignments</h3>
+                <p class="mb-0">Computer Assignments</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3>@Model.FurnitureAssignments</h3>
+                <p class="mb-0">Furniture Assignments</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2>Assignment History</h2>
+
+@if (!Model.AssignmentHistory.Any())
+{
+    <div class="alert alert-info">
+        No assets have been assigned to this personnel yet.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Asset</th>
+                <th>Category</th>
+                <th>Assignment Date</th>
+                <th>Return Date</th>
+                <th>Status</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach (var assignment in Model.AssignmentHistory)
+            {
+                <tr>
+                    <td>
+                        @assignment.Asset?.AssetCode -
+                        @assignment.Asset?.Name
+                    </td>
+
+                    <td>
+                        @assignment.Asset?.Category?.Name
+                    </td>
+
+                    <td>
+                        @assignment.AssignmentDate.ToString("dd.MM.yyyy")
+                    </td>
+
+                    <td>
+                        @assignment.ReturnDate?.ToString("dd.MM.yyyy")
+                    </td>
+
+                    <td>
+                        @if (assignment.IsActive)
+                        {
+                            <span class="badge bg-success">
+                                Active
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">
+                                Returned
+                            </span>
+                        }
+                    </td>
+
+                    <td>
+                        <a asp-controller="AssetAssignments"
+                           asp-action="Details"
+                           asp-route-id="@assignment.Id"
+                           class="btn btn-info btn-sm">
+                            View
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
