@@ -29,6 +29,7 @@ public class AssetAssignmentService : IAssetAssignmentService
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     public async Task<AssetAssignment?> GetByIdAsync(Guid id)
     {
         return await _context.AssetAssignments
@@ -56,6 +57,8 @@ public class AssetAssignmentService : IAssetAssignmentService
     }
 
 =======
+=======
+>>>>>>> parent of 9fed02a (basic warehouse)
     public async Task<List<AssetAssignment>> GetByPersonnelIdAsync(
     Guid personnelId)
 {
@@ -68,6 +71,9 @@ public class AssetAssignmentService : IAssetAssignmentService
         .OrderByDescending(assignment => assignment.AssignmentDate)
         .ToListAsync();
 }
+<<<<<<< HEAD
+>>>>>>> parent of 9fed02a (basic warehouse)
+=======
 >>>>>>> parent of 9fed02a (basic warehouse)
     public async Task<List<AssetAssignment>> GetByAssetIdAsync(Guid assetId)
     {
