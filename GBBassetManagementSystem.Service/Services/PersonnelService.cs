@@ -36,25 +36,26 @@ public class PersonnelService : IPersonnelService
         await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(Personnel personnel)
+   public async Task UpdateAsync(Personnel personnel)
+{
+    var existingPersonnel =
+        await _context.Personnel.FindAsync(personnel.Id);
+
+    if (existingPersonnel is null)
     {
-        var existingPersonnel =
-            await _context.Personnel.FindAsync(personnel.Id);
-
-        if (existingPersonnel is null)
-        {
-            throw new KeyNotFoundException("Personnel was not found.");
-        }
-
-        existingPersonnel.FirstName = personnel.FirstName;
-        existingPersonnel.LastName = personnel.LastName;
-        existingPersonnel.EmployeeNumber = personnel.EmployeeNumber;
-        existingPersonnel.Email = personnel.Email;
-        existingPersonnel.PhoneNumber = personnel.PhoneNumber;
-        existingPersonnel.DepartmentId = personnel.DepartmentId;
-
-        await _context.SaveChangesAsync();
+        throw new KeyNotFoundException("Personnel was not found.");
     }
+
+    existingPersonnel.FirstName = personnel.FirstName;
+    existingPersonnel.LastName = personnel.LastName;
+    existingPersonnel.RegistrationNumber =personnel.RegistrationNumber;   
+    existingPersonnel.NationalIdentityNumber = personnel.NationalIdentityNumber;
+    existingPersonnel.Email = personnel.Email;
+    existingPersonnel.PhoneNumber = personnel.PhoneNumber;
+    existingPersonnel.DepartmentId = personnel.DepartmentId;
+
+    await _context.SaveChangesAsync();
+}
 
     public async Task DeleteAsync(Guid id)
     {

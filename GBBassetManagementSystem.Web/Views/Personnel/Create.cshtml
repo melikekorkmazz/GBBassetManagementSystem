@@ -46,19 +46,18 @@
             </div>
 
             <div class="mb-3">
-                <label asp-for="EmployeeNumber"
-                       class="form-label">
-                    Employee Number
-                </label>
+             <label asp-for="RegistrationNumber"
+             class="form-label">
+             </label>
 
-                <input asp-for="EmployeeNumber"
-                       class="form-control" />
+            <input asp-for="RegistrationNumber"
+            class="form-control"
+            inputmode="numeric" />
 
-                <span asp-validation-for="EmployeeNumber"
-                      class="text-danger">
-                </span>
+          <span asp-validation-for="RegistrationNumber"
+            class="text-danger">
+            </span>
             </div>
-
             <div class="mb-3">
                 <label asp-for="Email"
                        class="form-label">
