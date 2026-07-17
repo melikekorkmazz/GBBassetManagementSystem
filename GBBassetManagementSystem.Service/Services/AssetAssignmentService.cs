@@ -28,6 +28,7 @@ public class AssetAssignmentService : IAssetAssignmentService
             .ToListAsync();
     }
 
+<<<<<<< HEAD
     public async Task<AssetAssignment?> GetByIdAsync(Guid id)
     {
         return await _context.AssetAssignments
@@ -54,6 +55,20 @@ public class AssetAssignmentService : IAssetAssignmentService
             .ToListAsync();
     }
 
+=======
+    public async Task<List<AssetAssignment>> GetByPersonnelIdAsync(
+    Guid personnelId)
+{
+    return await _context.AssetAssignments
+        .Where(assignment => assignment.PersonnelId == personnelId)
+        .Include(assignment => assignment.Asset)
+            .ThenInclude(asset => asset!.Category)
+        .Include(assignment => assignment.Personnel)
+            .ThenInclude(personnel => personnel!.Department)
+        .OrderByDescending(assignment => assignment.AssignmentDate)
+        .ToListAsync();
+}
+>>>>>>> parent of 9fed02a (basic warehouse)
     public async Task<List<AssetAssignment>> GetByAssetIdAsync(Guid assetId)
     {
         return await _context.AssetAssignments
@@ -70,11 +85,16 @@ public class AssetAssignmentService : IAssetAssignmentService
 
     public async Task AssignAsync(AssetAssignment assignment)
     {
-        var asset = await _context.Assets
-            .FindAsync(assignment.AssetId);
+        var asset = await _context.Assets.FindAsync(assignment.AssetId);
 
         if (asset is null)
+<<<<<<< HEAD
 
+=======
+        {
+            throw new KeyNotFoundException("Asset was not found.");
+        }
+>>>>>>> parent of 9fed02a (basic warehouse)
 
         if (asset.Status != AssetStatus.Available)
             throw new InvalidOperationException("Only available assets can be assigned.");

@@ -2,21 +2,24 @@ using GBBassetManagementSystem.Entity.Entities;
 using GBBassetManagementSystem.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
+using GBBassetManagementSystem.Web.Models;
 namespace GBBassetManagementSystem.Web.Controllers;
 
 public class PersonnelController : Controller
 {
     private readonly IPersonnelService _personnelService;
     private readonly IDepartmentService _departmentService;
+    private readonly IAssetAssignmentService _assignmentService;
 
     public PersonnelController(
-        IPersonnelService personnelService,
-        IDepartmentService departmentService)
-    {
-        _personnelService = personnelService;
-        _departmentService = departmentService;
-    }
+    IPersonnelService personnelService,
+    IDepartmentService departmentService,
+    IAssetAssignmentService assignmentService)
+{
+    _personnelService = personnelService;
+    _departmentService = departmentService;
+    _assignmentService = assignmentService;
+}
 
     public async Task<IActionResult> Index()
     {
@@ -45,8 +48,7 @@ public class PersonnelController : Controller
 
         await _personnelService.AddAsync(personnel);
 
-        TempData["SuccessMessage"] =
-            "Personnel saved successfully.";
+        TempData["SuccessMessage"] = "Personnel saved successfully.";
 
         return RedirectToAction(nameof(Index));
     }
@@ -67,9 +69,7 @@ public class PersonnelController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(
-        Guid id,
-        Personnel personnel)
+    public async Task<IActionResult> Edit(Guid id, Personnel personnel)
     {
         if (id != personnel.Id)
         {
@@ -92,8 +92,7 @@ public class PersonnelController : Controller
             return NotFound();
         }
 
-        TempData["SuccessMessage"] =
-            "Personnel updated successfully.";
+        TempData["SuccessMessage"] = "Personnel updated successfully.";
 
         return RedirectToAction(nameof(Index));
     }
@@ -123,8 +122,7 @@ public class PersonnelController : Controller
             return NotFound();
         }
 
-        TempData["SuccessMessage"] =
-            "Personnel deleted successfully.";
+        TempData["SuccessMessage"] = "Personnel deleted successfully.";
 
         return RedirectToAction(nameof(Index));
     }
@@ -132,8 +130,7 @@ public class PersonnelController : Controller
     private async Task LoadDepartmentsAsync(
         Guid? selectedDepartmentId = null)
     {
-        var departments =
-            await _departmentService.GetAllAsync();
+        var departments = await _departmentService.GetAllAsync();
 
         ViewBag.Departments = new SelectList(
             departments,
@@ -141,4 +138,24 @@ public class PersonnelController : Controller
             "Name",
             selectedDepartmentId);
     }
+    public async Task<IActionResult> Details(Guid id)
+{
+    var personnel = await _personnelService.GetByIdAsync(id);
+
+    if (personnel is null)
+    {
+        return NotFound();
+    }
+
+    var assignmentHistory =
+        await _assignmentService.GetByPersonnelIdAsync(id);
+
+    var model = new PersonnelDetailsViewModel
+    {
+        Personnel = personnel,
+        AssignmentHistory = assignmentHistory
+    };
+
+    return View(model);
+}
 }
