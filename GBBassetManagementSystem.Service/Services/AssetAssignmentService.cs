@@ -70,10 +70,11 @@ public class AssetAssignmentService : IAssetAssignmentService
 
     public async Task AssignAsync(AssetAssignment assignment)
     {
-        var asset = await _context.Assets.FindAsync(assignment.AssetId);
+        var asset = await _context.Assets
+            .FindAsync(assignment.AssetId);
 
         if (asset is null)
-            throw new KeyNotFoundException("Asset was not found.");
+
 
         if (asset.Status != AssetStatus.Available)
             throw new InvalidOperationException("Only available assets can be assigned.");

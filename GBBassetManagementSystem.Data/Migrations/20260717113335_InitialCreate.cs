@@ -62,7 +62,7 @@ namespace GBBassetManagementSystem.Data.Migrations
                     SerialNumber = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PurchaseDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    PurchasePrice = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    PurchasePrice = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     CategoryId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     Status = table.Column<int>(type: "int", nullable: false),
                     WarrantyExpirationDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
@@ -94,6 +94,8 @@ namespace GBBassetManagementSystem.Data.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     EmployeeNumber = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    NationalIdentityNumber = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Email = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     PhoneNumber = table.Column<string>(type: "longtext", nullable: false)
@@ -113,12 +115,41 @@ namespace GBBassetManagementSystem.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
+                name: "Rooms",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Name = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    RoomNumber = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Floor = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Building = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DepartmentId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rooms", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Rooms_Departments_DepartmentId",
+                        column: x => x.DepartmentId,
+                        principalTable: "Departments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
                 name: "AssetAssignments",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     AssetId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    PersonnelId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    AssignmentType = table.Column<int>(type: "int", nullable: false),
+                    PersonnelId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
+                    RoomId = table.Column<Guid>(type: "char(36)", nullable: true, collation: "ascii_general_ci"),
                     DeliveredBy = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ReceivedBy = table.Column<string>(type: "longtext", nullable: false)
@@ -144,7 +175,13 @@ namespace GBBassetManagementSystem.Data.Migrations
                         column: x => x.PersonnelId,
                         principalTable: "Personnel",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_AssetAssignments_Rooms_RoomId",
+                        column: x => x.RoomId,
+                        principalTable: "Rooms",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -187,6 +224,11 @@ namespace GBBassetManagementSystem.Data.Migrations
                 column: "PersonnelId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AssetAssignments_RoomId",
+                table: "AssetAssignments",
+                column: "RoomId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AssetReturns_AssetAssignmentId",
                 table: "AssetReturns",
                 column: "AssetAssignmentId");
@@ -199,6 +241,11 @@ namespace GBBassetManagementSystem.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Personnel_DepartmentId",
                 table: "Personnel",
+                column: "DepartmentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rooms_DepartmentId",
+                table: "Rooms",
                 column: "DepartmentId");
         }
 
@@ -216,6 +263,9 @@ namespace GBBassetManagementSystem.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Personnel");
+
+            migrationBuilder.DropTable(
+                name: "Rooms");
 
             migrationBuilder.DropTable(
                 name: "Categories");

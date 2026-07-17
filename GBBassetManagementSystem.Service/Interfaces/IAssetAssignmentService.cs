@@ -10,8 +10,6 @@ public interface IAssetAssignmentService
 
     Task<List<AssetAssignment>> GetByAssetIdAsync(Guid assetId);
 
-    Task<List<AssetAssignment>> GetByPersonnelIdAsync(Guid personnelId);
-
     Task AssignAsync(AssetAssignment assignment);
 
     Task ReturnAsync(

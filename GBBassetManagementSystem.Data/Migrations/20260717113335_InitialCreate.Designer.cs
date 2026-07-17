@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GBBassetManagementSystem.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260713125814_InitialCreate")]
+    [Migration("20260717113335_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -60,7 +60,8 @@ namespace GBBassetManagementSystem.Data.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<decimal>("PurchasePrice")
-                        .HasColumnType("decimal(65,30)");
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("SerialNumber")
                         .IsRequired()
@@ -91,6 +92,9 @@ namespace GBBassetManagementSystem.Data.Migrations
                     b.Property<DateTime>("AssignmentDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int>("AssignmentType")
+                        .HasColumnType("int");
+
                     b.Property<string>("DeliveredBy")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -104,7 +108,7 @@ namespace GBBassetManagementSystem.Data.Migrations
                     b.Property<string>("Notes")
                         .HasColumnType("longtext");
 
-                    b.Property<Guid>("PersonnelId")
+                    b.Property<Guid?>("PersonnelId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("ReceivedBy")
@@ -114,11 +118,16 @@ namespace GBBassetManagementSystem.Data.Migrations
                     b.Property<DateTime?>("ReturnDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<Guid?>("RoomId")
+                        .HasColumnType("char(36)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AssetId");
 
                     b.HasIndex("PersonnelId");
+
+                    b.HasIndex("RoomId");
 
                     b.ToTable("AssetAssignments");
                 });
@@ -217,6 +226,10 @@ namespace GBBassetManagementSystem.Data.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<string>("NationalIdentityNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -226,6 +239,36 @@ namespace GBBassetManagementSystem.Data.Migrations
                     b.HasIndex("DepartmentId");
 
                     b.ToTable("Personnel");
+                });
+
+            modelBuilder.Entity("GBBassetManagementSystem.Entity.Entities.Room", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Building")
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid>("DepartmentId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Floor")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("RoomNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("Rooms");
                 });
 
             modelBuilder.Entity("GBBassetManagementSystem.Entity.Entities.Asset", b =>
@@ -250,12 +293,18 @@ namespace GBBassetManagementSystem.Data.Migrations
                     b.HasOne("GBBassetManagementSystem.Entity.Entities.Personnel", "Personnel")
                         .WithMany()
                         .HasForeignKey("PersonnelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("GBBassetManagementSystem.Entity.Entities.Room", "Room")
+                        .WithMany()
+                        .HasForeignKey("RoomId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Asset");
 
                     b.Navigation("Personnel");
+
+                    b.Navigation("Room");
                 });
 
             modelBuilder.Entity("GBBassetManagementSystem.Entity.Entities.AssetReturn", b =>
@@ -270,6 +319,17 @@ namespace GBBassetManagementSystem.Data.Migrations
                 });
 
             modelBuilder.Entity("GBBassetManagementSystem.Entity.Entities.Personnel", b =>
+                {
+                    b.HasOne("GBBassetManagementSystem.Entity.Entities.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("GBBassetManagementSystem.Entity.Entities.Room", b =>
                 {
                     b.HasOne("GBBassetManagementSystem.Entity.Entities.Department", "Department")
                         .WithMany()
