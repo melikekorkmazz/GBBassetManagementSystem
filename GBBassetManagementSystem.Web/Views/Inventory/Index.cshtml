@@ -1,0 +1,135 @@
+@model GBBassetManagementSystem.Web.Models.InventoryViewModel
+
+@{
+    ViewData["Title"] = "Inventory";
+}
+
+<div class="container-fluid">
+
+    <div class="row mb-4">
+
+        <div class="col-md-2">
+            <div class="small-box bg-primary">
+                <div class="inner">
+                    <h3>@Model.TotalAssets</h3>
+                    <p>Total Assets</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="small-box bg-success">
+                <div class="inner">
+                    <h3>@Model.AvailableAssets</h3>
+                    <p>Available</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="small-box bg-info">
+                <div class="inner">
+                    <h3>@Model.AssignedAssets</h3>
+                    <p>Assigned</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="small-box bg-danger">
+                <div class="inner">
+                    <h3>@Model.BrokenAssets</h3>
+                    <p>Broken</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="small-box bg-warning">
+                <div class="inner">
+                    <h3>@Model.UnderMaintenanceAssets</h3>
+                    <p>Maintenance</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="small-box bg-secondary">
+                <div class="inner">
+                    <h3>@Model.LostAssets</h3>
+                    <p>Lost</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <div class="card-header">
+            <h3 class="card-title">
+                Category Distribution
+            </h3>
+        </div>
+
+        <div class="card-body p-0">
+
+            <table class="table table-hover">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Category</th>
+                        <th>Total</th>
+                        <th>Available</th>
+                        <th>Assigned</th>
+                        <th>Broken</th>
+                        <th>Maintenance</th>
+                        <th>Lost</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @foreach (var category in Model.Categories)
+                    {
+                        <tr>
+
+                            <td>
+
+                                <a asp-action="CategoryDetails"
+                                   asp-route-id="@category.CategoryId">
+
+                                    @category.CategoryName
+
+                                </a>
+
+                            </td>
+
+                            <td>@category.Total</td>
+
+                            <td>@category.Available</td>
+
+                            <td>@category.Assigned</td>
+
+                            <td>@category.Broken</td>
+
+                            <td>@category.UnderMaintenance</td>
+
+                            <td>@category.Lost</td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

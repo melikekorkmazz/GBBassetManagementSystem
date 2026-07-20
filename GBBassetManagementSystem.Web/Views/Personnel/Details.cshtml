@@ -24,24 +24,49 @@
 <div class="card mb-4">
     <div class="card-body">
         <dl class="row">
-            <dt class="col-sm-3">Employee Number</dt>
-            <dd class="col-sm-9">@Model.Personnel.EmployeeNumber</dd>
 
-            <dt class="col-sm-3">Full Name</dt>
+            <dt class="col-sm-3">
+                Registration Number
+            </dt>
+            <dd class="col-sm-9">
+                @Model.Personnel.RegistrationNumber
+            </dd>
+
+            <dt class="col-sm-3">
+                National Identity Number
+            </dt>
+            <dd class="col-sm-9">
+                @Model.Personnel.NationalIdentityNumber
+            </dd>
+
+            <dt class="col-sm-3">
+                Full Name
+            </dt>
             <dd class="col-sm-9">
                 @Model.Personnel.FirstName @Model.Personnel.LastName
             </dd>
 
-            <dt class="col-sm-3">Department</dt>
+            <dt class="col-sm-3">
+                Department
+            </dt>
             <dd class="col-sm-9">
                 @Model.Personnel.Department?.Name
             </dd>
 
-            <dt class="col-sm-3">Email</dt>
-            <dd class="col-sm-9">@Model.Personnel.Email</dd>
+            <dt class="col-sm-3">
+                Email
+            </dt>
+            <dd class="col-sm-9">
+                @Model.Personnel.Email
+            </dd>
 
-            <dt class="col-sm-3">Phone</dt>
-            <dd class="col-sm-9">@Model.Personnel.PhoneNumber</dd>
+            <dt class="col-sm-3">
+                Phone Number
+            </dt>
+            <dd class="col-sm-9">
+                @Model.Personnel.PhoneNumber
+            </dd>
+
         </dl>
     </div>
 </div>
@@ -124,7 +149,7 @@ else
                     </td>
 
                     <td>
-                        @assignment.ReturnDate?.ToString("dd.MM.yyyy")
+                        @(assignment.ReturnDate?.ToString("dd.MM.yyyy") ?? "-")
                     </td>
 
                     <td>

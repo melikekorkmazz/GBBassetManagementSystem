@@ -28,8 +28,6 @@ public class AssetAssignmentService : IAssetAssignmentService
             .ToListAsync();
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
     public async Task<AssetAssignment?> GetByIdAsync(Guid id)
     {
         return await _context.AssetAssignments
@@ -42,7 +40,8 @@ public class AssetAssignmentService : IAssetAssignmentService
             .FirstOrDefaultAsync(a => a.Id == id);
     }
 
-    public async Task<List<AssetAssignment>> GetByPersonnelIdAsync(Guid personnelId)
+    public async Task<List<AssetAssignment>> GetByPersonnelIdAsync(
+        Guid personnelId)
     {
         return await _context.AssetAssignments
             .Where(a => a.PersonnelId == personnelId)
@@ -56,26 +55,8 @@ public class AssetAssignmentService : IAssetAssignmentService
             .ToListAsync();
     }
 
-=======
-=======
->>>>>>> parent of 9fed02a (basic warehouse)
-    public async Task<List<AssetAssignment>> GetByPersonnelIdAsync(
-    Guid personnelId)
-{
-    return await _context.AssetAssignments
-        .Where(assignment => assignment.PersonnelId == personnelId)
-        .Include(assignment => assignment.Asset)
-            .ThenInclude(asset => asset!.Category)
-        .Include(assignment => assignment.Personnel)
-            .ThenInclude(personnel => personnel!.Department)
-        .OrderByDescending(assignment => assignment.AssignmentDate)
-        .ToListAsync();
-}
-<<<<<<< HEAD
->>>>>>> parent of 9fed02a (basic warehouse)
-=======
->>>>>>> parent of 9fed02a (basic warehouse)
-    public async Task<List<AssetAssignment>> GetByAssetIdAsync(Guid assetId)
+    public async Task<List<AssetAssignment>> GetByAssetIdAsync(
+        Guid assetId)
     {
         return await _context.AssetAssignments
             .Where(a => a.AssetId == assetId)
@@ -91,40 +72,46 @@ public class AssetAssignmentService : IAssetAssignmentService
 
     public async Task AssignAsync(AssetAssignment assignment)
     {
-        var asset = await _context.Assets.FindAsync(assignment.AssetId);
+        var asset = await _context.Assets
+            .FindAsync(assignment.AssetId);
 
         if (asset is null)
-<<<<<<< HEAD
-
-=======
         {
-            throw new KeyNotFoundException("Asset was not found.");
+            throw new KeyNotFoundException(
+                "Asset was not found.");
         }
->>>>>>> parent of 9fed02a (basic warehouse)
 
         if (asset.Status != AssetStatus.Available)
-            throw new InvalidOperationException("Only available assets can be assigned.");
+        {
+            throw new InvalidOperationException(
+                "Only available assets can be assigned.");
+        }
 
         switch (assignment.AssignmentType)
         {
             case AssignmentType.Personnel:
-
                 if (assignment.PersonnelId is null)
-                    throw new InvalidOperationException("Please select personnel.");
+                {
+                    throw new InvalidOperationException(
+                        "Please select personnel.");
+                }
 
                 assignment.RoomId = null;
                 break;
 
             case AssignmentType.Room:
-
                 if (assignment.RoomId is null)
-                    throw new InvalidOperationException("Please select a room.");
+                {
+                    throw new InvalidOperationException(
+                        "Please select a room.");
+                }
 
                 assignment.PersonnelId = null;
                 break;
 
             default:
-                throw new InvalidOperationException("Invalid assignment type.");
+                throw new InvalidOperationException(
+                    "Invalid assignment type.");
         }
 
         assignment.IsActive = true;
@@ -149,13 +136,22 @@ public class AssetAssignmentService : IAssetAssignmentService
             .FirstOrDefaultAsync(a => a.Id == assignmentId);
 
         if (assignment is null)
-            throw new KeyNotFoundException("Assignment was not found.");
+        {
+            throw new KeyNotFoundException(
+                "Assignment was not found.");
+        }
 
         if (!assignment.IsActive)
-            throw new InvalidOperationException("This asset has already been returned.");
+        {
+            throw new InvalidOperationException(
+                "This asset has already been returned.");
+        }
 
         if (assignment.Asset is null)
-            throw new KeyNotFoundException("Assigned asset was not found.");
+        {
+            throw new KeyNotFoundException(
+                "Assigned asset was not found.");
+        }
 
         assignment.IsActive = false;
         assignment.ReturnDate = DateTime.Today;

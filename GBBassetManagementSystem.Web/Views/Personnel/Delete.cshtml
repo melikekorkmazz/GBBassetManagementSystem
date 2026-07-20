@@ -11,20 +11,53 @@
 </div>
 
 <dl class="row">
-    <dt class="col-sm-3">Employee Number</dt>
-    <dd class="col-sm-9">@Model.EmployeeNumber</dd>
 
-    <dt class="col-sm-3">Full Name</dt>
-    <dd class="col-sm-9">@Model.FirstName @Model.LastName</dd>
+    <dt class="col-sm-3">
+        Registration Number
+    </dt>
+    <dd class="col-sm-9">
+        @Model.RegistrationNumber
+    </dd>
 
-    <dt class="col-sm-3">Department</dt>
-    <dd class="col-sm-9">@Model.Department?.Name</dd>
+    <dt class="col-sm-3">
+        National Identity Number
+    </dt>
+    <dd class="col-sm-9">
+        @Model.NationalIdentityNumber
+    </dd>
 
-    <dt class="col-sm-3">Email</dt>
-    <dd class="col-sm-9">@Model.Email</dd>
+    <dt class="col-sm-3">
+        Full Name
+    </dt>
+    <dd class="col-sm-9">
+        @Model.FirstName @Model.LastName
+    </dd>
+
+    <dt class="col-sm-3">
+        Department
+    </dt>
+    <dd class="col-sm-9">
+        @Model.Department?.Name
+    </dd>
+
+    <dt class="col-sm-3">
+        Email
+    </dt>
+    <dd class="col-sm-9">
+        @Model.Email
+    </dd>
+
+    <dt class="col-sm-3">
+        Phone Number
+    </dt>
+    <dd class="col-sm-9">
+        @Model.PhoneNumber
+    </dd>
+
 </dl>
 
 <form asp-action="Delete" method="post">
+
     <input asp-for="Id" type="hidden" />
 
     <button type="submit" class="btn btn-danger">
@@ -34,4 +67,5 @@
     <a asp-action="Index" class="btn btn-secondary">
         Cancel
     </a>
+
 </form>

@@ -11,12 +11,12 @@ public class Personnel : EntityBase
     [Required(ErrorMessage = "Last name is required.")]
     public string LastName { get; set; } = string.Empty;
 
-    [Display(Name = "Employe")]
+    [Display(Name = "Registration Number")]
     [Required(ErrorMessage = "Registration number is required.")]
     [RegularExpression(
         @"^[0-9]+$",
         ErrorMessage = "Registration number must contain only numbers.")]
-    public string EmployeeNumber { get; set; } = string.Empty;
+    public string RegistrationNumber { get; set; } = string.Empty;
 
     [Display(Name = "National Identity Number")]
     [Required(ErrorMessage = "National identity number is required.")]
@@ -30,12 +30,13 @@ public class Personnel : EntityBase
     public string Email { get; set; } = string.Empty;
 
     [Display(Name = "Phone Number")]
-    [Required(ErrorMessage = "Phone Number is required.")]
+    [Required(ErrorMessage = "Phone number is required.")]
     [RegularExpression(
         @"^[0-9]{11}$",
         ErrorMessage = "Phone number must contain exactly 11 digits.")]
     public string PhoneNumber { get; set; } = string.Empty;
 
+    [Display(Name = "Department")]
     [Required(ErrorMessage = "Department selection is required.")]
     public Guid DepartmentId { get; set; }
 

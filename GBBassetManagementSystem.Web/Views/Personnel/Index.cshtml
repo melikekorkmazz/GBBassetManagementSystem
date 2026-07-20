@@ -12,14 +12,11 @@
 }
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-
     <h1>Personnel</h1>
 
-    <a asp-action="Create"
-       class="btn btn-primary">
+    <a asp-action="Create" class="btn btn-primary">
         Add Personnel
     </a>
-
 </div>
 
 @if (!Model.Any())
@@ -34,7 +31,8 @@ else
 
         <thead>
             <tr>
-                <th>Employee Number</th>
+                <th>Registration Number</th>
+                <th>National Identity Number</th>
                 <th>Full Name</th>
                 <th>Email</th>
                 <th>Phone Number</th>
@@ -45,41 +43,46 @@ else
 
         <tbody>
 
-            @foreach (var person in Model)
-            {
-                <tr>
-                    <td>@person.EmployeeNumber</td>
+        @foreach (var person in Model)
+        {
+            <tr>
 
-                    <td>
-                        @person.FirstName @person.LastName
-                    </td>
+                <td>@person.RegistrationNumber</td>
 
-                    <td>@person.Email</td>
+                <td>@person.NationalIdentityNumber</td>
 
-                    <td>@person.PhoneNumber</td>
+                <td>
+                    @person.FirstName @person.LastName
+                </td>
 
-                    <td>@person.Department?.Name</td>
+                <td>@person.Email</td>
 
-                    <td>
-                        <a asp-action="Edit"
-                           asp-route-id="@person.Id"
-                           class="btn btn-warning btn-sm">
-                            Edit
-                        </a>
+                <td>@person.PhoneNumber</td>
 
-                        <a asp-action="Delete"
-                           asp-route-id="@person.Id"
-                           class="btn btn-danger btn-sm">
-                            Delete
-                        </a>
-                    </td>
-                     <a asp-action="Details"
-                      asp-route-id="@person.Id"
+                <td>@person.Department?.Name</td>
+
+                <td>
+                    <a asp-action="Details"
+                       asp-route-id="@person.Id"
                        class="btn btn-info btn-sm">
-                      Details
-                      </a>
-                </tr>
-            }
+                        Details
+                    </a>
+
+                    <a asp-action="Edit"
+                       asp-route-id="@person.Id"
+                       class="btn btn-warning btn-sm">
+                        Edit
+                    </a>
+
+                    <a asp-action="Delete"
+                       asp-route-id="@person.Id"
+                       class="btn btn-danger btn-sm">
+                        Delete
+                    </a>
+                </td>
+
+            </tr>
+        }
 
         </tbody>
 
