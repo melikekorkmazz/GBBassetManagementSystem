@@ -33,6 +33,7 @@ public class InventoryCategoryDetailsViewModel
     public List<InventoryDepartmentSummaryViewModel> Departments { get; set; } = [];
 
     public List<InventoryRoomSummaryViewModel> Rooms { get; set; } = [];
+    public List<TopAssignedModelViewModel> TopAssignedModels { get; set; } = [];
 }
 
 public class InventoryAssetRowViewModel
@@ -88,4 +89,12 @@ public class InventoryRoomSummaryViewModel
     public Guid DepartmentId { get; set; }
 
     public int AssetCount { get; set; }
+}
+public class TopAssignedModelViewModel
+{
+    public string Brand { get; set; } = string.Empty;
+
+    public string Model { get; set; } = string.Empty;
+
+    public int AssignmentCount { get; set; }
 }

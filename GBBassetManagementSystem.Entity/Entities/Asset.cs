@@ -26,8 +26,6 @@ public class Asset : EntityBase
 
     public DateTime? WarrantyExpirationDate { get; set; }
 
-    public string? Location { get; set; }
-
     public string? Notes { get; set; }
     
 }

@@ -10,21 +10,24 @@ namespace GBBassetManagementSystem.Web.Controllers;
 public class AssetAssignmentsController : Controller
 {
     private readonly IAssetAssignmentService _assignmentService;
-    private readonly IAssetService _assetService;
-    private readonly IPersonnelService _personnelService;
-    private readonly IRoomService _roomService;
+private readonly IAssetService _assetService;
+private readonly IPersonnelService _personnelService;
+private readonly IRoomService _roomService;
+private readonly IDepartmentService _departmentService;
 
-    public AssetAssignmentsController(
-        IAssetAssignmentService assignmentService,
-        IAssetService assetService,
-        IPersonnelService personnelService,
-        IRoomService roomService)
-    {
-        _assignmentService = assignmentService;
-        _assetService = assetService;
-        _personnelService = personnelService;
-        _roomService = roomService;
-    }
+   public AssetAssignmentsController(
+    IAssetAssignmentService assignmentService,
+    IAssetService assetService,
+    IPersonnelService personnelService,
+    IRoomService roomService,
+    IDepartmentService departmentService)
+{
+    _assignmentService = assignmentService;
+    _assetService = assetService;
+    _personnelService = personnelService;
+    _roomService = roomService;
+    _departmentService = departmentService;
+}
 
     public async Task<IActionResult> Index()
     {
@@ -97,6 +100,49 @@ public class AssetAssignmentsController : Controller
 
         return RedirectToAction(nameof(Index));
     }
+
+    [HttpGet]
+public async Task<IActionResult> GetPersonnelByDepartment(
+    Guid departmentId)
+{
+    var personnel = await _personnelService.GetAllAsync();
+
+    var personnelOptions = personnel
+        .Where(person => person.DepartmentId == departmentId)
+        .OrderBy(person => person.FirstName)
+        .ThenBy(person => person.LastName)
+        .Select(person => new
+        {
+            id = person.Id,
+            fullName = $"{person.FirstName} {person.LastName}"
+        })
+        .ToList();
+
+    return Json(personnelOptions);
+}
+ 
+
+
+ 
+[HttpGet]
+public async Task<IActionResult> GetRoomsByDepartment(
+    Guid departmentId)
+{
+    var rooms = await _roomService.GetAllAsync();
+
+    var roomOptions = rooms
+        .Where(room => room.DepartmentId == departmentId)
+        .OrderBy(room => room.Building)
+        .ThenBy(room => room.RoomNumber)
+        .Select(room => new
+        {
+            id = room.Id,
+            name = $"{room.Building} - {room.RoomNumber} - {room.Name}"
+        })
+        .ToList();
+
+    return Json(roomOptions);
+}
 
     public async Task<IActionResult> Return(Guid id)
     {
@@ -194,22 +240,35 @@ public class AssetAssignmentsController : Controller
             "DisplayName",
             selectedAssetId);
 
+
+            var departments =
+        await _departmentService.GetAllAsync();
+
+         ViewBag.Departments = new SelectList(
+         departments.OrderBy(department => department.Name),
+         "Id",
+           "Name");
+
         var personnel =
-            await _personnelService.GetAllAsync();
+    await _personnelService.GetAllAsync();
 
-        var personnelOptions = personnel
-            .Select(p => new
-            {
-                p.Id,
-                FullName = $"{p.FirstName} {p.LastName}"
-            })
-            .ToList();
+var personnelOptions = selectedPersonnelId.HasValue
+    ? personnel
+        .Where(person => person.Id == selectedPersonnelId.Value)
+        .Select(person => new
+        {
+            person.Id,
+            FullName =
+                $"{person.FirstName} {person.LastName}"
+        })
+        .ToList()
+    : [];
 
-        ViewBag.Personnel = new SelectList(
-            personnelOptions,
-            "Id",
-            "FullName",
-            selectedPersonnelId);
+ViewBag.Personnel = new SelectList(
+    personnelOptions,
+    "Id",
+    "FullName",
+    selectedPersonnelId);
 
         var rooms = await _roomService.GetAllAsync();
 

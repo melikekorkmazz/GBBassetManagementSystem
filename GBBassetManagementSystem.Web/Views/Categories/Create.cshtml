@@ -22,6 +22,29 @@
             </div>
 
             <div class="mb-3">
+    <label asp-for="Code" class="form-label"></label>
+    <input asp-for="Code"
+           class="form-control"
+           placeholder="Example: PC, PRN, FUR"
+           maxlength="10"
+           style="text-transform: uppercase;" />
+
+    <span asp-validation-for="Code" class="text-danger"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Description" class="form-label"></label>
+
+    <textarea asp-for="Description"
+              class="form-control"
+              rows="3"
+              placeholder="Enter a short category description"></textarea>
+
+    <span asp-validation-for="Description"
+          class="text-danger"></span>
+</div>
+
+            <div class="mb-3">
                 <label asp-for="Description" class="form-label"></label>
 
                 <textarea asp-for="Description"

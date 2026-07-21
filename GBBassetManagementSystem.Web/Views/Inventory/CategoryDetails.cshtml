@@ -96,6 +96,74 @@
             </div>
         </div>
 
+
+        <div class="card mb-4">
+
+    <div class="card-header">
+        <h5 class="mb-0">
+            🏆 Top Assigned Models
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        @if (!Model.TopAssignedModels.Any())
+        {
+            <p class="text-muted mb-0">
+                No assignment history found.
+            </p>
+        }
+        else
+        {
+            <table class="table table-sm table-hover mb-0">
+
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th class="text-end">Assignments</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @{
+                        int rank = 1;
+                    }
+
+                    @foreach (var item in Model.TopAssignedModels)
+                    {
+                        <tr>
+
+                            <td>
+                                @(rank == 1 ? "🥇" :
+                                  rank == 2 ? "🥈" :
+                                  "🥉")
+                            </td>
+
+                            <td>@item.Brand</td>
+
+                            <td>@item.Model</td>
+
+                            <td class="text-end">
+                                @item.AssignmentCount
+                            </td>
+
+                        </tr>
+
+                        rank++;
+                    }
+
+                </tbody>
+
+            </table>
+        }
+
+    </div>
+
+</div>
+
     </div>
 
     <!-- Department and Room distributions -->

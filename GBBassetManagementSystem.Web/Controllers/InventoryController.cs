@@ -151,9 +151,7 @@ public class InventoryController : Controller
                 DepartmentId = null,
                 RoomName = "—",
                 RoomId = null,
-                Location = string.IsNullOrWhiteSpace(asset.Location)
-                    ? "—"
-                    : asset.Location
+               
             };
 
             if (activeAssignment != null)
@@ -221,6 +219,7 @@ public class InventoryController : Controller
             .OrderByDescending(summary => summary.AssetCount)
             .ThenBy(summary => summary.DepartmentName)
             .ToList();
+ 
 
         var roomSummaries = assetRows
             .Where(asset =>
@@ -242,6 +241,29 @@ public class InventoryController : Controller
             .OrderByDescending(summary => summary.AssetCount)
             .ThenBy(summary => summary.RoomName)
             .ToList();
+
+
+                  // Top 3 most assigned models in this category
+var topAssignedModels = await _context.AssetAssignments
+    .AsNoTracking()
+    .Include(x => x.Asset)
+    .Where(x =>
+        x.Asset != null &&
+        x.Asset.CategoryId == id)
+    .GroupBy(x => new
+    {
+        Brand = x.Asset!.Brand,
+        Model = x.Asset!.Model
+    })
+    .Select(group => new TopAssignedModelViewModel
+    {
+        Brand = group.Key.Brand,
+        Model = group.Key.Model,
+        AssignmentCount = group.Count()
+    })
+    .OrderByDescending(model => model.AssignmentCount)
+    .Take(3)
+    .ToListAsync();
 
         IEnumerable<InventoryAssetRowViewModel> filteredAssets =
             assetRows;
@@ -280,40 +302,41 @@ public class InventoryController : Controller
                 ContainsText(asset.Location, searchValue));
         }
 
-        var model = new InventoryCategoryDetailsViewModel
-        {
-            CategoryId = category.Id,
-            CategoryName = category.Name,
+      var model = new InventoryCategoryDetailsViewModel
+{
+    CategoryId = category.Id,
+    CategoryName = category.Name,
 
-            Total = assetRows.Count,
+    Total = assetRows.Count,
 
-            Available = assetRows.Count(
-                asset => asset.Status == AssetStatus.Available),
+    Available = assetRows.Count(
+        asset => asset.Status == AssetStatus.Available),
 
-            Assigned = assetRows.Count(
-                asset => asset.Status == AssetStatus.Assigned),
+    Assigned = assetRows.Count(
+        asset => asset.Status == AssetStatus.Assigned),
 
-            Broken = assetRows.Count(
-                asset => asset.Status == AssetStatus.Broken),
+    Broken = assetRows.Count(
+        asset => asset.Status == AssetStatus.Broken),
 
-            UnderMaintenance = assetRows.Count(
-                asset => asset.Status == AssetStatus.UnderMaintenance),
+    UnderMaintenance = assetRows.Count(
+        asset => asset.Status == AssetStatus.UnderMaintenance),
 
-            Lost = assetRows.Count(
-                asset => asset.Status == AssetStatus.Lost),
+    Lost = assetRows.Count(
+        asset => asset.Status == AssetStatus.Lost),
 
-            Search = search,
-            SelectedStatus = status,
-            SelectedDepartmentId = departmentId,
-            SelectedRoomId = roomId,
+    Search = search,
+    SelectedStatus = status,
+    SelectedDepartmentId = departmentId,
+    SelectedRoomId = roomId,
 
-            Assets = filteredAssets
-                .OrderBy(asset => asset.AssetCode)
-                .ToList(),
+    Assets = filteredAssets
+        .OrderBy(asset => asset.AssetCode)
+        .ToList(),
 
-            Departments = departmentSummaries,
-            Rooms = roomSummaries
-        };
+    Departments = departmentSummaries,
+    Rooms = roomSummaries,
+    TopAssignedModels = topAssignedModels
+};
 
         return View(model);
     }

@@ -44,6 +44,23 @@
             </div>
 
             <div class="mb-3"
+     id="departmentSection">
+
+    <label class="form-label">
+        Department
+    </label>
+
+    <select id="departmentSelect"
+            class="form-select"
+            asp-items="ViewBag.Departments">
+
+        <option value="">Select Department</option>
+
+    </select>
+
+</div>
+
+            <div class="mb-3"
                  id="personnelSection">
 
                 <label asp-for="PersonnelId"
@@ -52,8 +69,9 @@
                 </label>
 
                 <select asp-for="PersonnelId"
-                        asp-items="ViewBag.Personnel"
-                        class="form-select">
+                  id="personnelSelect"
+                asp-items="ViewBag.Personnel"
+               class="form-select">
                     <option value="">Select Personnel</option>
                 </select>
             </div>
@@ -67,11 +85,12 @@
                     Room
                 </label>
 
-                <select asp-for="RoomId"
-                        asp-items="ViewBag.Rooms"
-                        class="form-select">
-                    <option value="">Select Room</option>
-                </select>
+                  <select asp-for="RoomId"
+                 id="roomSelect"
+                asp-items="ViewBag.Rooms"
+                 class="form-select">
+                <option value="">Select Room</option>
+                 </select>
             </div>
 
             <div class="mb-3">
@@ -134,21 +153,115 @@
 @section Scripts
 {
     <script>
-        const assignmentType = document.getElementById("assignmentType");
-        const personnelSection = document.getElementById("personnelSection");
-        const roomSection = document.getElementById("roomSection");
+        document.addEventListener("DOMContentLoaded", function () {
 
-        function updateAssignmentFields() {
-            if (assignmentType.value === "2") {
-                personnelSection.style.display = "none";
-                roomSection.style.display = "block";
-            } else {
-                personnelSection.style.display = "block";
-                roomSection.style.display = "none";
+            const assignmentType =
+                document.getElementById("assignmentType");
+
+            const personnelSection =
+                document.getElementById("personnelSection");
+
+            const roomSection =
+                document.getElementById("roomSection");
+
+            const departmentSelect =
+                document.getElementById("departmentSelect");
+
+            const personnelSelect =
+                document.getElementById("personnelSelect");
+
+            const roomSelect =
+                document.getElementById("roomSelect");
+
+            function updateAssignmentFields() {
+
+                if (assignmentType.value === "2") {
+
+                    personnelSection.style.display = "none";
+                    roomSection.style.display = "block";
+
+                    personnelSelect.value = "";
+
+                } else {
+
+                    personnelSection.style.display = "block";
+                    roomSection.style.display = "none";
+
+                    roomSelect.value = "";
+                }
             }
-        }
 
-        assignmentType.addEventListener("change", updateAssignmentFields);
-        updateAssignmentFields();
+            assignmentType.addEventListener(
+                "change",
+                updateAssignmentFields);
+
+            departmentSelect.addEventListener(
+                "change",
+                async function () {
+
+                    const departmentId = this.value;
+
+                    personnelSelect.innerHTML =
+                        '<option value="">Select Personnel</option>';
+
+                    roomSelect.innerHTML =
+                        '<option value="">Select Room</option>';
+
+                    if (departmentId === "") {
+                        return;
+                    }
+
+                    try {
+                        const personnelResponse = await fetch(
+                            `/AssetAssignments/GetPersonnelByDepartment?departmentId=${departmentId}`
+                        );
+
+                        if (!personnelResponse.ok) {
+                            throw new Error(
+                                "Personnel could not be loaded.");
+                        }
+
+                        const personnel =
+                            await personnelResponse.json();
+
+                        personnel.forEach(person => {
+                            const option =
+                                document.createElement("option");
+
+                            option.value = person.id;
+                            option.textContent = person.fullName;
+
+                            personnelSelect.appendChild(option);
+                        });
+
+                        const roomResponse = await fetch(
+                            `/AssetAssignments/GetRoomsByDepartment?departmentId=${departmentId}`
+                        );
+
+                        if (!roomResponse.ok) {
+                            throw new Error(
+                                "Rooms could not be loaded.");
+                        }
+
+                        const rooms =
+                            await roomResponse.json();
+
+                        rooms.forEach(room => {
+                            const option =
+                                document.createElement("option");
+
+                            option.value = room.id;
+                            option.textContent = room.name;
+
+                            roomSelect.appendChild(option);
+                        });
+
+                    } catch (error) {
+                        console.error(error);
+                    }
+                });
+
+            updateAssignmentFields();
+        });
     </script>
 }

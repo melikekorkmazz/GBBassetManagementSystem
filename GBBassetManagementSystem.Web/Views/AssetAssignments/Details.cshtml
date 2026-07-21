@@ -17,30 +17,47 @@
     </dd>
 
     <dt class="col-sm-3">Assignment Type</dt>
-    <dd class="col-sm-9">@Model.AssignmentType</dd>
+    <dd class="col-sm-9">
+        @Model.AssignmentType
+    </dd>
 
     <dt class="col-sm-3">Assigned To</dt>
     <dd class="col-sm-9">
         @if (Model.AssignmentType == AssignmentType.Personnel)
         {
-            <span>
-                @Model.Personnel?.FirstName
-                @Model.Personnel?.LastName
-            </span>
+            @($"{Model.Personnel?.FirstName} {Model.Personnel?.LastName}")
         }
         else
         {
-            <span>
-                @Model.Room?.Name (@Model.Room?.RoomNumber)
-            </span>
+            @($"{Model.Room?.Name} ({Model.Room?.RoomNumber})")
+        }
+    </dd>
+
+    <dt class="col-sm-3">Department</dt>
+    <dd class="col-sm-9">
+        @if (Model.Personnel != null)
+        {
+            @(Model.Personnel.Department?.Name ?? "-")
+        }
+        else if (Model.Room != null)
+        {
+            @(Model.Room.Department?.Name ?? "-")
+        }
+        else
+        {
+            <span>-</span>
         }
     </dd>
 
     <dt class="col-sm-3">Delivered By</dt>
-    <dd class="col-sm-9">@Model.DeliveredBy</dd>
+    <dd class="col-sm-9">
+        @Model.DeliveredBy
+    </dd>
 
     <dt class="col-sm-3">Received By</dt>
-    <dd class="col-sm-9">@Model.ReceivedBy</dd>
+    <dd class="col-sm-9">
+        @Model.ReceivedBy
+    </dd>
 
     <dt class="col-sm-3">Assignment Date</dt>
     <dd class="col-sm-9">
@@ -63,7 +80,9 @@
     </dd>
 
     <dt class="col-sm-3">Notes</dt>
-    <dd class="col-sm-9">@Model.Notes</dd>
+    <dd class="col-sm-9">
+        @Model.Notes
+    </dd>
 </dl>
 
 @if (Model.IsActive)

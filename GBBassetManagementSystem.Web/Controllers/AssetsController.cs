@@ -58,27 +58,52 @@ public class AssetsController : Controller
         return View();
     }
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(Asset asset)
+ [HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Create(Asset asset)
+{
+ // Since AssetCode no longer comes from the form, we are removing the old validation result.
+    ModelState.Remove(nameof(Asset.AssetCode));
+// A new asset is always created as Available.
+    asset.Status = AssetStatus.Available;
+
+    if (asset.CategoryId == Guid.Empty)
     {
-        if (!ModelState.IsValid)
+        ModelState.AddModelError(
+            nameof(Asset.CategoryId),
+            "Please select a category.");
+    }
+    else
+    {
+        try
         {
-            await LoadFormDataAsync(
-                asset.CategoryId,
-                asset.Status);
-
-            return View(asset);
+            asset.AssetCode =
+                await GenerateAssetCodeAsync(asset.CategoryId);
         }
-
-        await _assetService.AddAsync(asset);
-
-        TempData["SuccessMessage"] =
-            "Asset saved successfully.";
-
-        return RedirectToAction(nameof(Index));
+        catch (InvalidOperationException exception)
+        {
+            ModelState.AddModelError(
+                nameof(Asset.CategoryId),
+                exception.Message);
+        }
     }
 
+    if (!ModelState.IsValid)
+    {
+        await LoadFormDataAsync(
+            asset.CategoryId,
+            AssetStatus.Available);
+
+        return View(asset);
+    }
+
+    await _assetService.AddAsync(asset);
+
+    TempData["SuccessMessage"] =
+        $"Asset {asset.AssetCode} was created successfully.";
+
+    return RedirectToAction(nameof(Index));
+}
     public async Task<IActionResult> Edit(Guid id)
     {
         var asset = await _assetService.GetByIdAsync(id);
@@ -187,4 +212,46 @@ public class AssetsController : Controller
                 ? null
                 : (int)selectedStatus);
     }
+
+    private async Task<string> GenerateAssetCodeAsync(Guid categoryId)
+{
+    var category = await _categoryService.GetByIdAsync(categoryId);
+
+    if (category is null)
+    {
+        throw new InvalidOperationException("Selected category was not found.");
+    }
+
+    if (string.IsNullOrWhiteSpace(category.Code))
+    {
+        throw new InvalidOperationException(
+            "The selected category does not have a category code.");
+    }
+
+    var categoryCode = category.Code.Trim().ToUpperInvariant();
+    var assetCodePrefix = $"GBB-{categoryCode}-";
+
+    var assets = await _assetService.GetAllAsync();
+
+    var highestNumber = assets
+        .Where(asset =>
+            !string.IsNullOrWhiteSpace(asset.AssetCode) &&
+            asset.AssetCode.StartsWith(
+                assetCodePrefix,
+                StringComparison.OrdinalIgnoreCase))
+        .Select(asset =>
+        {
+            var numberPart = asset.AssetCode.Substring(assetCodePrefix.Length);
+
+            return int.TryParse(numberPart, out var number)
+                ? number
+                : 0;
+        })
+        .DefaultIfEmpty(0)
+        .Max();
+
+    var nextNumber = highestNumber + 1;
+
+    return $"{assetCodePrefix}{nextNumber:0000}";
+}
 }

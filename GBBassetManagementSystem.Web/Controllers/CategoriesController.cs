@@ -29,7 +29,9 @@ public class CategoriesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Category category)
     {
-        if (!ModelState.IsValid)
+        category.Code = category.Code.Trim().ToUpperInvariant();
+        category.Name = category.Name.Trim();
+         if (!ModelState.IsValid)
         {
             return View(category);
         }

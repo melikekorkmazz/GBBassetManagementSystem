@@ -102,6 +102,34 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const forms = document.querySelectorAll("form");
+
+        forms.forEach(form => {
+
+            form.addEventListener("submit", function () {
+
+                const submitButton =
+                    form.querySelector('button[type="submit"], input[type="submit"]');
+
+                if (submitButton) {
+
+                    submitButton.disabled = true;
+
+                    if (submitButton.tagName === "BUTTON") {
+                        submitButton.innerText = "Please wait...";
+                    }
+
+                }
+
+            });
+
+        });
+
+    });
+</script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

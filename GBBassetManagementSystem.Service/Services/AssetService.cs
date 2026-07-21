@@ -53,7 +53,6 @@ public class AssetService : IAssetService
         existingAsset.PurchasePrice = asset.PurchasePrice;
         existingAsset.Status = asset.Status;
         existingAsset.WarrantyExpirationDate = asset.WarrantyExpirationDate;
-        existingAsset.Location = asset.Location;
         existingAsset.Notes = asset.Notes;
         existingAsset.CategoryId = asset.CategoryId;
 
