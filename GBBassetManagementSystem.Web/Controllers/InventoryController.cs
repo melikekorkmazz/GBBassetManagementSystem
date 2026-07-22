@@ -18,67 +18,65 @@ public class InventoryController : Controller
     // Inventory ana sayfası
     // Genel durum özeti ve kategori dağılımı
     public async Task<IActionResult> Index()
+{
+    var assets = await _context.Assets
+        .AsNoTracking()
+        .Include(asset => asset.Category)
+        .ToListAsync();
+
+    var model = new InventoryViewModel
     {
-        var assets = await _context.Assets
-            .AsNoTracking()
-            .Include(asset => asset.Category)
-            .ToListAsync();
+        TotalAssets = assets.Count,
 
-        var model = new InventoryViewModel
-        {
-            TotalAssets = assets.Count,
+        AvailableAssets = assets.Count(
+            asset => asset.Status == AssetStatus.Available),
 
-            AvailableAssets = assets.Count(
-                asset => asset.Status == AssetStatus.Available),
+        AssignedAssets = assets.Count(
+            asset => asset.Status == AssetStatus.Assigned),
 
-            AssignedAssets = assets.Count(
-                asset => asset.Status == AssetStatus.Assigned),
+       MaintenanceAssets = assets.Count(
+    asset => asset.Status == AssetStatus.Maintenance),
 
-            BrokenAssets = assets.Count(
-                asset => asset.Status == AssetStatus.Broken),
+        LostAssets = assets.Count(
+            asset => asset.Status == AssetStatus.Lost),
+        DisposedAssets = assets.Count(
+           asset => asset.Status == AssetStatus.Disposed),
 
-            UnderMaintenanceAssets = assets.Count(
-                asset => asset.Status == AssetStatus.UnderMaintenance),
+        Categories = assets
+            .Where(asset => asset.Category != null)
+            .GroupBy(asset => new
+            {
+                asset.CategoryId,
+                CategoryName = asset.Category!.Name
+            })
+            .Select(group => new InventoryCategorySummaryViewModel
+            {
+                CategoryId = group.Key.CategoryId,
+                CategoryName = group.Key.CategoryName,
 
-            LostAssets = assets.Count(
-                asset => asset.Status == AssetStatus.Lost),
+                Total = group.Count(),
 
-            Categories = assets
-                .Where(asset => asset.Category != null)
-                .GroupBy(asset => new
-                {
-                    asset.CategoryId,
-                    CategoryName = asset.Category!.Name
-                })
-                .Select(group => new InventoryCategorySummaryViewModel
-                {
-                    CategoryId = group.Key.CategoryId,
-                    CategoryName = group.Key.CategoryName,
+                Available = group.Count(
+                    asset => asset.Status == AssetStatus.Available),
 
-                    Total = group.Count(),
+                Assigned = group.Count(
+                    asset => asset.Status == AssetStatus.Assigned),
 
-                    Available = group.Count(
-                        asset => asset.Status == AssetStatus.Available),
+                Maintenance = group.Count(
+                asset => asset.Status == AssetStatus.Maintenance),
 
-                    Assigned = group.Count(
-                        asset => asset.Status == AssetStatus.Assigned),
+                Lost = group.Count(
+                    asset => asset.Status == AssetStatus.Lost),
+                 Disposed = group.Count(
+    asset => asset.Status == AssetStatus.Disposed)   
+                    
+            })
+            .OrderBy(category => category.CategoryName)
+            .ToList()
+    };
 
-                    Broken = group.Count(
-                        asset => asset.Status == AssetStatus.Broken),
-
-                    UnderMaintenance = group.Count(
-                        asset =>
-                            asset.Status == AssetStatus.UnderMaintenance),
-
-                    Lost = group.Count(
-                        asset => asset.Status == AssetStatus.Lost)
-                })
-                .OrderBy(category => category.CategoryName)
-                .ToList()
-        };
-
-        return View(model);
-    }
+    return View(model);
+}
 
     // Örnek:
     // Inventory/CategoryDetails/CATEGORY_ID
@@ -315,14 +313,12 @@ var topAssignedModels = await _context.AssetAssignments
     Assigned = assetRows.Count(
         asset => asset.Status == AssetStatus.Assigned),
 
-    Broken = assetRows.Count(
-        asset => asset.Status == AssetStatus.Broken),
-
-    UnderMaintenance = assetRows.Count(
-        asset => asset.Status == AssetStatus.UnderMaintenance),
+   
 
     Lost = assetRows.Count(
         asset => asset.Status == AssetStatus.Lost),
+        Disposed = assetRows.Count(
+    asset => asset.Status == AssetStatus.Disposed),
 
     Search = search,
     SelectedStatus = status,

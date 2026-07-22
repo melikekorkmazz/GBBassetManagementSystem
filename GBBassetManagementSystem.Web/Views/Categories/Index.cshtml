@@ -4,6 +4,20 @@
     ViewData["Title"] = "Categories";
 }
 
+@if (TempData["SuccessMessage"] is not null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (TempData["ErrorMessage"] is not null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+}
+
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1>Categories</h1>
 

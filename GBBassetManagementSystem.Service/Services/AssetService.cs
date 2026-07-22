@@ -1,3 +1,4 @@
+using GBBassetManagementSystem.Entity.Enums;
 using GBBassetManagementSystem.Data.Context;
 using GBBassetManagementSystem.Entity.Entities;
 using GBBassetManagementSystem.Service.Interfaces;
@@ -58,17 +59,29 @@ public class AssetService : IAssetService
 
         await _context.SaveChangesAsync();
     }
+public async Task DisposeAsync(Guid id)
+{
+    var asset = await _context.Assets.FindAsync(id);
 
-    public async Task DeleteAsync(Guid id)
+    if (asset is null)
     {
-        var asset = await _context.Assets.FindAsync(id);
-
-        if (asset is null)
-        {
-            throw new KeyNotFoundException("Asset was not found.");
-        }
-
-        _context.Assets.Remove(asset);
-        await _context.SaveChangesAsync();
+        throw new KeyNotFoundException("Asset was not found.");
     }
+
+    if (asset.Status == AssetStatus.Assigned)
+    {
+        throw new InvalidOperationException(
+            "Assigned assets cannot be disposed. Return the asset first.");
+    }
+
+    if (asset.Status == AssetStatus.Disposed)
+    {
+        throw new InvalidOperationException(
+            "This asset has already been disposed.");
+    }
+
+    asset.Status = AssetStatus.Disposed;
+
+    await _context.SaveChangesAsync();
+}
 }

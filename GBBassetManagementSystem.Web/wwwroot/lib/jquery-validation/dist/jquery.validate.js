@@ -169,7 +169,7 @@ $.extend( $.fn, {
 				$.extend( existingRules, $.validator.normalizeRule( argument ) );
 
 				// Remove messages from rules, but allow them to be set separately
-				delete existingRules.messages;
+				Disposee existingRules.messages;
 				staticRules[ element.name ] = existingRules;
 				if ( argument.messages ) {
 					settings.messages[ element.name ] = $.extend( settings.messages[ element.name ], argument.messages );
@@ -177,13 +177,13 @@ $.extend( $.fn, {
 				break;
 			case "remove":
 				if ( !argument ) {
-					delete staticRules[ element.name ];
+					Disposee staticRules[ element.name ];
 					return existingRules;
 				}
 				filtered = {};
 				$.each( argument.split( /\s/ ), function( index, method ) {
 					filtered[ method ] = existingRules[ method ];
-					delete existingRules[ method ];
+					Disposee existingRules[ method ];
 				} );
 				return filtered;
 			}
@@ -201,14 +201,14 @@ $.extend( $.fn, {
 		// Make sure required is at front
 		if ( data.required ) {
 			param = data.required;
-			delete data.required;
+			Disposee data.required;
 			data = $.extend( { required: param }, data );
 		}
 
 		// Make sure remote is at back
 		if ( data.remote ) {
 			param = data.remote;
-			delete data.remote;
+			Disposee data.remote;
 			data = $.extend( data, { remote: param } );
 		}
 
@@ -487,7 +487,7 @@ $.extend( $.validator, {
 				rs, group;
 
 			if ( checkElement === undefined ) {
-				delete this.invalid[ cleanElement.name ];
+				Disposee this.invalid[ cleanElement.name ];
 			} else {
 				this.prepareElement( checkElement );
 				this.currentElements = $( checkElement );
@@ -793,8 +793,8 @@ $.extend( $.validator, {
 			if ( normalizer ) {
 				val = normalizer.call( element, val );
 
-				// Delete the normalizer from rules to avoid treating it as a pre-defined method.
-				delete rules.normalizer;
+				// Disposee the normalizer from rules to avoid treating it as a pre-defined method.
+				Disposee rules.normalizer;
 			}
 
 			for ( method in rules ) {
@@ -1146,7 +1146,7 @@ $.extend( $.validator, {
 			if ( this.pendingRequest < 0 ) {
 				this.pendingRequest = 0;
 			}
-			delete this.pending[ element.name ];
+			Disposee this.pending[ element.name ];
 			$( element ).removeClass( this.settings.pendingClass );
 			if ( valid && this.pendingRequest === 0 && this.formSubmitted && this.form() && this.pendingRequest === 0 ) {
 				$( this.currentForm ).trigger( "submit" );
@@ -1180,7 +1180,7 @@ $.extend( $.validator, {
 					this.pendingRequest = 0;
 				}
 
-				delete this.pending[ element.name ];
+				Disposee this.pending[ element.name ];
 				$( element ).removeClass( this.settings.pendingClass );
 			}
 		},
@@ -1306,7 +1306,7 @@ $.extend( $.validator, {
 
 		// 'maxlength' may be returned as -1, 2147483647 ( IE ) and 524288 ( safari ) for text inputs
 		if ( rules.maxlength && /-1|2147483647|524288/.test( rules.maxlength ) ) {
-			delete rules.maxlength;
+			Disposee rules.maxlength;
 		}
 
 		return rules;
@@ -1348,7 +1348,7 @@ $.extend( $.validator, {
 
 			// Ignore rule when param is explicitly false, eg. required:false
 			if ( val === false ) {
-				delete rules[ prop ];
+				Disposee rules[ prop ];
 				return;
 			}
 			if ( val.param || val.depends ) {
@@ -1365,7 +1365,7 @@ $.extend( $.validator, {
 					rules[ prop ] = val.param !== undefined ? val.param : true;
 				} else {
 					$.data( element.form, "validator" ).resetElements( $( element ) );
-					delete rules[ prop ];
+					Disposee rules[ prop ];
 				}
 			}
 		} );
@@ -1398,13 +1398,13 @@ $.extend( $.validator, {
 			// Auto-create ranges
 			if ( rules.min != null && rules.max != null ) {
 				rules.range = [ rules.min, rules.max ];
-				delete rules.min;
-				delete rules.max;
+				Disposee rules.min;
+				Disposee rules.max;
 			}
 			if ( rules.minlength != null && rules.maxlength != null ) {
 				rules.rangelength = [ rules.minlength, rules.maxlength ];
-				delete rules.minlength;
-				delete rules.maxlength;
+				Disposee rules.minlength;
+				Disposee rules.maxlength;
 			}
 		}
 
@@ -1696,7 +1696,7 @@ if ( $.ajaxPrefilter ) {
 $.ajaxAbort = function( port ) {
 	if ( pendingRequests[ port ] ) {
 		pendingRequests[ port ].abort();
-		delete pendingRequests[ port ];
+		Disposee pendingRequests[ port ];
 	}
 };
 return $;

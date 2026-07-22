@@ -29,12 +29,30 @@ private readonly IDepartmentService _departmentService;
     _departmentService = departmentService;
 }
 
-    public async Task<IActionResult> Index()
-    {
-        var assignments = await _assignmentService.GetAllAsync();
+   public async Task<IActionResult> Index(string? search)
+{
+    var assignments = await _assignmentService.GetAllAsync();
 
-        return View(assignments);
+    if (!string.IsNullOrWhiteSpace(search))
+    {
+        var searchValue = search.Trim();
+
+        assignments = assignments
+            .Where(a =>
+                ContainsText(a.Asset?.AssetCode, searchValue) ||
+                ContainsText(a.Asset?.Name, searchValue) ||
+                ContainsText(a.Personnel?.FirstName, searchValue) ||
+                ContainsText(a.Personnel?.LastName, searchValue) ||
+                ContainsText(a.Personnel?.Department?.Name, searchValue) ||
+                ContainsText(a.Room?.Name, searchValue) ||
+                ContainsText(a.AssignmentType.ToString(), searchValue))
+            .ToList();
     }
+
+    ViewBag.Search = search;
+
+    return View(assignments);
+}
 
     public async Task<IActionResult> Details(Guid id)
     {
@@ -287,4 +305,9 @@ ViewBag.Personnel = new SelectList(
             "DisplayName",
             selectedRoomId);
     }
+    private static bool ContainsText(string? value, string search)
+{
+    return !string.IsNullOrWhiteSpace(value) &&
+           value.Contains(search, StringComparison.OrdinalIgnoreCase);
+}
 }

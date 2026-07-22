@@ -122,7 +122,7 @@ public class PersonnelController : Controller
             return NotFound();
         }
 
-        TempData["SuccessMessage"] = "Personnel deleted successfully.";
+        TempData["SuccessMessage"] = "Personnel Deleted successfully.";
 
         return RedirectToAction(nameof(Index));
     }

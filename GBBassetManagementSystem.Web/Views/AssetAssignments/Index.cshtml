@@ -18,6 +18,25 @@
         New Assignment
     </a>
 </div>
+<form asp-action="Index" method="get" class="row g-2 mb-3">
+    <div class="col-md-9">
+        <input type="text"
+               name="search"
+               value="@ViewBag.Search"
+               class="form-control"
+               placeholder="Search by asset, personnel, department or room..." />
+    </div>
+
+    <div class="col-md-3 d-flex gap-2">
+        <button type="submit" class="btn btn-primary">
+            Search
+        </button>
+
+        <a asp-action="Index" class="btn btn-secondary">
+            Clear
+        </a>
+    </div>
+</form>
 
 @if (!Model.Any())
 {

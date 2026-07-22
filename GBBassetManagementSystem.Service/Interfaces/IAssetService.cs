@@ -12,5 +12,5 @@ public interface IAssetService
 
     Task UpdateAsync(Asset asset);
 
-    Task DeleteAsync(Guid id);
+    Task DisposeAsync(Guid id);
 }

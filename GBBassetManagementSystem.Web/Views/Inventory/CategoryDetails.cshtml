@@ -69,19 +69,11 @@
             </div>
         </div>
 
-        <div class="col-md-6 col-lg-2">
-            <div class="card h-100 border-danger">
-                <div class="card-body text-center">
-                    <h2 class="mb-1">@Model.Broken</h2>
-                    <span class="text-muted">Broken</span>
-                </div>
-            </div>
-        </div>
-
+    
         <div class="col-md-6 col-lg-2">
             <div class="card h-100 border-warning">
                 <div class="card-body text-center">
-                    <h2 class="mb-1">@Model.UnderMaintenance</h2>
+                    <h2 class="mb-1">@Model.Maintenance</h2>
                     <span class="text-muted">Maintenance</span>
                 </div>
             </div>
@@ -580,30 +572,28 @@
 @functions
 {
     private static string GetStatusText(AssetStatus status)
+{
+    return status switch
     {
-        return status switch
-        {
-            AssetStatus.Available => "Available",
-            AssetStatus.Assigned => "Assigned",
-            AssetStatus.UnderMaintenance => "Under Maintenance",
-            AssetStatus.Broken => "Broken",
-            AssetStatus.Lost => "Lost",
-            AssetStatus.Retired => "Retired",
-            _ => status.ToString()
-        };
-    }
+        AssetStatus.Available => "Available",
+        AssetStatus.Assigned => "Assigned",
+        AssetStatus.Maintenance => "Maintenance",
+        AssetStatus.Lost => "Lost",
+        AssetStatus.Disposed => "Disposed",
+        _ => status.ToString()
+    };
+}
 
     private static string GetStatusBadgeClass(AssetStatus status)
+{
+    return status switch
     {
-        return status switch
-        {
-            AssetStatus.Available => "bg-success",
-            AssetStatus.Assigned => "bg-primary",
-            AssetStatus.UnderMaintenance => "bg-warning text-dark",
-            AssetStatus.Broken => "bg-danger",
-            AssetStatus.Lost => "bg-dark",
-            AssetStatus.Retired => "bg-secondary",
-            _ => "bg-secondary"
-        };
-    }
+        AssetStatus.Available => "bg-success",
+        AssetStatus.Assigned => "bg-primary",
+        AssetStatus.Maintenance => "bg-warning text-dark",
+        AssetStatus.Lost => "bg-dark",
+        AssetStatus.Disposed => "bg-secondary",
+        _ => "bg-secondary"
+    };
+}
 }

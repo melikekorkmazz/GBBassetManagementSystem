@@ -23,12 +23,30 @@ public class AssetsController : Controller
         _assignmentService = assignmentService;
     }
 
-    public async Task<IActionResult> Index()
-    {
-        var assets = await _assetService.GetAllAsync();
+   public async Task<IActionResult> Index(string? search)
+{
+    var assets = await _assetService.GetAllAsync();
 
-        return View(assets);
+    if (!string.IsNullOrWhiteSpace(search))
+    {
+        var searchValue = search.Trim();
+
+        assets = assets
+            .Where(asset =>
+                ContainsText(asset.AssetCode, searchValue) ||
+                ContainsText(asset.Name, searchValue) ||
+                ContainsText(asset.Category?.Name, searchValue) ||
+                ContainsText(asset.Brand, searchValue) ||
+                ContainsText(asset.Model, searchValue) ||
+                ContainsText(asset.SerialNumber, searchValue) ||
+                ContainsText(asset.Status.ToString(), searchValue))
+            .ToList();
     }
+
+    ViewBag.Search = search;
+
+    return View(assets);
+}
 
     public async Task<IActionResult> Details(Guid id)
     {
@@ -155,36 +173,95 @@ public async Task<IActionResult> Create(Asset asset)
         return RedirectToAction(nameof(Index));
     }
 
-    public async Task<IActionResult> Delete(Guid id)
+   public async Task<IActionResult> Dispose(Guid id)
+{
+    var asset = await _assetService.GetByIdAsync(id);
+
+    if (asset is null)
     {
-        var asset = await _assetService.GetByIdAsync(id);
-
-        if (asset is null)
-        {
-            return NotFound();
-        }
-
-        return View(asset);
+        return NotFound();
     }
 
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(Guid id)
-    {
-        try
-        {
-            await _assetService.DeleteAsync(id);
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
-        }
+    var assignmentHistory =
+        await _assignmentService.GetByAssetIdAsync(id);
 
-        TempData["SuccessMessage"] =
-            "Asset deleted successfully.";
+    var hasActiveAssignment =
+        assignmentHistory.Any(assignment => assignment.IsActive);
+
+    if (hasActiveAssignment ||
+        asset.Status == AssetStatus.Assigned)
+    {
+        TempData["ErrorMessage"] =
+            "Assigned assets cannot be disposed. Return the asset first.";
 
         return RedirectToAction(nameof(Index));
     }
+
+    if (asset.Status == AssetStatus.Disposed)
+    {
+        TempData["ErrorMessage"] =
+            "This asset has already been disposed.";
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    return View(asset);
+}
+
+   [HttpPost, ActionName("Dispose")]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> DisposeConfirmed(Guid id)
+{
+    var asset = await _assetService.GetByIdAsync(id);
+
+    if (asset is null)
+    {
+        return NotFound();
+    }
+
+    var assignmentHistory =
+        await _assignmentService.GetByAssetIdAsync(id);
+
+    var hasActiveAssignment =
+        assignmentHistory.Any(assignment => assignment.IsActive);
+
+    if (hasActiveAssignment ||
+        asset.Status == AssetStatus.Assigned)
+    {
+        TempData["ErrorMessage"] =
+            "Assigned assets cannot be disposed. Return the asset first.";
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    if (asset.Status == AssetStatus.Disposed)
+    {
+        TempData["ErrorMessage"] =
+            "This asset has already been disposed.";
+
+        return RedirectToAction(nameof(Index));
+    }
+
+   try
+{
+    await _assetService.DisposeAsync(id);
+}
+catch (KeyNotFoundException)
+{
+    return NotFound();
+}
+catch (InvalidOperationException exception)
+{
+    TempData["ErrorMessage"] = exception.Message;
+
+    return RedirectToAction(nameof(Index));
+}
+    TempData["SuccessMessage"] =
+        $"Asset {asset.AssetCode} was disposed successfully.";
+
+    return RedirectToAction(nameof(Index));
+    
+}
 
     private async Task LoadFormDataAsync(
         Guid? selectedCategoryId = null,
@@ -253,5 +330,14 @@ public async Task<IActionResult> Create(Asset asset)
     var nextNumber = highestNumber + 1;
 
     return $"{assetCodePrefix}{nextNumber:0000}";
+}
+private static bool ContainsText(
+    string? value,
+    string search)
+{
+    return !string.IsNullOrWhiteSpace(value) &&
+           value.Contains(
+               search,
+               StringComparison.OrdinalIgnoreCase);
 }
 }

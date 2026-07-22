@@ -14,11 +14,10 @@ public class InventoryCategoryDetailsViewModel
 
     public int Assigned { get; set; }
 
-    public int Broken { get; set; }
-
-    public int UnderMaintenance { get; set; }
+    public int Maintenance { get; set; }
 
     public int Lost { get; set; }
+    public int Disposed { get; set; }
 
     public string? Search { get; set; }
 
@@ -33,6 +32,7 @@ public class InventoryCategoryDetailsViewModel
     public List<InventoryDepartmentSummaryViewModel> Departments { get; set; } = [];
 
     public List<InventoryRoomSummaryViewModel> Rooms { get; set; } = [];
+
     public List<TopAssignedModelViewModel> TopAssignedModels { get; set; } = [];
 }
 
@@ -90,6 +90,7 @@ public class InventoryRoomSummaryViewModel
 
     public int AssetCount { get; set; }
 }
+
 public class TopAssignedModelViewModel
 {
     public string Brand { get; set; } = string.Empty;

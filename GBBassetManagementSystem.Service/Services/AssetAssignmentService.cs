@@ -156,10 +156,7 @@ public class AssetAssignmentService : IAssetAssignmentService
         assignment.IsActive = false;
         assignment.ReturnDate = DateTime.Today;
 
-        assignment.Asset.Status =
-            condition == "Broken"
-                ? AssetStatus.Broken
-                : AssetStatus.Available;
+       assignment.Asset.Status = AssetStatus.Available;
 
         var assetReturn = new AssetReturn
         {

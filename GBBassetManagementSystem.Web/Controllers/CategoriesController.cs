@@ -91,19 +91,28 @@ public class CategoriesController : Controller
         return View(category);
     }
 
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(Guid id)
+[HttpPost, ActionName("Delete")]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> DeleteConfirmed(Guid id)
+{
+    try
     {
-        try
-        {
-            await _categoryService.DeleteAsync(id);
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound();
-        }
+        await _categoryService.DeleteAsync(id);
+    }
+    catch (KeyNotFoundException)
+    {
+        return NotFound();
+    }
+    catch (InvalidOperationException exception)
+    {
+        TempData["ErrorMessage"] = exception.Message;
 
         return RedirectToAction(nameof(Index));
     }
+
+    TempData["SuccessMessage"] =
+        "Category deleted successfully.";
+
+    return RedirectToAction(nameof(Index));
+}
 }

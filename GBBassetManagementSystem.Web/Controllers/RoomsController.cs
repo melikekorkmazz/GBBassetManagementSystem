@@ -101,7 +101,7 @@ public class RoomsController : Controller
     {
         await _roomService.DeleteAsync(id);
 
-        TempData["SuccessMessage"] = "Room deleted successfully.";
+        TempData["SuccessMessage"] = "Room Deleted successfully.";
 
         return RedirectToAction(nameof(Index));
     }

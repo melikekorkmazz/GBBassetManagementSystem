@@ -955,7 +955,7 @@ function createCache() {
 		if ( keys.push( key + " " ) > Expr.cacheLength ) {
 
 			// Only keep the most recent entries
-			delete cache[ keys.shift() ];
+			Disposee cache[ keys.shift() ];
 		}
 		return ( cache[ key + " " ] = value );
 	}
@@ -3996,7 +3996,7 @@ Data.prototype = {
 
 				// Otherwise secure it in a non-enumerable property
 				// configurable must be true to allow the property to be
-				// deleted when data is removed
+				// Disposeed when data is removed
 				} else {
 					Object.defineProperty( owner, this.expando, {
 						value: value,
@@ -4094,7 +4094,7 @@ Data.prototype = {
 			i = key.length;
 
 			while ( i-- ) {
-				delete cache[ key[ i ] ];
+				Disposee cache[ key[ i ] ];
 			}
 		}
 
@@ -4108,7 +4108,7 @@ Data.prototype = {
 			if ( owner.nodeType ) {
 				owner[ this.expando ] = undefined;
 			} else {
-				delete owner[ this.expando ];
+				Disposee owner[ this.expando ];
 			}
 		}
 	},
@@ -4338,7 +4338,7 @@ jQuery.extend( {
 			}
 
 			// Clear up the last queue stop function
-			delete hooks.stop;
+			Disposee hooks.stop;
 			fn.call( elem, next, hooks );
 		}
 
@@ -5084,7 +5084,7 @@ jQuery.event = {
 					jQuery.removeEvent( elem, type, elemData.handle );
 				}
 
-				delete events[ type ];
+				Disposee events[ type ];
 			}
 		}
 
@@ -6049,13 +6049,13 @@ jQuery.extend( {
 					}
 
 					// Support: Chrome <=35 - 45+
-					// Assign undefined instead of using delete, see Data#remove
+					// Assign undefined instead of using Disposee, see Data#remove
 					elem[ dataPriv.expando ] = undefined;
 				}
 				if ( elem[ dataUser.expando ] ) {
 
 					// Support: Chrome <=35 - 45+
-					// Assign undefined instead of using delete, see Data#remove
+					// Assign undefined instead of using Disposee, see Data#remove
 					elem[ dataUser.expando ] = undefined;
 				}
 			}
@@ -6508,7 +6508,7 @@ function addGetHookIf( conditionFn, hookFn ) {
 
 				// Hook not needed (or it's not possible to use it due
 				// to missing dependency), remove it.
-				delete this.get;
+				Disposee this.get;
 				return;
 			}
 
@@ -7249,7 +7249,7 @@ function defaultPrefilter( elem, props, opts ) {
 	for ( prop in props ) {
 		value = props[ prop ];
 		if ( rfxtypes.test( value ) ) {
-			delete props[ prop ];
+			Disposee props[ prop ];
 			toggle = toggle || value === "toggle";
 			if ( value === ( hidden ? "hide" : "show" ) ) {
 
@@ -7397,13 +7397,13 @@ function propFilter( props, specialEasing ) {
 
 		if ( index !== name ) {
 			props[ name ] = value;
-			delete props[ index ];
+			Disposee props[ index ];
 		}
 
 		hooks = jQuery.cssHooks[ name ];
 		if ( hooks && "expand" in hooks ) {
 			value = hooks.expand( value );
-			delete props[ name ];
+			Disposee props[ name ];
 
 			// Not quite $.extend, this won't overwrite existing keys.
 			// Reusing 'index' because we have the correct "name"
@@ -7427,7 +7427,7 @@ function Animation( elem, properties, options ) {
 		deferred = jQuery.Deferred().always( function() {
 
 			// Don't match elem in the :animated selector
-			delete tick.elem;
+			Disposee tick.elem;
 		} ),
 		tick = function() {
 			if ( stopped ) {
@@ -7660,7 +7660,7 @@ jQuery.fn.extend( {
 	stop: function( type, clearQueue, gotoEnd ) {
 		var stopQueue = function( hooks ) {
 			var stop = hooks.stop;
-			delete hooks.stop;
+			Disposee hooks.stop;
 			stop( gotoEnd );
 		};
 
@@ -7747,7 +7747,7 @@ jQuery.fn.extend( {
 			}
 
 			// Turn off finishing flag
-			delete data.finish;
+			Disposee data.finish;
 		} );
 	}
 } );
@@ -8006,7 +8006,7 @@ jQuery.fn.extend( {
 
 	removeProp: function( name ) {
 		return this.each( function() {
-			delete this[ jQuery.propFix[ name ] || name ];
+			Disposee this[ jQuery.propFix[ name ] || name ];
 		} );
 	}
 } );
@@ -9426,7 +9426,7 @@ jQuery.extend( {
 				cacheURL += ( rquery.test( cacheURL ) ? "&" : "?" ) + s.data;
 
 				// trac-9682: remove data so that it's not used in an eventual retry
-				delete s.data;
+				Disposee s.data;
 			}
 
 			// Add or update anti-cache param if needed

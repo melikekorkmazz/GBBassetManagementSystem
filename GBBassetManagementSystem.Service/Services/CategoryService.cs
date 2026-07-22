@@ -49,16 +49,27 @@ public class CategoryService : ICategoryService
         await _context.SaveChangesAsync();
     }
 
+    
     public async Task DeleteAsync(Guid id)
+{
+    var category = await _context.Categories.FindAsync(id);
+
+    if (category is null)
     {
-        var category = await _context.Categories.FindAsync(id);
-
-        if (category is null)
-        {
-            throw new KeyNotFoundException("Category was not found.");
-        }
-
-        _context.Categories.Remove(category);
-        await _context.SaveChangesAsync();
+        throw new KeyNotFoundException("Category was not found.");
     }
+
+    var hasAssets = await _context.Assets
+        .AnyAsync(asset => asset.CategoryId == id);
+
+    if (hasAssets)
+    {
+        throw new InvalidOperationException(
+            "This category cannot be deleted because it contains assets.");
+    }
+
+    _context.Categories.Remove(category);
+
+    await _context.SaveChangesAsync();
+}
 }

@@ -10,11 +10,11 @@ public class InventoryViewModel
 
     public int AssignedAssets { get; set; }
 
-    public int BrokenAssets { get; set; }
-
-    public int UnderMaintenanceAssets { get; set; }
+    public int MaintenanceAssets { get; set; }
 
     public int LostAssets { get; set; }
+
+    public int DisposedAssets { get; set; }
 
     public List<InventoryCategorySummaryViewModel> Categories { get; set; } = [];
 }
@@ -31,9 +31,9 @@ public class InventoryCategorySummaryViewModel
 
     public int Assigned { get; set; }
 
-    public int Broken { get; set; }
-
-    public int UnderMaintenance { get; set; }
+    public int Maintenance { get; set; }
 
     public int Lost { get; set; }
+
+    public int Disposed { get; set; }
 }

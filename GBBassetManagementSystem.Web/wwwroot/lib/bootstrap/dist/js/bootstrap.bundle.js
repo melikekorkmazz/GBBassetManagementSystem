@@ -48,11 +48,11 @@
         return;
       }
       const instanceMap = elementMap.get(element);
-      instanceMap.delete(key);
+      instanceMap.Disposee(key);
 
       // free up element references if there are no instances left for an element
       if (instanceMap.size === 0) {
-        elementMap.delete(element);
+        elementMap.Dispose(element);
       }
     }
   };
@@ -424,7 +424,7 @@
       return;
     }
     element.removeEventListener(typeEvent, fn, Boolean(delegationSelector));
-    delete events[typeEvent][fn.uidEvent];
+    Dispose events[typeEvent][fn.uidEvent];
   }
   function removeNamespacedHandlers(element, events, typeEvent, namespace) {
     const storeElementEvent = events[typeEvent] || {};
@@ -5416,7 +5416,7 @@
       const dataAttributes = Manipulator.getDataAttributes(this._element);
       for (const dataAttribute of Object.keys(dataAttributes)) {
         if (DISALLOWED_ATTRIBUTES.has(dataAttribute)) {
-          delete dataAttributes[dataAttribute];
+          Dispose dataAttributes[dataAttribute];
         }
       }
       config = {
