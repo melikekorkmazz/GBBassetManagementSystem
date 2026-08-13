@@ -1,15 +1,16 @@
+using System.ComponentModel.DataAnnotations;
 using GBBassetManagementSystem.Core.Entities;
 
-namespace GBBassetManagementSystem.Entity.Entities
+namespace GBBassetManagementSystem.Entity.Entities;
+
+public class Category : EntityBase
 {
-    public class Category : EntityBase
-    {
-        public string Name { get; set; } = string.Empty;
+    [Display(Name = "CategoryName")]
+    public string Name { get; set; } = string.Empty;
 
-        public string Code { get; set; } = string.Empty;
+    [Display(Name = "CategoryCode")]
+    public string Code { get; set; } = string.Empty;
 
-        public string? Description { get; set; }
-
-        public ICollection<Asset> Assets { get; set; } = new List<Asset>();
-    }
+    [Display(Name = "Description")]
+    public string? Description { get; set; }
 }

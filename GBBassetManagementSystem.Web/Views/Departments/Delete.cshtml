@@ -26,6 +26,113 @@
     </button>
 
     <a asp-action="Index" class="btn btn-secondary">
-        Cancel
+        Cancel@model GBBassetManagementSystem.Entity.Entities.Department
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<GBBassetManagementSystem.Web.SharedResource> Localizer
+
+@{
+    ViewData["Title"] = Localizer["DeleteDepartment"];
+}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8 col-xl-7">
+
+            <div class="card">
+
+                <div class="card-header border-bottom">
+
+                    <div class="d-flex align-items-center gap-3">
+
+                        <div class="avatar">
+                            <span class="avatar-initial rounded bg-label-danger">
+                                <i class="icon-base ti tabler-building-minus"></i>
+                            </span>
+                        </div>
+
+                        <div>
+                            <h4 class="mb-1">
+                                @Localizer["DeleteDepartment"]
+                            </h4>
+
+                            <p class="text-muted mb-0">
+                                @Localizer["DeleteDepartmentDescription"]
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="card-body pt-4">
+
+                    <div class="alert alert-warning"
+                         role="alert">
+
+                        <i class="icon-base ti tabler-alert-triangle me-1"></i>
+                        @Localizer["DeleteDepartmentConfirmation"]
+                    </div>
+
+                    <dl class="row mb-4">
+
+                        <dt class="col-sm-4">
+                            @Localizer["Name"]
+                        </dt>
+
+                        <dd class="col-sm-8">
+                            @Model.Name
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            @Localizer["Description"]
+                        </dt>
+
+                        <dd class="col-sm-8">
+                            @(string.IsNullOrWhiteSpace(Model.Description)
+                                ? "-"
+                                : Model.Description)
+                        </dd>
+
+                    </dl>
+
+                    <form asp-action="Delete"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input asp-for="Id"
+                               type="hidden" />
+
+                        <div class="d-flex justify-content-end gap-2">
+
+                            <a asp-action="Index"
+                               class="btn btn-label-secondary">
+
+                                <i class="icon-base ti tabler-x me-1"></i>
+                                @Localizer["Cancel"]
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-danger">
+
+                                <i class="icon-base ti tabler-trash me-1"></i>
+                                @Localizer["Delete"]
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
     </a>
 </form>

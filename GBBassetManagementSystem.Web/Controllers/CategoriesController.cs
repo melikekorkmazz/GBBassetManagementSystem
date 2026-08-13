@@ -1,16 +1,23 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using GBBassetManagementSystem.Entity.Entities;
 using GBBassetManagementSystem.Service.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 
 namespace GBBassetManagementSystem.Web.Controllers;
 
+[Authorize(Roles = "Admin")]
 public class CategoriesController : Controller
 {
     private readonly ICategoryService _categoryService;
+    private readonly IStringLocalizer<SharedResource> _localizer;
 
-    public CategoriesController(ICategoryService categoryService)
+    public CategoriesController(
+        ICategoryService categoryService,
+        IStringLocalizer<SharedResource> localizer)
     {
         _categoryService = categoryService;
+        _localizer = localizer;
     }
 
     public async Task<IActionResult> Index()
@@ -29,14 +36,25 @@ public class CategoriesController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Category category)
     {
-        category.Code = category.Code.Trim().ToUpperInvariant();
-        category.Name = category.Name.Trim();
-         if (!ModelState.IsValid)
+        if (!string.IsNullOrWhiteSpace(category.Code))
+        {
+            category.Code = category.Code.Trim().ToUpperInvariant();
+        }
+
+        if (!string.IsNullOrWhiteSpace(category.Name))
+        {
+            category.Name = category.Name.Trim();
+        }
+
+        if (!ModelState.IsValid)
         {
             return View(category);
         }
 
         await _categoryService.AddAsync(category);
+
+        TempData["SuccessMessage"] =
+            _localizer["CategoryCreated"].Value;
 
         return RedirectToAction(nameof(Index));
     }
@@ -62,6 +80,16 @@ public class CategoriesController : Controller
             return BadRequest();
         }
 
+        if (!string.IsNullOrWhiteSpace(category.Code))
+        {
+            category.Code = category.Code.Trim().ToUpperInvariant();
+        }
+
+        if (!string.IsNullOrWhiteSpace(category.Name))
+        {
+            category.Name = category.Name.Trim();
+        }
+
         if (!ModelState.IsValid)
         {
             return View(category);
@@ -75,6 +103,9 @@ public class CategoriesController : Controller
         {
             return NotFound();
         }
+
+        TempData["SuccessMessage"] =
+            _localizer["CategoryUpdated"].Value;
 
         return RedirectToAction(nameof(Index));
     }
@@ -91,28 +122,29 @@ public class CategoriesController : Controller
         return View(category);
     }
 
-[HttpPost, ActionName("Delete")]
-[ValidateAntiForgeryToken]
-public async Task<IActionResult> DeleteConfirmed(Guid id)
-{
-    try
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(Guid id)
     {
-        await _categoryService.DeleteAsync(id);
-    }
-    catch (KeyNotFoundException)
-    {
-        return NotFound();
-    }
-    catch (InvalidOperationException exception)
-    {
-        TempData["ErrorMessage"] = exception.Message;
+        try
+        {
+            await _categoryService.DeleteAsync(id);
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound();
+        }
+        catch (InvalidOperationException)
+        {
+            TempData["ErrorMessage"] =
+                _localizer["CategoryContainsAssets"].Value;
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        TempData["SuccessMessage"] =
+            _localizer["CategoryDeleted"].Value;
 
         return RedirectToAction(nameof(Index));
     }
-
-    TempData["SuccessMessage"] =
-        "Category deleted successfully.";
-
-    return RedirectToAction(nameof(Index));
-}
 }

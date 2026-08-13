@@ -1,85 +1,180 @@
 @model GBBassetManagementSystem.Entity.Entities.Room
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<GBBassetManagementSystem.Web.SharedResource> Localizer
 
 @{
-    ViewData["Title"] = "Edit Room";
+    ViewData["Title"] = Localizer["EditRoom"];
 }
 
-<h1>Edit Room</h1>
+<div class="container-xxl flex-grow-1 container-p-y">
 
-<hr />
+    <div class="row justify-content-center">
 
-<div class="row">
-    <div class="col-md-6">
+        <div class="col-lg-8 col-xl-7">
 
-        <form asp-action="Edit" method="post">
+            <div class="card">
 
-            <input asp-for="Id" type="hidden" />
+                <div class="card-header border-bottom">
 
-            <div asp-validation-summary="All"
-                 class="text-danger">
+                    <div class="d-flex align-items-center gap-3">
+
+                        <div class="avatar">
+                            <span class="avatar-initial rounded bg-label-warning">
+                                <i class="icon-base ti tabler-edit"></i>
+                            </span>
+                        </div>
+
+                        <div>
+                            <h4 class="mb-1">
+                                @Localizer["EditRoom"]
+                            </h4>
+
+                            <p class="text-muted mb-0">
+                                @Localizer["EditRoomDescription"]
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="card-body pt-4">
+
+                    <form asp-action="Edit"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input asp-for="Id"
+                               type="hidden" />
+
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div asp-validation-summary="All"
+                                 class="alert alert-danger"
+                                 role="alert">
+                            </div>
+                        }
+
+                        <div class="mb-3">
+
+                            <label asp-for="Name"
+                                   class="form-label">
+                                @Localizer["RoomName"]
+                            </label>
+
+                            <input asp-for="Name"
+                                   class="form-control" />
+
+                            <span asp-validation-for="Name"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="RoomNumber"
+                                   class="form-label">
+                                @Localizer["RoomNumber"]
+                            </label>
+
+                            <input asp-for="RoomNumber"
+                                   class="form-control" />
+
+                            <span asp-validation-for="RoomNumber"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="Building"
+                                       class="form-label">
+                                    @Localizer["Building"]
+                                </label>
+
+                                <input asp-for="Building"
+                                       class="form-control" />
+
+                                <span asp-validation-for="Building"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="Floor"
+                                       class="form-label">
+                                    @Localizer["Floor"]
+                                </label>
+
+                                <input asp-for="Floor"
+                                       class="form-control" />
+
+                                <span asp-validation-for="Floor"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label asp-for="DepartmentId"
+                                   class="form-label">
+                                @Localizer["Department"]
+                            </label>
+
+                            <select asp-for="DepartmentId"
+                                    asp-items="ViewBag.Departments"
+                                    class="form-select">
+
+                               <option value="@Guid.Empty">
+    @Localizer["SelectDepartment"]
+</option>
+
+                            </select>
+
+                            <span asp-validation-for="DepartmentId"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+
+                            <a asp-action="Index"
+                               class="btn btn-label-secondary">
+
+                                <i class="icon-base ti tabler-arrow-left me-1"></i>
+                                @Localizer["Back"]
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                <i class="icon-base ti tabler-device-floppy me-1"></i>
+                                @Localizer["SaveChanges"]
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
             </div>
 
-            <div class="mb-3">
-                <label asp-for="Name" class="form-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name"
-                      class="text-danger"></span>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="RoomNumber"
-                       class="form-label"></label>
-                <input asp-for="RoomNumber"
-                       class="form-control" />
-                <span asp-validation-for="RoomNumber"
-                      class="text-danger"></span>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="Building"
-                       class="form-label"></label>
-                <input asp-for="Building"
-                       class="form-control" />
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="Floor"
-                       class="form-label"></label>
-                <input asp-for="Floor"
-                       class="form-control" />
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="DepartmentId"
-                       class="form-label">
-                    Department
-                </label>
-
-                <select asp-for="DepartmentId"
-                        asp-items="ViewBag.Departments"
-                        class="form-select">
-                    <option value="">
-                        Select Department
-                    </option>
-                </select>
-
-                <span asp-validation-for="DepartmentId"
-                      class="text-danger"></span>
-            </div>
-
-            <button type="submit"
-                    class="btn btn-success">
-                Save Changes
-            </button>
-
-            <a asp-action="Index"
-               class="btn btn-secondary">
-                Back
-            </a>
-
-        </form>
+        </div>
 
     </div>
+
 </div>
 
 @section Scripts

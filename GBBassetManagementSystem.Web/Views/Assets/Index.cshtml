@@ -1,7 +1,16 @@
+@using GBBassetManagementSystem.Entity.Enums
+@using Microsoft.Extensions.Localization
+@using System.Globalization
+
 @model IEnumerable<GBBassetManagementSystem.Entity.Entities.Asset>
 
+@inject IStringLocalizer<GBBassetManagementSystem.Web.SharedResource> Localizer
+
 @{
-    ViewData["Title"] = "Assets";
+    ViewData["Title"] = Localizer["Assets"];
+
+    var currentCulture =
+        CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
 }
 
 @if (TempData["SuccessMessage"] is not null)
@@ -10,6 +19,7 @@
         @TempData["SuccessMessage"]
     </div>
 }
+
 @if (TempData["ErrorMessage"] is not null)
 {
     <div class="alert alert-danger">
@@ -18,11 +28,17 @@
 }
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Assets</h1>
+    <h1>@Localizer["Assets"]</h1>
 
-    <a asp-action="Create" class="btn btn-primary">
-        Add Asset
-    </a>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create"
+           class="btn btn-primary">
+
+            <i class="icon-base ti tabler-plus me-1"></i>
+            @Localizer["AddAsset"]
+        </a>
+    }
 </div>
 
 <form asp-action="Index"
@@ -34,18 +50,22 @@
                name="search"
                value="@ViewBag.Search"
                class="form-control"
-               placeholder="Search by code, name, category, brand, model, serial number or status..." />
+               placeholder="@Localizer["AssetSearchPlaceholder"]" />
     </div>
 
     <div class="col-md-3 d-flex gap-2">
         <button type="submit"
                 class="btn btn-primary">
-            Search
+
+            <i class="icon-base ti tabler-search me-1"></i>
+            @Localizer["Search"]
         </button>
 
         <a asp-action="Index"
            class="btn btn-secondary">
-            Clear
+
+            <i class="icon-base ti tabler-x me-1"></i>
+            @Localizer["Clear"]
         </a>
     </div>
 </form>
@@ -53,61 +73,132 @@
 @if (!Model.Any())
 {
     <div class="alert alert-info">
-        No assets have been added yet.
+        @Localizer["NoAssetsAdded"]
     </div>
 }
 else
 {
-    <table class="table table-bordered table-striped">
-       <thead>
-    <tr>
-        <th>Asset Code</th>
-        <th>Name</th>
-        <th>Category</th>
-        <th>Brand</th>
-        <th>Model</th>
-        <th>Purchase Price</th>
-        <th>Status</th>
-        <th>Actions</th>
-    </tr>
-</thead>
-        <tbody>
-    @foreach (var asset in Model)
-    {
-        <tr>
-            <td>@asset.AssetCode</td>
-            <td>@asset.Name</td>
-            <td>@asset.Category?.Name</td>
-            <td>@asset.Brand</td>
-            <td>@asset.Model</td>
+    <div class="card">
+        <div class="table-responsive text-nowrap">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>@Localizer["AssetCode"]</th>
+                        <th>@Localizer["Name"]</th>
+                        <th>@Localizer["Category"]</th>
+                        <th>@Localizer["Brand"]</th>
+                        <th>@Localizer["Model"]</th>
+                        <th>@Localizer["PurchasePrice"]</th>
+                        <th>@Localizer["Status"]</th>
+                        <th>@Localizer["Actions"]</th>
+                    </tr>
+                </thead>
 
-            <td>
-                @asset.PurchasePrice.ToString("C", new System.Globalization.CultureInfo("tr-TR"))
-            </td>
+                <tbody>
+                    @foreach (var asset in Model)
+                    {
+                        <tr>
+                            <td>@asset.AssetCode</td>
+                            <td>@asset.Name</td>
+                            <td>@asset.Category?.Name</td>
+                            <td>@asset.Brand</td>
+                            <td>@asset.Model</td>
 
-            <td>@asset.Status</td>
-      
+                            <td>
+                                @if (currentCulture == "tr")
+                                {
+                                    @asset.PurchasePrice.ToString(
+                                        "C",
+                                        new CultureInfo("tr-TR"))
+                                }
+                                else
+                                {
+                                    @asset.PurchasePrice.ToString(
+                                        "C",
+                                        new CultureInfo("en-US"))
+                                }
+                            </td>
 
-            <td>
-                <a asp-action="Edit"
-                   asp-route-id="@asset.Id"
-                   class="btn btn-warning btn-sm">
-                    Edit
-                </a>
+                            <td>
+                                @switch (asset.Status)
+                                {
+                                    case AssetStatus.Available:
+                                        <span class="badge bg-label-success">
+                                            @Localizer["Available"]
+                                        </span>
+                                        break;
 
-                <a asp-action="Dispose"
-                   asp-route-id="@asset.Id"
-                   class="btn btn-danger btn-sm">
-                    Dispose
-                </a>
-                <a asp-action="Details"
-                asp-route-id="@asset.Id"
-              class="btn btn-info btn-sm">
-               Details
-                </a>
-            </td>
-        </tr>
-    }
-</tbody>
-    </table>
+                                    case AssetStatus.Assigned:
+                                        <span class="badge bg-label-primary">
+                                            @Localizer["Assigned"]
+                                        </span>
+                                        break;
+
+                                    case AssetStatus.Maintenance:
+                                        <span class="badge bg-label-warning">
+                                            @Localizer["Maintenance"]
+                                        </span>
+                                        break;
+
+                                    case AssetStatus.Lost:
+                                        <span class="badge bg-label-danger">
+                                            @Localizer["Lost"]
+                                        </span>
+                                        break;
+
+                                    case AssetStatus.Disposed:
+                                        <span class="badge bg-label-secondary">
+                                            @Localizer["Disposed"]
+                                        </span>
+                                        break;
+
+                                    default:
+                                        <span class="badge bg-label-dark">
+                                            @asset.Status
+                                        </span>
+                                        break;
+                                }
+                            </td>
+
+                            <td>
+                                <div class="d-flex gap-1 flex-wrap">
+
+                                    <a asp-action="Details"
+                                       asp-route-id="@asset.Id"
+                                       class="btn btn-info btn-sm">
+
+                                        <i class="icon-base ti tabler-eye me-1"></i>
+                                        @Localizer["Details"]
+                                    </a>
+
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <a asp-action="Edit"
+                                           asp-route-id="@asset.Id"
+                                           class="btn btn-warning btn-sm">
+
+                                            <i class="icon-base ti tabler-edit me-1"></i>
+                                            @Localizer["Edit"]
+                                        </a>
+
+                                        @if (asset.Status == AssetStatus.Available)
+                                        {
+                                            <a asp-action="Dispose"
+                                               asp-route-id="@asset.Id"
+                                               class="btn btn-danger btn-sm">
+
+                                                <i class="icon-base ti tabler-trash me-1"></i>
+                                                @Localizer["Dispose"]
+                                            </a>
+                                        }
+                                    }
+
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 }

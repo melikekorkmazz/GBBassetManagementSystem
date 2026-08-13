@@ -1,22 +1,29 @@
 @model GBBassetManagementSystem.Web.Models.InventoryCategoryDetailsViewModel
 
 @using GBBassetManagementSystem.Entity.Enums
+@using Microsoft.Extensions.Localization
+
+@inject IStringLocalizer<GBBassetManagementSystem.Web.SharedResource> Localizer
 
 @{
-    ViewData["Title"] = $"{Model.CategoryName} Inventory";
+    ViewData["Title"] =
+        $"{Model.CategoryName} - {Localizer["Inventory"]}";
 }
 
-<div class="container-fluid py-3">
+<div class="container-xxl flex-grow-1 container-p-y">
 
-    <!-- Breadcrumb and title -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <!-- Header -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+
         <div>
+
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-2">
+
                     <li class="breadcrumb-item">
                         <a asp-controller="Inventory"
                            asp-action="Index">
-                            Inventory
+                            @Localizer["Inventory"]
                         </a>
                     </li>
 
@@ -24,277 +31,327 @@
                         aria-current="page">
                         @Model.CategoryName
                     </li>
+
                 </ol>
             </nav>
 
-            <h1 class="mb-0">
-                @Model.CategoryName Inventory
-            </h1>
+            <h4 class="mb-0">
+                @Model.CategoryName - @Localizer["Inventory"]
+            </h4>
+
         </div>
 
         <a asp-controller="Inventory"
            asp-action="Index"
-           class="btn btn-outline-secondary">
-            Back to Inventory
+           class="btn btn-label-secondary">
+
+            <i class="icon-base ti tabler-arrow-left me-1"></i>
+            @Localizer["BackToInventory"]
         </a>
+
     </div>
 
-    <!-- Summary cards -->
+    <!-- Summary -->
     <div class="row g-3 mb-4">
 
         <div class="col-md-6 col-lg-2">
-            <div class="card h-100 border-primary">
-                <div class="card-body text-center">
+            <div class="card h-100 text-center">
+                <div class="card-body">
                     <h2 class="mb-1">@Model.Total</h2>
-                    <span class="text-muted">Total Assets</span>
+                    <span class="text-muted">
+                        @Localizer["TotalAssets"]
+                    </span>
                 </div>
             </div>
         </div>
 
         <div class="col-md-6 col-lg-2">
-            <div class="card h-100 border-success">
-                <div class="card-body text-center">
+            <div class="card h-100 text-center">
+                <div class="card-body">
                     <h2 class="mb-1">@Model.Available</h2>
-                    <span class="text-muted">Available</span>
+                    <span class="text-muted">
+                        @Localizer["Available"]
+                    </span>
                 </div>
             </div>
         </div>
 
         <div class="col-md-6 col-lg-2">
-            <div class="card h-100 border-info">
-                <div class="card-body text-center">
+            <div class="card h-100 text-center">
+                <div class="card-body">
                     <h2 class="mb-1">@Model.Assigned</h2>
-                    <span class="text-muted">Assigned</span>
+                    <span class="text-muted">
+                        @Localizer["Assigned"]
+                    </span>
                 </div>
             </div>
         </div>
 
-    
         <div class="col-md-6 col-lg-2">
-            <div class="card h-100 border-warning">
-                <div class="card-body text-center">
+            <div class="card h-100 text-center">
+                <div class="card-body">
                     <h2 class="mb-1">@Model.Maintenance</h2>
-                    <span class="text-muted">Maintenance</span>
+                    <span class="text-muted">
+                        @Localizer["Maintenance"]
+                    </span>
                 </div>
             </div>
         </div>
 
         <div class="col-md-6 col-lg-2">
-            <div class="card h-100 border-dark">
-                <div class="card-body text-center">
+            <div class="card h-100 text-center">
+                <div class="card-body">
                     <h2 class="mb-1">@Model.Lost</h2>
-                    <span class="text-muted">Lost</span>
+                    <span class="text-muted">
+                        @Localizer["Lost"]
+                    </span>
                 </div>
             </div>
         </div>
 
-
-        <div class="card mb-4">
-
-    <div class="card-header">
-        <h5 class="mb-0">
-            🏆 Top Assigned Models
-        </h5>
-    </div>
-
-    <div class="card-body">
-
-        @if (!Model.TopAssignedModels.Any())
-        {
-            <p class="text-muted mb-0">
-                No assignment history found.
-            </p>
-        }
-        else
-        {
-            <table class="table table-sm table-hover mb-0">
-
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Brand</th>
-                        <th>Model</th>
-                        <th class="text-end">Assignments</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    @{
-                        int rank = 1;
-                    }
-
-                    @foreach (var item in Model.TopAssignedModels)
-                    {
-                        <tr>
-
-                            <td>
-                                @(rank == 1 ? "🥇" :
-                                  rank == 2 ? "🥈" :
-                                  "🥉")
-                            </td>
-
-                            <td>@item.Brand</td>
-
-                            <td>@item.Model</td>
-
-                            <td class="text-end">
-                                @item.AssignmentCount
-                            </td>
-
-                        </tr>
-
-                        rank++;
-                    }
-
-                </tbody>
-
-            </table>
-        }
+        <div class="col-md-6 col-lg-2">
+            <div class="card h-100 text-center">
+                <div class="card-body">
+                    <h2 class="mb-1">@Model.Disposed</h2>
+                    <span class="text-muted">
+                        @Localizer["Disposed"]
+                    </span>
+                </div>
+            </div>
+        </div>
 
     </div>
 
-</div>
+    <!-- Top assigned models -->
+    <div class="card mb-4">
+
+        <div class="card-header border-bottom">
+            <h5 class="mb-0">
+                <i class="icon-base ti tabler-trophy me-1"></i>
+                @Localizer["TopAssignedModels"]
+            </h5>
+        </div>
+
+        <div class="card-body">
+
+            @if (!Model.TopAssignedModels.Any())
+            {
+                <p class="text-muted mb-0">
+                    @Localizer["NoAssignmentHistoryFound"]
+                </p>
+            }
+            else
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover mb-0">
+
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>@Localizer["Brand"]</th>
+                                <th>@Localizer["Model"]</th>
+                                <th class="text-end">
+                                    @Localizer["Assignments"]
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @{
+                                int rank = 1;
+                            }
+
+                            @foreach (var item in Model.TopAssignedModels)
+                            {
+                                <tr>
+
+                                    <td>
+                                        @(rank == 1 ? "🥇" :
+                                          rank == 2 ? "🥈" :
+                                          "🥉")
+                                    </td>
+
+                                    <td>@item.Brand</td>
+                                    <td>@item.Model</td>
+
+                                    <td class="text-end">
+                                        @item.AssignmentCount
+                                    </td>
+
+                                </tr>
+
+                                rank++;
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+
+        </div>
 
     </div>
 
-    <!-- Department and Room distributions -->
+    <!-- Distributions -->
     <div class="row g-4 mb-4">
 
-        <!-- Department distribution -->
+        <!-- Departments -->
         <div class="col-lg-6">
+
             <div class="card h-100">
 
-                <div class="card-header">
+                <div class="card-header border-bottom">
                     <h5 class="mb-0">
-                        Department Distribution
+                        @Localizer["DepartmentDistribution"]
                     </h5>
                 </div>
 
-                <div class="card-body p-0">
+                @if (Model.Departments.Count == 0)
+                {
+                    <div class="card-body text-center text-muted">
+                        @Localizer["NoDepartmentAssignmentFound"]
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
 
-                    @if (Model.Departments.Count == 0)
-                    {
-                        <div class="p-4 text-center text-muted">
-                            No department assignment was found for this category.
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
+                        <table class="table table-hover mb-0">
 
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>Department</th>
-                                        <th class="text-end">Asset Count</th>
-                                        <th class="text-end">Percentage</th>
-                                    </tr>
-                                </thead>
+                            <thead class="table-light">
+                                <tr>
+                                    <th>@Localizer["Department"]</th>
+                                    <th class="text-end">
+                                        @Localizer["AssetCount"]
+                                    </th>
+                                    <th class="text-end">
+                                        @Localizer["Percentage"]
+                                    </th>
+                                </tr>
+                            </thead>
 
-                                <tbody>
-                                    @foreach (var department in Model.Departments)
-                                    {
-                                        var percentage = Model.Total == 0
+                            <tbody>
+
+                                @foreach (var department in Model.Departments)
+                                {
+                                    var percentage =
+                                        Model.Total == 0
                                             ? 0
                                             : department.AssetCount * 100.0 / Model.Total;
 
-                                        <tr>
-                                            <td>
-                                                <a asp-controller="Inventory"
-                                                   asp-action="CategoryDetails"
-                                                   asp-route-id="@Model.CategoryId"
-                                                   asp-route-departmentId="@department.DepartmentId"
-                                                   asp-route-status="@Model.SelectedStatus"
-                                                   asp-route-search="@Model.Search"
-                                                   class="text-decoration-none fw-semibold">
-                                                    @department.DepartmentName
-                                                </a>
-                                            </td>
+                                    <tr>
 
-                                            <td class="text-end">
-                                                @department.AssetCount
-                                            </td>
+                                        <td>
+                                            <a asp-controller="Inventory"
+                                               asp-action="CategoryDetails"
+                                               asp-route-id="@Model.CategoryId"
+                                               asp-route-departmentId="@department.DepartmentId"
+                                               asp-route-status="@Model.SelectedStatus"
+                                               asp-route-search="@Model.Search"
+                                               class="text-decoration-none fw-semibold">
 
-                                            <td class="text-end">
-                                                @percentage.ToString("0.#")%
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
+                                                @department.DepartmentName
+                                            </a>
+                                        </td>
 
-                            </table>
-                        </div>
-                    }
+                                        <td class="text-end">
+                                            @department.AssetCount
+                                        </td>
 
-                </div>
+                                        <td class="text-end">
+                                            @percentage.ToString("0.#")%
+                                        </td>
+
+                                    </tr>
+                                }
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                }
+
             </div>
+
         </div>
 
-        <!-- Room distribution -->
+        <!-- Rooms -->
         <div class="col-lg-6">
+
             <div class="card h-100">
 
-                <div class="card-header">
+                <div class="card-header border-bottom">
                     <h5 class="mb-0">
-                        Room Distribution
+                        @Localizer["RoomDistribution"]
                     </h5>
                 </div>
 
-                <div class="card-body p-0">
+                @if (Model.Rooms.Count == 0)
+                {
+                    <div class="card-body text-center text-muted">
+                        @Localizer["NoRoomAssignmentFound"]
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
 
-                    @if (Model.Rooms.Count == 0)
-                    {
-                        <div class="p-4 text-center text-muted">
-                            No room assignment was found for this category.
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle mb-0">
+                        <table class="table table-hover mb-0">
 
-                                <thead class="table-light">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>@Localizer["Room"]</th>
+                                    <th>@Localizer["Department"]</th>
+                                    <th class="text-end">
+                                        @Localizer["AssetCount"]
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                @foreach (var room in Model.Rooms)
+                                {
                                     <tr>
-                                        <th>Room</th>
-                                        <th>Department</th>
-                                        <th class="text-end">Asset Count</th>
+
+                                        <td>
+                                            <a asp-controller="Inventory"
+                                               asp-action="CategoryDetails"
+                                               asp-route-id="@Model.CategoryId"
+                                               asp-route-roomId="@room.RoomId"
+                                               asp-route-status="@Model.SelectedStatus"
+                                               asp-route-search="@Model.Search"
+                                               class="text-decoration-none fw-semibold">
+
+                                                @room.RoomName
+                                            </a>
+                                        </td>
+
+                                        <td>
+                                            @room.DepartmentName
+                                        </td>
+
+                                        <td class="text-end">
+                                            @room.AssetCount
+                                        </td>
+
                                     </tr>
-                                </thead>
+                                }
 
-                                <tbody>
-                                    @foreach (var room in Model.Rooms)
-                                    {
-                                        <tr>
-                                            <td>
-                                                <a asp-controller="Inventory"
-                                                   asp-action="CategoryDetails"
-                                                   asp-route-id="@Model.CategoryId"
-                                                   asp-route-roomId="@room.RoomId"
-                                                   asp-route-status="@Model.SelectedStatus"
-                                                   asp-route-search="@Model.Search"
-                                                   class="text-decoration-none fw-semibold">
-                                                    @room.RoomName
-                                                </a>
-                                            </td>
+                            </tbody>
 
-                                            <td>
-                                                @room.DepartmentName
-                                            </td>
+                        </table>
 
-                                            <td class="text-end">
-                                                @room.AssetCount
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
+                    </div>
+                }
 
-                            </table>
-                        </div>
-                    }
-
-                </div>
             </div>
+
         </div>
 
     </div>
@@ -302,8 +359,10 @@
     <!-- Filters -->
     <div class="card mb-4">
 
-        <div class="card-header">
-            <h5 class="mb-0">Filters</h5>
+        <div class="card-header border-bottom">
+            <h5 class="mb-0">
+                @Localizer["Filters"]
+            </h5>
         </div>
 
         <div class="card-body">
@@ -319,9 +378,10 @@
                 <div class="row g-3 align-items-end">
 
                     <div class="col-md-6 col-lg-3">
+
                         <label for="search"
                                class="form-label">
-                            Search
+                            @Localizer["Search"]
                         </label>
 
                         <input type="text"
@@ -329,26 +389,31 @@
                                name="search"
                                value="@Model.Search"
                                class="form-control"
-                               placeholder="Code, name, brand, model..." />
+                               placeholder="@Localizer["InventorySearchPlaceholder"]" />
+
                     </div>
 
                     <div class="col-md-6 col-lg-3">
+
                         <label for="status"
                                class="form-label">
-                            Status
+                            @Localizer["Status"]
                         </label>
 
                         <select id="status"
                                 name="status"
                                 class="form-select">
 
-                            <option value="">All Statuses</option>
+                            <option value="">
+                                @Localizer["AllStatuses"]
+                            </option>
 
                             @foreach (var statusValue in Enum.GetValues<AssetStatus>())
                             {
                                 if (Model.SelectedStatus == statusValue)
                                 {
-                                    <option value="@statusValue" selected>
+                                    <option value="@statusValue"
+                                            selected>
                                         @GetStatusText(statusValue)
                                     </option>
                                 }
@@ -361,19 +426,23 @@
                             }
 
                         </select>
+
                     </div>
 
                     <div class="col-md-6 col-lg-3">
+
                         <label for="departmentId"
                                class="form-label">
-                            Department
+                            @Localizer["Department"]
                         </label>
 
                         <select id="departmentId"
                                 name="departmentId"
                                 class="form-select">
 
-                            <option value="">All Departments</option>
+                            <option value="">
+                                @Localizer["AllDepartments"]
+                            </option>
 
                             @foreach (var department in Model.Departments)
                             {
@@ -394,19 +463,23 @@
                             }
 
                         </select>
+
                     </div>
 
                     <div class="col-md-6 col-lg-3">
+
                         <label for="roomId"
                                class="form-label">
-                            Room
+                            @Localizer["Room"]
                         </label>
 
                         <select id="roomId"
                                 name="roomId"
                                 class="form-select">
 
-                            <option value="">All Rooms</option>
+                            <option value="">
+                                @Localizer["AllRooms"]
+                            </option>
 
                             @foreach (var room in Model.Rooms)
                             {
@@ -426,20 +499,25 @@
                             }
 
                         </select>
+
                     </div>
 
                     <div class="col-12 d-flex gap-2">
 
                         <button type="submit"
                                 class="btn btn-primary">
-                            Apply Filters
+
+                            <i class="icon-base ti tabler-filter me-1"></i>
+                            @Localizer["ApplyFilters"]
                         </button>
 
                         <a asp-controller="Inventory"
                            asp-action="CategoryDetails"
                            asp-route-id="@Model.CategoryId"
-                           class="btn btn-outline-secondary">
-                            Clear Filters
+                           class="btn btn-label-secondary">
+
+                            <i class="icon-base ti tabler-x me-1"></i>
+                            @Localizer["ClearFilters"]
                         </a>
 
                     </div>
@@ -449,151 +527,191 @@
             </form>
 
         </div>
+
     </div>
 
-    <!-- Asset list -->
+    <!-- Assets -->
     <div class="card">
 
-        <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+
             <h5 class="mb-0">
-                Assets
+                @Localizer["Assets"]
             </h5>
 
-            <span class="badge bg-secondary">
-                @Model.Assets.Count result(s)
+            <span class="badge bg-label-secondary">
+                @Model.Assets.Count @Localizer["Results"]
             </span>
+
         </div>
 
-        <div class="card-body p-0">
+        @if (Model.Assets.Count == 0)
+        {
+            <div class="card-body text-center py-5">
 
-            @if (Model.Assets.Count == 0)
-            {
-                <div class="p-5 text-center">
-                    <h5>No assets found</h5>
-                    <p class="text-muted mb-0">
-                        No asset matches the selected filters.
-                    </p>
+                <div class="avatar avatar-xl mx-auto mb-3">
+                    <span class="avatar-initial rounded-circle bg-label-secondary">
+                        <i class="icon-base ti tabler-package-off fs-2"></i>
+                    </span>
                 </div>
-            }
-            else
-            {
-                <div class="table-responsive">
 
-                    <table class="table table-hover align-middle mb-0">
+                <h5>
+                    @Localizer["NoAssetsFound"]
+                </h5>
 
-                        <thead class="table-light">
+                <p class="text-muted mb-0">
+                    @Localizer["NoAssetsMatchFilters"]
+                </p>
+
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+
+                <table class="table table-hover">
+
+                    <thead class="table-light">
+                        <tr>
+                            <th>@Localizer["AssetCode"]</th>
+                            <th>@Localizer["Asset"]</th>
+                            <th>@Localizer["BrandModel"]</th>
+                            <th>@Localizer["SerialNumber"]</th>
+                            <th>@Localizer["Status"]</th>
+                            <th>@Localizer["AssignedTo"]</th>
+                            <th>@Localizer["Department"]</th>
+                            <th>@Localizer["RoomLocation"]</th>
+                            <th class="text-end">
+                                @Localizer["Action"]
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var asset in Model.Assets)
+                        {
                             <tr>
-                                <th>Asset Code</th>
-                                <th>Asset</th>
-                                <th>Brand / Model</th>
-                                <th>Serial Number</th>
-                                <th>Status</th>
-                                <th>Assigned To</th>
-                                <th>Department</th>
-                                <th>Room / Location</th>
-                                <th class="text-end">Action</th>
+
+                                <td class="fw-semibold">
+                                    @asset.AssetCode
+                                </td>
+
+                                <td>
+                                    @asset.Name
+                                </td>
+
+                                <td>
+                                    <div>@asset.Brand</div>
+
+                                    <small class="text-muted">
+                                        @asset.Model
+                                    </small>
+                                </td>
+
+                                <td>
+                                    @asset.SerialNumber
+                                </td>
+
+                                <td>
+                                    <span class="badge @GetStatusBadgeClass(asset.Status)">
+                                        @GetStatusText(asset.Status)
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @asset.AssignedTo
+                                </td>
+
+                                <td>
+                                    @asset.DepartmentName
+                                </td>
+
+                                <td>
+                                    @if (asset.RoomName != "—")
+                                    {
+                                        @asset.RoomName
+                                    }
+                                    else
+                                    {
+                                        @asset.Location
+                                    }
+                                </td>
+
+                                <td class="text-end">
+
+                                    <a asp-controller="Assets"
+                                       asp-action="Details"
+                                       asp-route-id="@asset.AssetId"
+                                       class="btn btn-sm btn-label-info">
+
+                                        <i class="icon-base ti tabler-eye me-1"></i>
+                                        @Localizer["Details"]
+                                    </a>
+
+                                </td>
+
                             </tr>
-                        </thead>
+                        }
 
-                        <tbody>
+                    </tbody>
 
-                            @foreach (var asset in Model.Assets)
-                            {
-                                <tr>
+                </table>
 
-                                    <td class="fw-semibold">
-                                        @asset.AssetCode
-                                    </td>
+            </div>
+        }
 
-                                    <td>
-                                        @asset.Name
-                                    </td>
-
-                                    <td>
-                                        <div>@asset.Brand</div>
-                                        <small class="text-muted">
-                                            @asset.Model
-                                        </small>
-                                    </td>
-
-                                    <td>
-                                        @asset.SerialNumber
-                                    </td>
-
-                                    <td>
-                                        <span class="badge @GetStatusBadgeClass(asset.Status)">
-                                            @GetStatusText(asset.Status)
-                                        </span>
-                                    </td>
-
-                                    <td>
-                                        @asset.AssignedTo
-                                    </td>
-
-                                    <td>
-                                        @asset.DepartmentName
-                                    </td>
-
-                                    <td>
-                                        @if (asset.RoomName != "—")
-                                        {
-                                            <div>@asset.RoomName</div>
-                                        }
-                                        else
-                                        {
-                                            <div>@asset.Location</div>
-                                        }
-                                    </td>
-
-                                    <td class="text-end">
-                                        <a asp-controller="Assets"
-                                           asp-action="Details"
-                                           asp-route-id="@asset.AssetId"
-                                           class="btn btn-sm btn-outline-primary">
-                                            Details
-                                        </a>
-                                    </td>
-
-                                </tr>
-                            }
-
-                        </tbody>
-
-                    </table>
-
-                </div>
-            }
-
-        </div>
     </div>
 
 </div>
 
 @functions
 {
-    private static string GetStatusText(AssetStatus status)
-{
-    return status switch
+    private string GetStatusText(AssetStatus status)
     {
-        AssetStatus.Available => "Available",
-        AssetStatus.Assigned => "Assigned",
-        AssetStatus.Maintenance => "Maintenance",
-        AssetStatus.Lost => "Lost",
-        AssetStatus.Disposed => "Disposed",
-        _ => status.ToString()
-    };
-}
+        return status switch
+        {
+            AssetStatus.Available =>
+                Localizer["Available"].Value,
 
-    private static string GetStatusBadgeClass(AssetStatus status)
-{
-    return status switch
+            AssetStatus.Assigned =>
+                Localizer["Assigned"].Value,
+
+            AssetStatus.Maintenance =>
+                Localizer["Maintenance"].Value,
+
+            AssetStatus.Lost =>
+                Localizer["Lost"].Value,
+
+            AssetStatus.Disposed =>
+                Localizer["Disposed"].Value,
+
+            _ => status.ToString()
+        };
+    }
+
+    private static string GetStatusBadgeClass(
+        AssetStatus status)
     {
-        AssetStatus.Available => "bg-success",
-        AssetStatus.Assigned => "bg-primary",
-        AssetStatus.Maintenance => "bg-warning text-dark",
-        AssetStatus.Lost => "bg-dark",
-        AssetStatus.Disposed => "bg-secondary",
-        _ => "bg-secondary"
-    };
-}
+        return status switch
+        {
+            AssetStatus.Available =>
+                "bg-label-success",
+
+            AssetStatus.Assigned =>
+                "bg-label-primary",
+
+            AssetStatus.Maintenance =>
+                "bg-label-warning",
+
+            AssetStatus.Lost =>
+                "bg-label-dark",
+
+            AssetStatus.Disposed =>
+                "bg-label-danger",
+
+            _ =>
+                "bg-label-secondary"
+        };
+    }
 }

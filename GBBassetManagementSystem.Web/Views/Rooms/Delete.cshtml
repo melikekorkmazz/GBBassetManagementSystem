@@ -1,42 +1,132 @@
 @model GBBassetManagementSystem.Entity.Entities.Room
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<GBBassetManagementSystem.Web.SharedResource> Localizer
 
 @{
-    ViewData["Title"] = "Delete Room";
+    ViewData["Title"] = Localizer["DeleteRoom"];
 }
 
-<h1>Delete Room</h1>
+<div class="container-xxl flex-grow-1 container-p-y">
 
-<div class="alert alert-warning">
-    Are you sure you want to Delete this room?
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8 col-xl-7">
+
+            <div class="card">
+
+                <div class="card-header border-bottom">
+
+                    <div class="d-flex align-items-center gap-3">
+
+                        <div class="avatar">
+                            <span class="avatar-initial rounded bg-label-danger">
+                                <i class="icon-base ti tabler-trash"></i>
+                            </span>
+                        </div>
+
+                        <div>
+                            <h4 class="mb-1">
+                                @Localizer["DeleteRoom"]
+                            </h4>
+
+                            <p class="text-muted mb-0">
+                                @Localizer["DeleteRoomDescription"]
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="card-body pt-4">
+
+                    <div class="alert alert-warning"
+                         role="alert">
+
+                        <i class="icon-base ti tabler-alert-triangle me-1"></i>
+                        @Localizer["DeleteRoomConfirmation"]
+                    </div>
+
+                    <dl class="row mb-4">
+
+                        <dt class="col-sm-4">
+                            @Localizer["RoomName"]
+                        </dt>
+
+                        <dd class="col-sm-8">
+                            @Model.Name
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            @Localizer["RoomNumber"]
+                        </dt>
+
+                        <dd class="col-sm-8">
+                            @Model.RoomNumber
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            @Localizer["Building"]
+                        </dt>
+
+                        <dd class="col-sm-8">
+                            @(string.IsNullOrWhiteSpace(Model.Building)
+                                ? "-"
+                                : Model.Building)
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            @Localizer["Floor"]
+                        </dt>
+
+                        <dd class="col-sm-8">
+                            @Model.Floor
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            @Localizer["Department"]
+                        </dt>
+
+                        <dd class="col-sm-8">
+                            @(Model.Department?.Name ?? "-")
+                        </dd>
+
+                    </dl>
+
+                    <form asp-action="Delete"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input asp-for="Id"
+                               type="hidden" />
+
+                        <div class="d-flex justify-content-end gap-2">
+
+                            <a asp-action="Index"
+                               class="btn btn-label-secondary">
+
+                                <i class="icon-base ti tabler-x me-1"></i>
+                                @Localizer["Cancel"]
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-danger">
+
+                                <i class="icon-base ti tabler-trash me-1"></i>
+                                @Localizer["Delete"]
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
-
-<dl class="row">
-    <dt class="col-sm-3">Room Name</dt>
-    <dd class="col-sm-9">@Model.Name</dd>
-
-    <dt class="col-sm-3">Room Number</dt>
-    <dd class="col-sm-9">@Model.RoomNumber</dd>
-
-    <dt class="col-sm-3">Building</dt>
-    <dd class="col-sm-9">@Model.Building</dd>
-
-    <dt class="col-sm-3">Floor</dt>
-    <dd class="col-sm-9">@Model.Floor</dd>
-
-    <dt class="col-sm-3">Department</dt>
-    <dd class="col-sm-9">@Model.Department?.Name</dd>
-</dl>
-
-<form asp-action="Delete" method="post">
-    <input asp-for="Id" type="hidden" />
-
-    <button type="submit"
-            class="btn btn-danger">
-        Delete
-    </button>
-
-    <a asp-action="Index"
-       class="btn btn-secondary">
-        Cancel
-    </a>
-</form>

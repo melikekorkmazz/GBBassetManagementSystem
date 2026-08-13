@@ -3,6 +3,11 @@
   <ItemGroup>
     <ProjectReference Include="..\GBBassetManagementSystem.Data\GBBassetManagementSystem.Data.csproj" />
     <ProjectReference Include="..\GBBassetManagementSystem.Entity\GBBassetManagementSystem.Entity.csproj" />
+    <ProjectReference Include="..\GBBassetManagementSystem.Shared\GBBassetManagementSystem.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.17.0" />
   </ItemGroup>
 
   <PropertyGroup>

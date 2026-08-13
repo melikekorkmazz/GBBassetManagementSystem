@@ -1,31 +1,39 @@
 @model GBBassetManagementSystem.Entity.Entities.Category
 
 @{
-    ViewData["Title"] = "Delete Category";
+    ViewData["Title"] = Localizer["DeleteCategory"];
 }
 
-<h1>Delete Category</h1>
+<h1>@Localizer["DeleteCategory"]</h1>
 
 <div class="alert alert-warning">
-    Are you sure you want to delete this category?
+    @Localizer["DeleteCategoryConfirmation"]
 </div>
 
 <dl class="row">
-    <dt class="col-sm-2">Name</dt>
-    <dd class="col-sm-10">@Model.Name</dd>
+    <dt class="col-sm-2">
+        @Localizer["CategoryName"]
+    </dt>
+    <dd class="col-sm-10">
+        @Model.Name
+    </dd>
 
-    <dt class="col-sm-2">Description</dt>
-    <dd class="col-sm-10">@Model.Description</dd>
+    <dt class="col-sm-2">
+        @Localizer["Description"]
+    </dt>
+    <dd class="col-sm-10">
+        @Model.Description
+    </dd>
 </dl>
 
 <form asp-action="Delete" method="post">
     <input asp-for="Id" type="hidden" />
 
     <button type="submit" class="btn btn-danger">
-        Delete
+        @Localizer["Delete"]
     </button>
 
     <a asp-action="Index" class="btn btn-secondary">
-        Cancel
+        @Localizer["Cancel"]
     </a>
 </form>

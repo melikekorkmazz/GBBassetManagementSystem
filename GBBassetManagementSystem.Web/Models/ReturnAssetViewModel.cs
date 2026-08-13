@@ -13,8 +13,7 @@ public class ReturnAssetViewModel
     [Required]
     public DateTime ReturnDate { get; set; } = DateTime.Today;
 
-    [Required]
-    public string ReceivedBy { get; set; } = string.Empty;
+    public string? ReceivedBy { get; set; }
 
     [Required]
     public string Condition { get; set; } = "Good";

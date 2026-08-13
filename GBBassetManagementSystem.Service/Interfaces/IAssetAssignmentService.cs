@@ -14,10 +14,11 @@ public interface IAssetAssignmentService
 
     Task AssignAsync(AssetAssignment assignment);
 
-    Task ReturnAsync(
-        Guid assignmentId,
-        string receivedBy,
-        string condition,
-        string? damageDescription,
-        string? notes);
+   Task ReturnAsync(
+    Guid assignmentId,
+    DateTime returnDate,
+    string? receivedBy,
+    string condition,
+    string? damageDescription,
+    string? notes);
 }

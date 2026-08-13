@@ -1,4 +1,5 @@
-using GBBassetManagementSystem.Entity.Entities;
+
+using Microsoft.AspNetCore.Authorization;using GBBassetManagementSystem.Entity.Entities;
 using GBBassetManagementSystem.Entity.Enums;
 using GBBassetManagementSystem.Service.Interfaces;
 using GBBassetManagementSystem.Web.Models;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GBBassetManagementSystem.Web.Controllers;
 
+[Authorize(Roles = "Admin,DepartmentUser")]
 public class AssetsController : Controller
 {
     private readonly IAssetService _assetService;
@@ -69,12 +71,15 @@ public class AssetsController : Controller
         return View(model);
     }
 
+[Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create()
     {
         await LoadFormDataAsync();
 
         return View();
     }
+
+[Authorize(Roles = "Admin")]
 
  [HttpPost]
 [ValidateAntiForgeryToken]
@@ -122,6 +127,8 @@ public async Task<IActionResult> Create(Asset asset)
 
     return RedirectToAction(nameof(Index));
 }
+
+[Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(Guid id)
     {
         var asset = await _assetService.GetByIdAsync(id);
@@ -137,6 +144,8 @@ public async Task<IActionResult> Create(Asset asset)
 
         return View(asset);
     }
+
+[Authorize(Roles = "Admin")]
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -173,6 +182,7 @@ public async Task<IActionResult> Create(Asset asset)
         return RedirectToAction(nameof(Index));
     }
 
+[Authorize(Roles = "Admin")]
    public async Task<IActionResult> Dispose(Guid id)
 {
     var asset = await _assetService.GetByIdAsync(id);
@@ -208,6 +218,7 @@ public async Task<IActionResult> Create(Asset asset)
     return View(asset);
 }
 
+[Authorize(Roles = "Admin")]
    [HttpPost, ActionName("Dispose")]
 [ValidateAntiForgeryToken]
 public async Task<IActionResult> DisposeConfirmed(Guid id)

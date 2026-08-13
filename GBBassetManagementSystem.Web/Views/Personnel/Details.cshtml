@@ -1,182 +1,286 @@
 @model GBBassetManagementSystem.Web.Models.PersonnelDetailsViewModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<GBBassetManagementSystem.Web.SharedResource> Localizer
 
 @{
-    ViewData["Title"] = "Personnel Details";
+    ViewData["Title"] = Localizer["PersonnelDetails"];
 }
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Personnel Details</h1>
+<div class="container-xxl flex-grow-1 container-p-y">
 
-    <div>
-        <a asp-action="Edit"
-           asp-route-id="@Model.Personnel.Id"
-           class="btn btn-warning">
-            Edit
-        </a>
+    <div class="card mb-4">
 
-        <a asp-action="Index"
-           class="btn btn-secondary">
-            Back
-        </a>
+        <div class="card-header border-bottom">
+
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="avatar">
+                        <span class="avatar-initial rounded bg-label-info">
+                            <i class="icon-base ti tabler-user"></i>
+                        </span>
+                    </div>
+
+                    <div>
+                        <h4 class="mb-1">
+                            @Localizer["PersonnelDetails"]
+                        </h4>
+
+                        <p class="text-muted mb-0">
+                            @Model.Personnel.FirstName @Model.Personnel.LastName
+                        </p>
+                    </div>
+
+                </div>
+
+                <div class="d-flex gap-2">
+
+                    <a asp-action="Edit"
+                       asp-route-id="@Model.Personnel.Id"
+                       class="btn btn-label-warning">
+
+                        <i class="icon-base ti tabler-edit me-1"></i>
+                        @Localizer["Edit"]
+                    </a>
+
+                    <a asp-action="Index"
+                       class="btn btn-label-secondary">
+
+                        <i class="icon-base ti tabler-arrow-left me-1"></i>
+                        @Localizer["Back"]
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card-body pt-4">
+
+            <dl class="row mb-0">
+
+                <dt class="col-sm-3">
+                    @Localizer["RegistrationNumber"]
+                </dt>
+
+                <dd class="col-sm-9">
+                    @Model.Personnel.RegistrationNumber
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Localizer["NationalIdentityNumber"]
+                </dt>
+
+                <dd class="col-sm-9">
+                    @Model.Personnel.NationalIdentityNumber
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Localizer["FullName"]
+                </dt>
+
+                <dd class="col-sm-9">
+                    @Model.Personnel.FirstName @Model.Personnel.LastName
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Localizer["Department"]
+                </dt>
+
+                <dd class="col-sm-9">
+                    @(Model.Personnel.Department?.Name ?? "-")
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Localizer["Email"]
+                </dt>
+
+                <dd class="col-sm-9">
+                    @Model.Personnel.Email
+                </dd>
+
+                <dt class="col-sm-3">
+                    @Localizer["PhoneNumber"]
+                </dt>
+
+                <dd class="col-sm-9">
+                    @Model.Personnel.PhoneNumber
+                </dd>
+
+            </dl>
+
+        </div>
+
     </div>
-</div>
 
-<div class="card mb-4">
-    <div class="card-body">
-        <dl class="row">
+    <div class="row g-4 mb-4">
 
-            <dt class="col-sm-3">
-                Registration Number
-            </dt>
-            <dd class="col-sm-9">
-                @Model.Personnel.RegistrationNumber
-            </dd>
+        <div class="col-md-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
 
-            <dt class="col-sm-3">
-                National Identity Number
-            </dt>
-            <dd class="col-sm-9">
-                @Model.Personnel.NationalIdentityNumber
-            </dd>
+                    <h3 class="mb-1">
+                        @Model.TotalAssignments
+                    </h3>
 
-            <dt class="col-sm-3">
-                Full Name
-            </dt>
-            <dd class="col-sm-9">
-                @Model.Personnel.FirstName @Model.Personnel.LastName
-            </dd>
+                    <p class="text-muted mb-0">
+                        @Localizer["TotalAssignments"]
+                    </p>
 
-            <dt class="col-sm-3">
-                Department
-            </dt>
-            <dd class="col-sm-9">
-                @Model.Personnel.Department?.Name
-            </dd>
-
-            <dt class="col-sm-3">
-                Email
-            </dt>
-            <dd class="col-sm-9">
-                @Model.Personnel.Email
-            </dd>
-
-            <dt class="col-sm-3">
-                Phone Number
-            </dt>
-            <dd class="col-sm-9">
-                @Model.Personnel.PhoneNumber
-            </dd>
-
-        </dl>
-    </div>
-</div>
-
-<div class="row mb-4">
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h3>@Model.TotalAssignments</h3>
-                <p class="mb-0">Total Assignments</p>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h3>@Model.ActiveAssignments</h3>
-                <p class="mb-0">Active Assets</p>
+        <div class="col-md-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+
+                    <h3 class="mb-1">
+                        @Model.ActiveAssignments
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        @Localizer["ActiveAssets"]
+                    </p>
+
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h3>@Model.ComputerAssignments</h3>
-                <p class="mb-0">Computer Assignments</p>
+        <div class="col-md-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+
+                    <h3 class="mb-1">
+                        @Model.ComputerAssignments
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        @Localizer["ComputerAssignments"]
+                    </p>
+
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="card text-center">
-            <div class="card-body">
-                <h3>@Model.FurnitureAssignments</h3>
-                <p class="mb-0">Furniture Assignments</p>
+        <div class="col-md-3">
+            <div class="card text-center h-100">
+                <div class="card-body">
+
+                    <h3 class="mb-1">
+                        @Model.FurnitureAssignments
+                    </h3>
+
+                    <p class="text-muted mb-0">
+                        @Localizer["FurnitureAssignments"]
+                    </p>
+
+                </div>
             </div>
         </div>
+
     </div>
-</div>
 
-<h2>Assignment History</h2>
+    <div class="card">
 
-@if (!Model.AssignmentHistory.Any())
-{
-    <div class="alert alert-info">
-        No assets have been assigned to this personnel yet.
-    </div>
-}
-else
-{
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Asset</th>
-                <th>Category</th>
-                <th>Assignment Date</th>
-                <th>Return Date</th>
-                <th>Status</th>
-                <th>Details</th>
-            </tr>
-        </thead>
+        <div class="card-header border-bottom">
+            <h5 class="mb-0">
+                @Localizer["AssignmentHistory"]
+            </h5>
+        </div>
 
-        <tbody>
-            @foreach (var assignment in Model.AssignmentHistory)
-            {
-                <tr>
-                    <td>
-                        @assignment.Asset?.AssetCode -
-                        @assignment.Asset?.Name
-                    </td>
+        @if (!Model.AssignmentHistory.Any())
+        {
+            <div class="card-body">
 
-                    <td>
-                        @assignment.Asset?.Category?.Name
-                    </td>
+                <div class="alert alert-info mb-0">
+                    @Localizer["NoPersonnelAssignments"]
+                </div>
 
-                    <td>
-                        @assignment.AssignmentDate.ToString("dd.MM.yyyy")
-                    </td>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
 
-                    <td>
-                        @(assignment.ReturnDate?.ToString("dd.MM.yyyy") ?? "-")
-                    </td>
+                <table class="table table-hover">
 
-                    <td>
-                        @if (assignment.IsActive)
+                    <thead class="table-light">
+                        <tr>
+                            <th>@Localizer["Asset"]</th>
+                            <th>@Localizer["Category"]</th>
+                            <th>@Localizer["AssignmentDate"]</th>
+                            <th>@Localizer["ReturnDate"]</th>
+                            <th>@Localizer["Status"]</th>
+                            <th>@Localizer["Details"]</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var assignment in Model.AssignmentHistory)
                         {
-                            <span class="badge bg-success">
-                                Active
-                            </span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-secondary">
-                                Returned
-                            </span>
-                        }
-                    </td>
+                            <tr>
 
-                    <td>
-                        <a asp-controller="AssetAssignments"
-                           asp-action="Details"
-                           asp-route-id="@assignment.Id"
-                           class="btn btn-info btn-sm">
-                            View
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+                                <td>
+                                    @assignment.Asset?.AssetCode -
+                                    @assignment.Asset?.Name
+                                </td>
+
+                                <td>
+                                    @assignment.Asset?.Category?.Name
+                                </td>
+
+                                <td>
+                                    @assignment.AssignmentDate.ToString("dd.MM.yyyy")
+                                </td>
+
+                                <td>
+                                    @(assignment.ReturnDate?.ToString("dd.MM.yyyy") ?? "-")
+                                </td>
+
+                                <td>
+
+                                    @if (assignment.IsActive)
+                                    {
+                                        <span class="badge bg-label-success">
+                                            @Localizer["Active"]
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-label-secondary">
+                                            @Localizer["Returned"]
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td>
+
+                                    <a asp-controller="AssetAssignments"
+                                       asp-action="Details"
+                                       asp-route-id="@assignment.Id"
+                                       class="btn btn-sm btn-label-info">
+
+                                        <i class="icon-base ti tabler-eye me-1"></i>
+                                        @Localizer["View"]
+                                    </a>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+    </div>
+
+</div>

@@ -1,11 +1,11 @@
 using GBBassetManagementSystem.Core.Entities;
 using GBBassetManagementSystem.Entity.Enums;
-
+using System.ComponentModel.DataAnnotations;
 namespace GBBassetManagementSystem.Entity.Entities;
 
 public class AssetAssignment : EntityBase
 {
-    public Guid AssetId { get; set; }
+     public Guid? AssetId { get; set; }
 
     public Asset? Asset { get; set; }
 
@@ -19,10 +19,9 @@ public class AssetAssignment : EntityBase
 
     public Room? Room { get; set; }
 
-    public string DeliveredBy { get; set; } = string.Empty;
-
-    public string ReceivedBy { get; set; } = string.Empty;
-
+[Required(ErrorMessage = "DeliveredByRequired")]
+public string DeliveredBy { get; set; } = string.Empty;
+    public string? ReceivedBy { get; set; }
     public DateTime AssignmentDate { get; set; } = DateTime.Today;
 
     public DateTime? ExpectedReturnDate { get; set; }

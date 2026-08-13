@@ -1,152 +1,347 @@
 @model IEnumerable<GBBassetManagementSystem.Entity.Entities.AssetAssignment>
 
+@using GBBassetManagementSystem.Entity.Enums
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<GBBassetManagementSystem.Web.SharedResource> Localizer
+
 @{
-    ViewData["Title"] = "Asset Assignments";
+    ViewData["Title"] = Localizer["AssetAssignments"];
 }
 
-@if (TempData["SuccessMessage"] is not null)
-{
-    <div class="alert alert-success">
-        @TempData["SuccessMessage"]
-    </div>
-}
+<div class="container-xxl flex-grow-1 container-p-y">
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Asset Assignments</h1>
+    @if (TempData["SuccessMessage"] is string successMessage)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
 
-    <a asp-action="Create" class="btn btn-primary">
-        New Assignment
-    </a>
-</div>
-<form asp-action="Index" method="get" class="row g-2 mb-3">
-    <div class="col-md-9">
-        <input type="text"
-               name="search"
-               value="@ViewBag.Search"
-               class="form-control"
-               placeholder="Search by asset, personnel, department or room..." />
-    </div>
+            <i class="icon-base ti tabler-circle-check me-2"></i>
+            @successMessage
 
-    <div class="col-md-3 d-flex gap-2">
-        <button type="submit" class="btn btn-primary">
-            Search
-        </button>
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="@Localizer["Close"]">
+            </button>
+        </div>
+    }
 
-        <a asp-action="Index" class="btn btn-secondary">
-            Clear
-        </a>
-    </div>
-</form>
+    @if (TempData["ErrorMessage"] is string errorMessage)
+    {
+        <div class="alert alert-danger alert-dismissible fade show"
+             role="alert">
 
-@if (!Model.Any())
-{
-    <div class="alert alert-info">
-        No assignments have been created yet.
-    </div>
-}
-else
-{
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Asset</th>
-                <th>Assignment Type</th>
-                <th>Assigned To</th>
-                <th>Department</th>
-                <th>Assignment Date</th>
-                <th>Expected Return</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
+            <i class="icon-base ti tabler-alert-circle me-2"></i>
+            @errorMessage
 
-        <tbody>
-            @foreach (var assignment in Model)
-            {
-                <tr>
-                    <td>
-                        @assignment.Asset?.AssetCode -
-                        @assignment.Asset?.Name
-                    </td>
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="@Localizer["Close"]">
+            </button>
+        </div>
+    }
 
-                    <td>@assignment.AssignmentType</td>
+    <div class="card">
 
-                    <td>
-                        @if (assignment.AssignmentType ==
-                            GBBassetManagementSystem.Entity.Enums.AssignmentType.Personnel)
-                        {
-                            <span>
-                                @assignment.Personnel?.FirstName
-                                @assignment.Personnel?.LastName
+        <div class="card-header border-bottom">
+
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="avatar">
+                        <span class="avatar-initial rounded bg-label-primary">
+                            <i class="icon-base ti tabler-arrows-exchange"></i>
+                        </span>
+                    </div>
+
+                    <div>
+                        <h4 class="mb-1">
+                            @Localizer["AssetAssignments"]
+                        </h4>
+
+                        <p class="text-muted mb-0">
+                            @Localizer["AssetAssignmentsDescription"]
+                        </p>
+                    </div>
+
+                </div>
+
+                <a asp-controller="AssetAssignments"
+                   asp-action="Create"
+                   class="btn btn-primary">
+
+                    <i class="icon-base ti tabler-plus me-1"></i>
+                    @Localizer["NewAssignment"]
+                </a>
+
+            </div>
+
+        </div>
+
+        <div class="card-body border-bottom">
+
+            <form asp-controller="AssetAssignments"
+                  asp-action="Index"
+                  method="get"
+                  class="row g-3 align-items-end">
+
+                <div class="col-md-9">
+
+                    <label for="assignmentSearch"
+                           class="form-label">
+
+                        @Localizer["SearchAssignments"]
+                    </label>
+
+                    <div class="input-group input-group-merge">
+
+                        <span class="input-group-text">
+                            <i class="icon-base ti tabler-search"></i>
+                        </span>
+
+                        <input type="text"
+                               id="assignmentSearch"
+                               name="search"
+                               value="@ViewBag.Search"
+                               class="form-control"
+                               placeholder="@Localizer["SearchAssignmentsPlaceholder"]" />
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <div class="d-flex gap-2">
+
+                        <button type="submit"
+                                class="btn btn-primary flex-grow-1">
+
+                            <i class="icon-base ti tabler-search me-1"></i>
+                            @Localizer["Search"]
+                        </button>
+
+                        <a asp-controller="AssetAssignments"
+                           asp-action="Index"
+                           class="btn btn-label-secondary">
+
+                            <i class="icon-base ti tabler-x"></i>
+                            <span class="d-none d-lg-inline ms-1">
+                                @Localizer["Clear"]
                             </span>
-                        }
-                        else
-                        {
-                            <span>
-                                @assignment.Room?.Name
-                                (@assignment.Room?.RoomNumber)
-                            </span>
-                        }
-                    </td>
-
-                    <td>
-                        @if (assignment.Personnel is not null)
-                        {
-                            @assignment.Personnel.Department?.Name
-                        }
-                        else
-                        {
-                            @assignment.Room?.Department?.Name
-                        }
-                    </td>
-
-                    <td>
-                        @assignment.AssignmentDate.ToString("dd.MM.yyyy")
-                    </td>
-
-                    <td>
-                        @assignment.ExpectedReturnDate?.ToString("dd.MM.yyyy")
-                    </td>
-
-                    <td>
-                        @if (assignment.IsActive)
-                        {
-                            <span class="badge bg-success">
-                                Active
-                            </span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-secondary">
-                                Returned
-                            </span>
-                        }
-                    </td>
-
-                    <td>
-                        <a asp-action="Details"
-                           asp-route-id="@assignment.Id"
-                           class="btn btn-info btn-sm">
-                            Details
                         </a>
 
-                        @if (assignment.IsActive)
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+
+                <table class="table table-hover">
+
+                    <thead class="table-light">
+                        <tr>
+                            <th>@Localizer["Asset"]</th>
+                            <th>@Localizer["AssignmentType"]</th>
+                            <th>@Localizer["AssignedTo"]</th>
+                            <th>@Localizer["Department"]</th>
+                            <th>@Localizer["AssignmentDate"]</th>
+                            <th>@Localizer["ExpectedReturn"]</th>
+                            <th>@Localizer["Status"]</th>
+                            <th class="text-end">
+                                @Localizer["Actions"]
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var assignment in Model)
                         {
-                            <a asp-action="Return"
-                               asp-route-id="@assignment.Id"
-                               class="btn btn-success btn-sm">
-                                Return
-                            </a>
+                            var departmentName =
+                                assignment.Personnel?.Department?.Name
+                                ?? assignment.Room?.Department?.Name
+                                ?? "-";
+
+                            var assignedTo =
+                                assignment.AssignmentType == AssignmentType.Personnel
+                                    ? $"{assignment.Personnel?.FirstName} {assignment.Personnel?.LastName}"
+                                    : $"{assignment.Room?.Name} ({assignment.Room?.RoomNumber})";
+
+                            <tr>
+
+                                <td>
+
+                                    <div class="d-flex align-items-center gap-3">
+
+                                        <div class="avatar avatar-sm">
+                                            <span class="avatar-initial rounded bg-label-primary">
+                                                <i class="icon-base ti tabler-device-desktop"></i>
+                                            </span>
+                                        </div>
+
+                                        <div class="d-flex flex-column">
+
+                                            <span class="fw-medium">
+                                                @assignment.Asset?.Name
+                                            </span>
+
+                                            <small class="text-muted">
+                                                @assignment.Asset?.AssetCode
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    @if (assignment.AssignmentType == AssignmentType.Personnel)
+                                    {
+                                        <span class="badge bg-label-info">
+
+                                            <i class="icon-base ti tabler-user me-1"></i>
+                                            @Localizer["Personnel"]
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-label-warning">
+
+                                            <i class="icon-base ti tabler-door me-1"></i>
+                                            @Localizer["Room"]
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td>
+                                    @assignedTo
+                                </td>
+
+                                <td>
+                                    @departmentName
+                                </td>
+
+                                <td>
+                                    @assignment.AssignmentDate.ToString("dd.MM.yyyy")
+                                </td>
+
+                                <td>
+
+                                    @if (assignment.ExpectedReturnDate.HasValue)
+                                    {
+                                        @assignment.ExpectedReturnDate.Value.ToString("dd.MM.yyyy")
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+
+                                </td>
+
+                                <td>
+
+                                    @if (assignment.IsActive)
+                                    {
+                                        <span class="badge bg-label-success">
+
+                                            <i class="icon-base ti tabler-circle-check me-1"></i>
+                                            @Localizer["Active"]
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-label-secondary">
+
+                                            <i class="icon-base ti tabler-arrow-back-up me-1"></i>
+                                            @Localizer["Returned"]
+                                        </span>
+                                    }
+
+                                </td>
+
+                                <td class="text-end">
+
+                                    <div class="d-inline-flex gap-2">
+
+                                        <a asp-controller="AssetAssignments"
+                                           asp-action="Details"
+                                           asp-route-id="@assignment.Id"
+                                           class="btn btn-sm btn-label-info">
+
+                                            <i class="icon-base ti tabler-eye me-1"></i>
+                                            @Localizer["Details"]
+                                        </a>
+
+                                        @if (assignment.IsActive)
+                                        {
+                                            <a asp-controller="AssetAssignments"
+                                               asp-action="Return"
+                                               asp-route-id="@assignment.Id"
+                                               class="btn btn-sm btn-label-success">
+
+                                                <i class="icon-base ti tabler-arrow-back-up me-1"></i>
+                                                @Localizer["Return"]
+                                            </a>
+                                        }
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
                         }
-                        else
-                        {
-                            <span class="badge bg-secondary">
-                                Returned
-                            </span>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="card-body">
+
+                <div class="text-center py-5">
+
+                    <div class="avatar avatar-xl mx-auto mb-4">
+                        <span class="avatar-initial rounded-circle bg-label-primary">
+                            <i class="icon-base ti tabler-arrows-exchange-off fs-2"></i>
+                        </span>
+                    </div>
+
+                    <h5 class="mb-2">
+                        @Localizer["NoAssignmentsFound"]
+                    </h5>
+
+                    <p class="text-muted mb-4">
+                        @Localizer["NoAssignmentsFoundDescription"]
+                    </p>
+
+                    <a asp-controller="AssetAssignments"
+                       asp-action="Create"
+                       class="btn btn-primary">
+
+                        <i class="icon-base ti tabler-plus me-1"></i>
+                        @Localizer["CreateFirstAssignment"]
+                    </a>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>

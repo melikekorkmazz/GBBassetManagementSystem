@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using GBBassetManagementSystem.Web.Models;
 
 namespace GBBassetManagementSystem.Web.Controllers;
 
+[Authorize(Roles = "Admin,DepartmentUser")]
 public class HomeController : Controller
 {
     public IActionResult Index()
@@ -16,9 +18,18 @@ public class HomeController : Controller
         return View();
     }
 
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    [AllowAnonymous]
+    [ResponseCache(
+        Duration = 0,
+        Location = ResponseCacheLocation.None,
+        NoStore = true)]
     public IActionResult Error()
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        return View(new ErrorViewModel
+        {
+            RequestId =
+                Activity.Current?.Id ??
+                HttpContext.TraceIdentifier
+        });
     }
 }

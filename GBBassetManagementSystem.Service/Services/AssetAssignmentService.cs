@@ -123,53 +123,54 @@ public class AssetAssignmentService : IAssetAssignmentService
 
         await _context.SaveChangesAsync();
     }
+public async Task ReturnAsync(
+    Guid assignmentId,
+    DateTime returnDate,
+    string? receivedBy,
+    string condition,
+    string? damageDescription,
+    string? notes)
+{
+    var assignment = await _context.AssetAssignments
+        .Include(a => a.Asset)
+        .FirstOrDefaultAsync(a => a.Id == assignmentId);
 
-    public async Task ReturnAsync(
-        Guid assignmentId,
-        string receivedBy,
-        string condition,
-        string? damageDescription,
-        string? notes)
+    if (assignment is null)
     {
-        var assignment = await _context.AssetAssignments
-            .Include(a => a.Asset)
-            .FirstOrDefaultAsync(a => a.Id == assignmentId);
-
-        if (assignment is null)
-        {
-            throw new KeyNotFoundException(
-                "Assignment was not found.");
-        }
-
-        if (!assignment.IsActive)
-        {
-            throw new InvalidOperationException(
-                "This asset has already been returned.");
-        }
-
-        if (assignment.Asset is null)
-        {
-            throw new KeyNotFoundException(
-                "Assigned asset was not found.");
-        }
-
-        assignment.IsActive = false;
-        assignment.ReturnDate = DateTime.Today;
-
-       assignment.Asset.Status = AssetStatus.Available;
-
-        var assetReturn = new AssetReturn
-        {
-            AssetAssignmentId = assignment.Id,
-            ReturnDate = DateTime.Today,
-            ReceivedBy = receivedBy,
-            Condition = condition,
-            DamageDescription = damageDescription,
-            Notes = notes
-        };
-
-        _context.AssetReturns.Add(assetReturn);
-
-        await _context.SaveChangesAsync();
+        throw new KeyNotFoundException(
+            "Assignment was not found.");
     }
+
+    if (!assignment.IsActive)
+    {
+        throw new InvalidOperationException(
+            "This asset has already been returned.");
+    }
+
+    if (assignment.Asset is null)
+    {
+        throw new KeyNotFoundException(
+            "Assigned asset was not found.");
+    }
+
+    assignment.IsActive = false;
+    assignment.ReturnDate = returnDate;
+    assignment.ReceivedBy = receivedBy;
+
+    assignment.Asset.Status = AssetStatus.Available;
+
+    var assetReturn = new AssetReturn
+    {
+        AssetAssignmentId = assignment.Id,
+        ReturnDate = returnDate,
+        ReceivedBy = receivedBy,
+        Condition = condition,
+        DamageDescription = damageDescription,
+        Notes = notes
+    };
+
+    _context.AssetReturns.Add(assetReturn);
+
+    await _context.SaveChangesAsync();
+}
 }

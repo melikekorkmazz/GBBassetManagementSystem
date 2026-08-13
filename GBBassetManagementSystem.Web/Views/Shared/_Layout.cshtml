@@ -1,135 +1,511 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+@using System.Globalization
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.Extensions.Localization
+@using GBBassetManagementSystem.Entity.Entities
+
+@inject UserManager<ApplicationUser> UserManager
+@inject IStringLocalizer<GBBassetManagementSystem.Web.SharedResource> Localizer
+
+@{
+    var currentCulture =
+        CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+
+    var currentLanguageName =
+        currentCulture == "tr"
+            ? Localizer["Turkish"]
+            : Localizer["English"];
+
+    var returnUrl =
+        $"{Context.Request.Path}{Context.Request.QueryString}";
+}
+
+<!doctype html>
+
+<html lang="@currentCulture"
+      class="layout-navbar-fixed layout-menu-fixed layout-compact"
+      dir="ltr"
+      data-skin="default"
+      data-bs-theme="light"
+      data-assets-path="/vuexy/"
+      data-template="vertical-menu-template">
+
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - GBBassetManagementSystem.Web</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/GBBassetManagementSystem.Web.styles.css" asp-append-version="true" />
+
+    <meta name="viewport"
+          content="width=device-width,
+                   initial-scale=1.0,
+                   user-scalable=no,
+                   minimum-scale=1.0,
+                   maximum-scale=1.0" />
+
+    <title>
+        @ViewData["Title"] - @Localizer["SystemName"]
+    </title>
+
+    <link rel="icon"
+          type="image/x-icon"
+          href="~/vuexy/img/favicon/favicon.ico" />
+
+    <!-- Fonts -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet" />
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="~/vuexy/vendor/fonts/iconify-icons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet"
+          href="~/vuexy/vendor/libs/node-waves/node-waves.css" />
+
+    <link rel="stylesheet"
+          href="~/vuexy/vendor/libs/pickr/pickr-themes.css" />
+
+    <link rel="stylesheet"
+          href="~/vuexy/vendor/css/core.css" />
+
+    <link rel="stylesheet"
+          href="~/vuexy/css/demo.css" />
+
+    <link rel="stylesheet"
+          href="~/vuexy/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
+<link rel="stylesheet"
+      href="~/vuexy/vendor/libs/flatpickr/flatpickr.css" />
+    <!-- Helpers -->
+    <script src="~/vuexy/vendor/js/helpers.js"></script>
+    <script src="~/vuexy/js/config.js"></script>
+
+    @await RenderSectionAsync("Styles", required: false)
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GBBassetManagementSystem.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                         
-                          <li class="nav-item">
-                              <a class="nav-link text-dark"
-                                     asp-controller="Categories"
-                                     asp-action="Index">
-                                     Categories
-                                    </a>
-                              </li>
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
 
-                             <li class="nav-item">
-                               <a class="nav-link text-dark"
-                                  asp-controller="Departments"
-                                 asp-action="Index">
-                                   Departments
-                                   </a>
-                            </li>
+            <!-- Sidebar -->
+            <aside id="layout-menu"
+                   class="layout-menu menu-vertical menu">
 
-                                <li class="nav-item">
-                                 <a class="nav-link text-dark"
-                               asp-controller="Personnel"
-                                   asp-action="Index">
-                                    Personnel
-                                 </a>
-                                </li>
-                                <li class="nav-item">
-                                     <a class="nav-link text-dark"
-                                 asp-controller="Assets"
-                                 asp-action="Index">
-                                   Assets
-                                </a>
-                             </li>
-                             
-                             <li class="nav-item">
-                          <a class="nav-link text-dark"
-                            asp-controller="Rooms"
-                             asp-action="Index">
-                            Rooms
-                              </a>
-                             </li>
-                             <li class="nav-item">
-                                <a class="nav-link text-dark"
-                               asp-controller="AssetAssignments"
-                                  asp-action="Index">
-                               Assignments
-                                </a>
-                              </li>
-                             <li class="nav-item">
-                             <a asp-controller="Inventory"
-                                 asp-action="Index"
-                                 class="nav-link">
-                               <i class="nav-icon fas fa-warehouse"></i>
-                              <p>Inventory</p>
-                                   </a>
-                                 </li>
-                    
+                <div class="app-brand demo">
+                    <a asp-controller="Home"
+                       asp-action="Index"
+                       class="app-brand-link">
 
-                             
-                    </ul>
+                        <span class="app-brand-logo demo">
+                            <span class="text-primary">
+                                <i class="icon-base ti tabler-building-community fs-2"></i>
+                            </span>
+                        </span>
+
+                        <span class="app-brand-text demo menu-text fw-bold ms-3">
+                            @Localizer["GBBAssets"]
+                        </span>
+                    </a>
+
+                    <a href="javascript:void(0);"
+                       class="layout-menu-toggle menu-link text-large ms-auto">
+
+                        <i class="icon-base ti menu-toggle-icon d-none d-xl-block"></i>
+                        <i class="icon-base ti tabler-x d-block d-xl-none"></i>
+                    </a>
                 </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - GBBassetManagementSystem.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
+                <div class="menu-inner-shadow"></div>
 
-        const forms = document.querySelectorAll("form");
+                <ul class="menu-inner py-1">
 
-        forms.forEach(form => {
+                    <li class="menu-header small">
+                        <span class="menu-header-text">
+                            @Localizer["AssetManagement"]
+                        </span>
+                    </li>
 
-            form.addEventListener("submit", function () {
+                    <li class="menu-item">
+                        <a asp-controller="Home"
+                           asp-action="Index"
+                           class="menu-link">
 
-                const submitButton =
-                    form.querySelector('button[type="submit"], input[type="submit"]');
+                            <i class="menu-icon icon-base ti tabler-home"></i>
 
-                if (submitButton) {
+                            <div>
+                                @Localizer["Home"]
+                            </div>
+                        </a>
+                    </li>
 
-                    submitButton.disabled = true;
+                    <!-- Inventory: Admin and DepartmentUser -->
+                    <li class="menu-item">
+                        <a asp-controller="Inventory"
+                           asp-action="Index"
+                           class="menu-link">
 
-                    if (submitButton.tagName === "BUTTON") {
-                        submitButton.innerText = "Please wait...";
+                            <i class="menu-icon icon-base ti tabler-chart-pie"></i>
+
+                            <div>
+                                @Localizer["Inventory"]
+                            </div>
+                        </a>
+                    </li>
+
+                    <!-- Assets: Admin and DepartmentUser -->
+                    <li class="menu-item">
+                        <a asp-controller="Assets"
+                           asp-action="Index"
+                           class="menu-link">
+
+                            <i class="menu-icon icon-base ti tabler-device-desktop"></i>
+
+                            <div>
+                                @Localizer["Assets"]
+                            </div>
+                        </a>
+                    </li>
+
+                    <!-- Assignments: Admin and DepartmentUser -->
+                    <li class="menu-item">
+                        <a asp-controller="AssetAssignments"
+                           asp-action="Index"
+                           class="menu-link">
+
+                            <i class="menu-icon icon-base ti tabler-arrows-exchange"></i>
+
+                            <div>
+                                @Localizer["Assignments"]
+                            </div>
+                        </a>
+                    </li>
+
+                    <li class="menu-header small">
+                        <span class="menu-header-text">
+                            @Localizer["Organization"]
+                        </span>
+                    </li>
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <!-- Categories: Admin only -->
+                        <li class="menu-item">
+                            <a asp-controller="Categories"
+                               asp-action="Index"
+                               class="menu-link">
+
+                                <i class="menu-icon icon-base ti tabler-category"></i>
+
+                                <div>
+                                    @Localizer["Categories"]
+                                </div>
+                            </a>
+                        </li>
+
+                        <!-- Departments: Admin only -->
+                        <li class="menu-item">
+                            <a asp-controller="Departments"
+                               asp-action="Index"
+                               class="menu-link">
+
+                                <i class="menu-icon icon-base ti tabler-building"></i>
+
+                                <div>
+                                    @Localizer["Departments"]
+                                </div>
+                            </a>
+                        </li>
                     }
 
-                }
+                    <!-- Rooms: Admin and DepartmentUser -->
+                    <li class="menu-item">
+                        <a asp-controller="Rooms"
+                           asp-action="Index"
+                           class="menu-link">
 
-            });
+                            <i class="menu-icon icon-base ti tabler-door"></i>
 
-        });
+                            <div>
+                                @Localizer["Rooms"]
+                            </div>
+                        </a>
+                    </li>
 
-    });
-</script>
-    @await RenderSectionAsync("Scripts", required: false)
+                    <!-- Personnel: Admin and DepartmentUser -->
+                    <li class="menu-item">
+                        <a asp-controller="Personnel"
+                           asp-action="Index"
+                           class="menu-link">
+
+                            <i class="menu-icon icon-base ti tabler-users"></i>
+
+                            <div>
+                                @Localizer["Personnel"]
+                            </div>
+                        </a>
+                    </li>
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <!-- Users: Admin only -->
+                        <li class="menu-item">
+                            <a asp-controller="UserManagement"
+                               asp-action="Index"
+                               class="menu-link">
+
+                                <i class="menu-icon icon-base ti tabler-user-cog"></i>
+
+                                <div>
+                                    @Localizer["Users"]
+                                </div>
+                            </a>
+                        </li>
+                    }
+
+                </ul>
+            </aside>
+
+            <!-- Page -->
+            <div class="layout-page">
+
+                <!-- Navbar -->
+                <nav class="layout-navbar container-xxl navbar-detached navbar navbar-expand-xl align-items-center bg-navbar-theme"
+                     id="layout-navbar">
+
+                    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-4 me-xl-0 d-xl-none">
+
+                        <a class="nav-item nav-link px-0 me-xl-6"
+                           href="javascript:void(0)">
+
+                            <i class="icon-base ti tabler-menu-2 icon-md"></i>
+                        </a>
+                    </div>
+
+                    <div class="navbar-nav-right d-flex align-items-center justify-content-between"
+                         id="navbar-collapse">
+
+                        <div class="navbar-nav align-items-center">
+                            <div class="nav-item navbar-search-wrapper mb-0">
+
+                                <span class="d-inline-block fw-semibold">
+                                    @Localizer["MunicipalityName"]
+                                </span>
+                            </div>
+                        </div>
+
+                        <ul class="navbar-nav flex-row align-items-center ms-auto">
+
+                            <!-- Language selector -->
+                            <li class="nav-item dropdown-language navbar-dropdown dropdown me-3">
+
+                                <a class="nav-link dropdown-toggle hide-arrow d-flex align-items-center"
+                                   href="javascript:void(0);"
+                                   data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+
+                                    <i class="icon-base ti tabler-world me-1"></i>
+
+                                    <span class="d-none d-md-inline">
+                                        @currentLanguageName
+                                    </span>
+
+                                    <i class="icon-base ti tabler-chevron-down ms-1 icon-xs"></i>
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-menu-end">
+
+                                    <li>
+                                        <h6 class="dropdown-header">
+                                            @Localizer["Language"]
+                                        </h6>
+                                    </li>
+
+                                    <li>
+                                        <form asp-controller="Language"
+                                              asp-action="SetLanguage"
+                                              method="post">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="culture"
+                                                   value="en" />
+
+                                            <input type="hidden"
+                                                   name="returnUrl"
+                                                   value="@returnUrl" />
+
+                                            <button type="submit"
+                                                    class="dropdown-item @(currentCulture == "en" ? "active" : "")">
+
+                                                <span class="me-2">
+                                                    🇬🇧
+                                                </span>
+
+                                                @Localizer["English"]
+
+                                                @if (currentCulture == "en")
+                                                {
+                                                    <i class="icon-base ti tabler-check ms-auto"></i>
+                                                }
+                                            </button>
+                                        </form>
+                                    </li>
+
+                                    <li>
+                                        <form asp-controller="Language"
+                                              asp-action="SetLanguage"
+                                              method="post">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <input type="hidden"
+                                                   name="culture"
+                                                   value="tr" />
+
+                                            <input type="hidden"
+                                                   name="returnUrl"
+                                                   value="@returnUrl" />
+
+                                            <button type="submit"
+                                                    class="dropdown-item @(currentCulture == "tr" ? "active" : "")">
+
+                                                <span class="me-2">
+                                                    🇹🇷
+                                                </span>
+
+                                                @Localizer["Turkish"]
+
+                                                @if (currentCulture == "tr")
+                                                {
+                                                    <i class="icon-base ti tabler-check ms-auto"></i>
+                                                }
+                                            </button>
+                                        </form>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                            <!-- User menu -->
+                            <li class="nav-item dropdown-user navbar-dropdown dropdown">
+
+                                <a class="nav-link dropdown-toggle hide-arrow p-0"
+                                   href="javascript:void(0);"
+                                   data-bs-toggle="dropdown">
+
+                                    <div class="avatar avatar-online">
+
+                                        <span class="avatar-initial rounded-circle bg-label-primary">
+                                            <i class="icon-base ti tabler-user"></i>
+                                        </span>
+                                    </div>
+                                </a>
+
+                                <ul class="dropdown-menu dropdown-menu-end">
+
+                                    <li>
+                                        <span class="dropdown-item-text">
+                                            <span class="fw-medium">
+                                                @User.Identity?.Name
+                                            </span>
+                                        </span>
+                                    </li>
+
+                                    <li>
+                                        <div class="dropdown-divider"></div>
+                                    </li>
+
+                                    <li>
+                                        @if (User.Identity?.IsAuthenticated == true)
+                                        {
+                                            <form asp-controller="Account"
+                                                  asp-action="Logout"
+                                                  method="post">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <button type="submit"
+                                                        class="dropdown-item border-0 bg-transparent w-100 text-start">
+
+                                                    <i class="icon-base ti tabler-logout me-2"></i>
+
+                                                    @Localizer["Logout"]
+                                                </button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <a class="dropdown-item"
+                                               asp-controller="Account"
+                                               asp-action="Login">
+
+                                                <i class="icon-base ti tabler-login me-2"></i>
+
+                                                @Localizer["Login"]
+                                            </a>
+                                        }
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </div>
+                </nav>
+
+                <!-- Content wrapper -->
+                <div class="content-wrapper">
+
+                    <div class="container-xxl flex-grow-1 container-p-y">
+
+                        @RenderBody()
+
+                    </div>
+
+                    <footer class="content-footer footer bg-footer-theme">
+                        <div class="container-xxl">
+
+                            <div class="footer-container d-flex align-items-center justify-content-between py-4">
+
+                                <div class="text-body">
+                                    © @DateTime.Now.Year
+                                    @Localizer["SystemName"]
+                                </div>
+
+                            </div>
+                        </div>
+                    </footer>
+
+                    <div class="content-backdrop fade"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layout-overlay layout-menu-toggle"></div>
+        <div class="drag-target"></div>
+    </div>
+
+    <!-- Core JS -->
+    <script src="~/vuexy/vendor/libs/jquery/jquery.js"></script>
+    <script src="~/vuexy/vendor/libs/popper/popper.js"></script>
+    <script src="~/vuexy/vendor/js/bootstrap.js"></script>
+    <script src="~/vuexy/vendor/libs/node-waves/node-waves.js"></script>
+    <script src="~/vuexy/vendor/libs/pickr/pickr.js"></script>
+    <script src="~/vuexy/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="~/vuexy/vendor/libs/hammer/hammer.js"></script>
+    <script src="~/vuexy/vendor/libs/i18n/i18n.js"></script>
+    <script src="~/vuexy/vendor/js/menu.js"></script>
+
+    <!-- Main JS -->
+    <script src="~/vuexy/js/main.js"></script>
+
+    @await RenderSectionAsync(
+        "Scripts",
+        required: false)
 </body>
+
 </html>

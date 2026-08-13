@@ -1,87 +1,180 @@
 @model GBBassetManagementSystem.Web.Models.InventoryViewModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<GBBassetManagementSystem.Web.SharedResource> Localizer
 
 @{
-    ViewData["Title"] = "Inventory";
+    ViewData["Title"] = Localizer["Inventory"];
 }
 
-<div class="container-fluid">
+<div class="container-xxl flex-grow-1 container-p-y">
 
-    <div class="row mb-4">
+    <div class="d-flex align-items-center gap-3 mb-4">
 
-        <div class="col-md-3">
-            <div class="small-box bg-primary">
-                <div class="inner">
-                    <h3>@Model.TotalAssets</h3>
-                    <p>Total Assets</p>
-                </div>
-            </div>
+        <div class="avatar">
+            <span class="avatar-initial rounded bg-label-primary">
+                <i class="icon-base ti tabler-chart-pie"></i>
+            </span>
         </div>
 
-        <div class="col-md-3">
-            <div class="small-box bg-success">
-                <div class="inner">
-                    <h3>@Model.AvailableAssets</h3>
-                    <p>Available</p>
-                </div>
-            </div>
+        <div>
+            <h4 class="mb-1">
+                @Localizer["Inventory"]
+            </h4>
+
+            <p class="text-muted mb-0">
+                @Localizer["InventoryPageDescription"]
+            </p>
         </div>
 
-        <div class="col-md-3">
-            <div class="small-box bg-info">
-                <div class="inner">
-                    <h3>@Model.AssignedAssets</h3>
-                    <p>Assigned</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="small-box bg-warning">
-                <div class="inner">
-                    <h3>@Model.MaintenanceAssets</h3>
-                    <p>Maintenance</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="small-box bg-secondary">
-                <div class="inner">
-                    <h3>@Model.LostAssets</h3>
-                    <p>Lost</p>
-                </div>
-            </div>
-        </div>
-
-       <div class="col-md-3">
-    <div class="small-box bg-orange">
-        <div class="inner">
-            <h3>@Model.DisposedAssets</h3>
-            <p>Disposed</p>
-        </div>
     </div>
-</div>
+
+    <!-- Summary cards -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-6 col-xl-2">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="avatar mx-auto mb-2">
+                        <span class="avatar-initial rounded bg-label-primary">
+                            <i class="icon-base ti tabler-package"></i>
+                        </span>
+                    </div>
+
+                    <h3 class="mb-1">
+                        @Model.TotalAssets
+                    </h3>
+
+                    <span class="text-muted">
+                        @Localizer["TotalAssets"]
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-2">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="avatar mx-auto mb-2">
+                        <span class="avatar-initial rounded bg-label-success">
+                            <i class="icon-base ti tabler-circle-check"></i>
+                        </span>
+                    </div>
+
+                    <h3 class="mb-1">
+                        @Model.AvailableAssets
+                    </h3>
+
+                    <span class="text-muted">
+                        @Localizer["Available"]
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-2">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="avatar mx-auto mb-2">
+                        <span class="avatar-initial rounded bg-label-info">
+                            <i class="icon-base ti tabler-user-check"></i>
+                        </span>
+                    </div>
+
+                    <h3 class="mb-1">
+                        @Model.AssignedAssets
+                    </h3>
+
+                    <span class="text-muted">
+                        @Localizer["Assigned"]
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-2">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="avatar mx-auto mb-2">
+                        <span class="avatar-initial rounded bg-label-warning">
+                            <i class="icon-base ti tabler-tools"></i>
+                        </span>
+                    </div>
+
+                    <h3 class="mb-1">
+                        @Model.MaintenanceAssets
+                    </h3>
+
+                    <span class="text-muted">
+                        @Localizer["Maintenance"]
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-2">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="avatar mx-auto mb-2">
+                        <span class="avatar-initial rounded bg-label-secondary">
+                            <i class="icon-base ti tabler-help-circle"></i>
+                        </span>
+                    </div>
+
+                    <h3 class="mb-1">
+                        @Model.LostAssets
+                    </h3>
+
+                    <span class="text-muted">
+                        @Localizer["Lost"]
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-xl-2">
+            <div class="card h-100">
+                <div class="card-body text-center">
+                    <div class="avatar mx-auto mb-2">
+                        <span class="avatar-initial rounded bg-label-danger">
+                            <i class="icon-base ti tabler-trash"></i>
+                        </span>
+                    </div>
+
+                    <h3 class="mb-1">
+                        @Model.DisposedAssets
+                    </h3>
+
+                    <span class="text-muted">
+                        @Localizer["Disposed"]
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Category distribution -->
     <div class="card">
 
-        <div class="card-header">
-            <h3 class="card-title">
-                Category Distribution
-            </h3>
+        <div class="card-header border-bottom">
+            <h5 class="mb-0">
+                @Localizer["CategoryDistribution"]
+            </h5>
         </div>
 
-        <div class="card-body p-0">
+        <div class="table-responsive">
 
             <table class="table table-hover">
 
-                <thead>
+                <thead class="table-light">
                     <tr>
-                        <th>Category</th>
-                        <th>Total</th>
-                        <th>Available</th>
-                        <th>Assigned</th>
-                        <th>Maintenance</th>
-                        <th>Lost</th>
-                        <th>Disposed</th>
+                        <th>@Localizer["Category"]</th>
+                        <th>@Localizer["Total"]</th>
+                        <th>@Localizer["Available"]</th>
+                        <th>@Localizer["Assigned"]</th>
+                        <th>@Localizer["Maintenance"]</th>
+                        <th>@Localizer["Lost"]</th>
+                        <th>@Localizer["Disposed"]</th>
                     </tr>
                 </thead>
 
@@ -93,7 +186,8 @@
 
                             <td>
                                 <a asp-action="CategoryDetails"
-                                   asp-route-id="@category.CategoryId">
+                                   asp-route-id="@category.CategoryId"
+                                   class="fw-medium text-decoration-none">
                                     @category.CategoryName
                                 </a>
                             </td>

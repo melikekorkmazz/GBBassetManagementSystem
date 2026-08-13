@@ -5,39 +5,40 @@ namespace GBBassetManagementSystem.Entity.Entities;
 
 public class Personnel : EntityBase
 {
-    [Required(ErrorMessage = "First name is required.")]
+    [Required(ErrorMessage = "FirstNameRequired")]
     public string FirstName { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "Last name is required.")]
+    [Required(ErrorMessage = "LastNameRequired")]
     public string LastName { get; set; } = string.Empty;
 
-    [Display(Name = "Registration Number")]
-    [Required(ErrorMessage = "Registration number is required.")]
+    [Display(Name = "RegistrationNumber")]
+    [Required(ErrorMessage = "RegistrationNumberRequired")]
     [RegularExpression(
         @"^[0-9]+$",
-        ErrorMessage = "Registration number must contain only numbers.")]
+        ErrorMessage = "RegistrationNumberNumbersOnly")]
     public string RegistrationNumber { get; set; } = string.Empty;
 
-    [Display(Name = "National Identity Number")]
-    [Required(ErrorMessage = "National identity number is required.")]
+    [Display(Name = "NationalIdentityNumber")]
+    [Required(ErrorMessage = "NationalIdentityNumberRequired")]
     [RegularExpression(
         @"^[0-9]{11}$",
-        ErrorMessage = "National identity number must contain exactly 11 digits.")]
+        ErrorMessage = "NationalIdentityNumberLength")]
     public string NationalIdentityNumber { get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "Email address is required.")]
-    [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
+    [Required(ErrorMessage = "EmailRequired")]
+    [EmailAddress(ErrorMessage = "InvalidEmail")]
     public string Email { get; set; } = string.Empty;
 
-    [Display(Name = "Phone Number")]
-    [Required(ErrorMessage = "Phone number is required.")]
+    [Display(Name = "PhoneNumber")]
+    [Required(ErrorMessage = "PhoneNumberRequired")]
     [RegularExpression(
         @"^[0-9]{11}$",
-        ErrorMessage = "Phone number must contain exactly 11 digits.")]
+        ErrorMessage = "PhoneNumberLength")]
     public string PhoneNumber { get; set; } = string.Empty;
 
-    [Display(Name = "Department")]
-    [Required(ErrorMessage = "Department selection is required.")]
+    // Guid is not nullable because every personnel must belong
+    // to a department. Department selection is validated
+    // in the controller.
     public Guid DepartmentId { get; set; }
 
     public Department? Department { get; set; }

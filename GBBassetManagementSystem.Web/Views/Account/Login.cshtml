@@ -1,0 +1,363 @@
+@model GBBassetManagementSystem.Web.Models.LoginViewModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<GBBassetManagementSystem.Web.SharedResource> Localizer
+
+@{
+    Layout = null;
+    ViewData["Title"] = Localizer["Login"];
+}
+
+<!doctype html>
+
+<html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName"
+      class="layout-wide customizer-hide"
+      dir="ltr"
+      data-skin="default"
+      data-bs-theme="light"
+      data-assets-path="/vuexy/">
+
+<head>
+    <meta charset="utf-8" />
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>
+        @Localizer["Login"] - @Localizer["ApplicationName"]
+    </title>
+
+    <link rel="icon"
+          type="image/x-icon"
+          href="~/vuexy/img/favicon/favicon.ico" />
+
+    <!-- Fonts -->
+    <link rel="preconnect"
+          href="https://fonts.googleapis.com" />
+
+    <link rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossorigin />
+
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet" />
+
+    <!-- Icons -->
+    <link rel="stylesheet"
+          href="~/vuexy/vendor/fonts/iconify-icons.css" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet"
+          href="~/vuexy/vendor/libs/node-waves/node-waves.css" />
+
+    <link rel="stylesheet"
+          href="~/vuexy/vendor/css/core.css" />
+
+    <link rel="stylesheet"
+          href="~/vuexy/css/demo.css" />
+
+    <script src="~/vuexy/vendor/js/helpers.js"></script>
+    <script src="~/vuexy/js/config.js"></script>
+
+    <style>
+        body {
+            background-color: #f8f7fa;
+        }
+
+        .authentication-wrapper {
+            min-height: 100vh;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .brand-icon {
+            width: 56px;
+            height: 56px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="position-fixed top-0 end-0 p-4"
+     style="z-index: 1050;">
+
+    <div class="dropdown">
+
+        <button type="button"
+                class="btn btn-label-secondary dropdown-toggle"
+                data-bs-toggle="dropdown"
+                aria-expanded="false">
+
+            <i class="icon-base ti tabler-language me-1"></i>
+
+            @if (System.Globalization.CultureInfo
+                .CurrentUICulture
+                .TwoLetterISOLanguageName == "tr")
+            {
+                <span>Türkçe</span>
+            }
+            else
+            {
+                <span>English</span>
+            }
+
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-end">
+
+            <li>
+                <form asp-controller="Language"
+                      asp-action="SetLanguage"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden"
+                           name="culture"
+                           value="tr" />
+
+                    <input type="hidden"
+                           name="returnUrl"
+                           value="@($"{Context.Request.Path}{Context.Request.QueryString}")" />
+
+                    <button type="submit"
+                            class="dropdown-item">
+
+                        Türkçe
+                    </button>
+
+                </form>
+            </li>
+
+            <li>
+                <form asp-controller="Language"
+                      asp-action="SetLanguage"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden"
+                           name="culture"
+                           value="en" />
+
+                    <input type="hidden"
+                           name="returnUrl"
+                           value="@($"{Context.Request.Path}{Context.Request.QueryString}")" />
+
+                    <button type="submit"
+                            class="dropdown-item">
+
+                        English
+                    </button>
+
+                </form>
+            </li>
+
+        </ul>
+
+    </div>
+
+</div>
+    <div class="authentication-wrapper authentication-basic container-p-y">
+        <div class="authentication-inner py-6">
+
+            <div class="card login-card mx-auto">
+                <div class="card-body p-6">
+
+                    <div class="text-center mb-5">
+                        <div class="brand-icon rounded-circle bg-label-primary mb-3">
+                            <i class="icon-base ti tabler-building-community fs-2"></i>
+                        </div>
+
+                        <h3 class="mb-1">
+                            @Localizer["ApplicationName"]
+                        </h3>
+
+                        <p class="text-muted mb-0">
+                            @Localizer["SignInToContinue"]
+                        </p>
+                    </div>
+
+                    <form asp-controller="Account"
+                          asp-action="Login"
+                          method="post">
+
+@if (TempData["ErrorMessage"] is string errorMessage)
+{
+    <div class="alert alert-danger alert-dismissible fade show"
+         role="alert">
+        <i class="icon-base ti tabler-alert-circle me-1"></i>
+        @errorMessage
+
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close">
+        </button>
+    </div>
+}
+
+                        @Html.AntiForgeryToken()
+
+                        <input asp-for="ReturnUrl"
+                               type="hidden" />
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="alert alert-danger"
+                             role="alert">
+                        </div>
+
+                        <div class="mb-4">
+                           <label asp-for="UsernameOrEmail" class="form-label">
+    @Localizer["UsernameOrEmail"]
+</label>
+
+                            <input asp-for="UsernameOrEmail"
+                                   class="form-control"
+                                   placeholder="@Localizer["EnterUsernameOrEmail"]"
+                                   autocomplete="username"
+                                   autofocus />
+
+                            <span asp-validation-for="UsernameOrEmail"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Password" class="form-label">
+    @Localizer["Password"]
+</label>
+
+                            <div class="input-group input-group-merge">
+
+                                <input asp-for="Password"
+                                       id="loginPassword"
+                                       class="form-control"
+                                       type="password"
+                                       placeholder="••••••••"
+                                       autocomplete="current-password" />
+
+                                <button type="button"
+                                        id="togglePasswordButton"
+                                        class="input-group-text cursor-pointer border-start-0"
+                                        aria-label="@Localizer["ShowPassword"]"
+                                        aria-pressed="false">
+
+                                    <i id="passwordIcon"
+                                       class="icon-base ti tabler-eye-off">
+                                    </i>
+                                </button>
+                            </div>
+
+                            <span asp-validation-for="Password"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-5">
+
+                            <div class="form-check mb-0">
+                                <input asp-for="RememberMe"
+                                       class="form-check-input" />
+
+                              <label asp-for="RememberMe" class="form-check-label">
+    @Localizer["RememberMe"]
+</label>
+                            </div>
+
+                            <a asp-controller="Account"
+                               asp-action="ForgotPassword"
+                               class="text-primary">
+                                @Localizer["ForgotPassword"]
+                            </a>
+                        </div>
+
+                        <button type="submit"
+                                class="btn btn-primary d-grid w-100">
+                            @Localizer["Login"]
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Core JS -->
+    <script src="~/vuexy/vendor/libs/jquery/jquery.js"></script>
+    <script src="~/vuexy/vendor/libs/popper/popper.js"></script>
+    <script src="~/vuexy/vendor/js/bootstrap.js"></script>
+    <script src="~/vuexy/vendor/libs/node-waves/node-waves.js"></script>
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const passwordInput =
+                document.getElementById("loginPassword");
+
+            const toggleButton =
+                document.getElementById("togglePasswordButton");
+
+            const passwordIcon =
+                document.getElementById("passwordIcon");
+
+            if (!passwordInput || !toggleButton || !passwordIcon) {
+                return;
+            }
+
+            const showPasswordText =
+                @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                    Localizer["ShowPassword"].Value));
+
+            const hidePasswordText =
+                @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                    Localizer["HidePassword"].Value));
+
+            toggleButton.addEventListener("click", function () {
+                const passwordIsHidden =
+                    passwordInput.type === "password";
+
+                if (passwordIsHidden) {
+                    passwordInput.type = "text";
+
+                    passwordIcon.classList.remove("tabler-eye-off");
+                    passwordIcon.classList.add("tabler-eye");
+
+                    toggleButton.setAttribute(
+                        "aria-label",
+                        hidePasswordText
+                    );
+
+                    toggleButton.setAttribute(
+                        "aria-pressed",
+                        "true"
+                    );
+                } else {
+                    passwordInput.type = "password";
+
+                    passwordIcon.classList.remove("tabler-eye");
+                    passwordIcon.classList.add("tabler-eye-off");
+
+                    toggleButton.setAttribute(
+                        "aria-label",
+                        showPasswordText
+                    );
+
+                    toggleButton.setAttribute(
+                        "aria-pressed",
+                        "false"
+                    );
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

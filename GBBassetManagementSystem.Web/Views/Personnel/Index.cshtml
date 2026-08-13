@@ -1,90 +1,175 @@
 @model IEnumerable<GBBassetManagementSystem.Entity.Entities.Personnel>
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<GBBassetManagementSystem.Web.SharedResource> Localizer
 
 @{
-    ViewData["Title"] = "Personnel";
+    ViewData["Title"] = Localizer["Personnel"];
 }
 
-@if (TempData["SuccessMessage"] is not null)
-{
-    <div class="alert alert-success">
-        @TempData["SuccessMessage"]
-    </div>
-}
+<div class="container-xxl flex-grow-1 container-p-y">
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Personnel</h1>
+    @if (TempData["SuccessMessage"] is string successMessage)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
 
-    <a asp-action="Create" class="btn btn-primary">
-        Add Personnel
-    </a>
-</div>
+            <i class="icon-base ti tabler-circle-check me-2"></i>
+            @successMessage
 
-@if (!Model.Any())
-{
-    <div class="alert alert-info">
-        No personnel have been added yet.
-    </div>
-}
-else
-{
-    <table class="table table-bordered table-striped">
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+        </div>
+    }
 
-        <thead>
-            <tr>
-                <th>Registration Number</th>
-                <th>National Identity Number</th>
-                <th>Full Name</th>
-                <th>Email</th>
-                <th>Phone Number</th>
-                <th>Department</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
+    <div class="card">
 
-        <tbody>
+        <div class="card-header border-bottom">
 
-        @foreach (var person in Model)
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="avatar">
+                        <span class="avatar-initial rounded bg-label-info">
+                            <i class="icon-base ti tabler-users"></i>
+                        </span>
+                    </div>
+
+                    <div>
+                        <h4 class="mb-1">
+                            @Localizer["Personnel"]
+                        </h4>
+
+                        <p class="text-muted mb-0">
+                            @Localizer["PersonnelPageDescription"]
+                        </p>
+                    </div>
+
+                </div>
+
+                <a asp-controller="Personnel"
+                   asp-action="Create"
+                   class="btn btn-primary">
+
+                    <i class="icon-base ti tabler-user-plus me-1"></i>
+                    @Localizer["AddPersonnel"]
+                </a>
+
+            </div>
+
+        </div>
+
+        @if (!Model.Any())
         {
-            <tr>
+            <div class="card-body">
 
-                <td>@person.RegistrationNumber</td>
+                <div class="text-center py-5">
 
-                <td>@person.NationalIdentityNumber</td>
+                    <div class="avatar avatar-xl mx-auto mb-3">
+                        <span class="avatar-initial rounded-circle bg-label-info">
+                            <i class="icon-base ti tabler-users-off fs-2"></i>
+                        </span>
+                    </div>
 
-                <td>
-                    @person.FirstName @person.LastName
-                </td>
+                    <h5 class="mb-2">
+                        @Localizer["NoPersonnelFound"]
+                    </h5>
 
-                <td>@person.Email</td>
+                    <p class="text-muted mb-0">
+                        @Localizer["NoPersonnelFoundDescription"]
+                    </p>
 
-                <td>@person.PhoneNumber</td>
+                </div>
 
-                <td>@person.Department?.Name</td>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
 
-                <td>
-                    <a asp-action="Details"
-                       asp-route-id="@person.Id"
-                       class="btn btn-info btn-sm">
-                        Details
-                    </a>
+                <table class="table table-hover">
 
-                    <a asp-action="Edit"
-                       asp-route-id="@person.Id"
-                       class="btn btn-warning btn-sm">
-                        Edit
-                    </a>
+                    <thead class="table-light">
+                        <tr>
+                            <th>@Localizer["RegistrationNumber"]</th>
+                            <th>@Localizer["NationalIdentityNumber"]</th>
+                            <th>@Localizer["FullName"]</th>
+                            <th>@Localizer["Email"]</th>
+                            <th>@Localizer["PhoneNumber"]</th>
+                            <th>@Localizer["Department"]</th>
+                            <th class="text-end">
+                                @Localizer["Actions"]
+                            </th>
+                        </tr>
+                    </thead>
 
-                    <a asp-action="Delete"
-                       asp-route-id="@person.Id"
-                       class="btn btn-danger btn-sm">
-                        Delete
-                    </a>
-                </td>
+                    <tbody>
 
-            </tr>
+                        @foreach (var person in Model)
+                        {
+                            <tr>
+
+                                <td>@person.RegistrationNumber</td>
+
+                                <td>@person.NationalIdentityNumber</td>
+
+                                <td class="fw-medium">
+                                    @person.FirstName @person.LastName
+                                </td>
+
+                                <td>@person.Email</td>
+
+                                <td>@person.PhoneNumber</td>
+
+                                <td>
+                                    @(person.Department?.Name ?? "-")
+                                </td>
+
+                                <td class="text-end">
+
+                                    <div class="d-inline-flex gap-1">
+
+                                        <a asp-action="Details"
+                                           asp-route-id="@person.Id"
+                                           class="btn btn-sm btn-label-info">
+
+                                            <i class="icon-base ti tabler-eye me-1"></i>
+                                            @Localizer["Details"]
+                                        </a>
+
+                                        <a asp-action="Edit"
+                                           asp-route-id="@person.Id"
+                                           class="btn btn-sm btn-label-warning">
+
+                                            <i class="icon-base ti tabler-edit me-1"></i>
+                                            @Localizer["Edit"]
+                                        </a>
+
+                                        <a asp-action="Delete"
+                                           asp-route-id="@person.Id"
+                                           class="btn btn-sm btn-label-danger">
+
+                                            <i class="icon-base ti tabler-trash me-1"></i>
+                                            @Localizer["Delete"]
+                                        </a>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
         }
 
-        </tbody>
+    </div>
 
-    </table>
-}
+</div>

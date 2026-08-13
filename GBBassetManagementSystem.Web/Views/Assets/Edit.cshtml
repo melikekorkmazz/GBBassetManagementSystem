@@ -1,11 +1,13 @@
+@using Microsoft.Extensions.Localization
+@using GBBassetManagementSystem.Entity.Enums
+
+@inject IStringLocalizer<GBBassetManagementSystem.Web.SharedResource> Localizer
 @model GBBassetManagementSystem.Entity.Entities.Asset
 
 @{
-    ViewData["Title"] = "Edit Asset";
+    ViewData["Title"] = Localizer["EditAsset"];
 }
-
-<h1>Edit Asset</h1>
-
+<h1>@Localizer["EditAsset"]</h1>
 <hr />
 
 <div class="row">
@@ -59,26 +61,40 @@
             </div>
 
             <div class="mb-3">
-                <label asp-for="CategoryId"
-                       class="form-label">
-                    Category
-                </label>
+               <label asp-for="CategoryId" class="form-label">
+    @Localizer["Category"]
+</label>
 
                 <select asp-for="CategoryId"
                         asp-items="ViewBag.Categories"
                         class="form-select">
-                    <option value="">Select Category</option>
+                    <option value="">@Localizer["SelectCategory"]</option>
                 </select>
             </div>
 
-            <div class="mb-3">
-                <label asp-for="Status" class="form-label"></label>
+            <select asp-for="Status" class="form-select">
 
-                <select asp-for="Status"
-                        asp-items="ViewBag.Statuses"
-                        class="form-select">
-                </select>
-            </div>
+    <option value="@AssetStatus.Available">
+        @Localizer["Available"]
+    </option>
+
+    <option value="@AssetStatus.Assigned">
+        @Localizer["Assigned"]
+    </option>
+
+    <option value="@AssetStatus.Maintenance">
+        @Localizer["Maintenance"]
+    </option>
+
+    <option value="@AssetStatus.Lost">
+        @Localizer["Lost"]
+    </option>
+
+    <option value="@AssetStatus.Disposed">
+        @Localizer["Disposed"]
+    </option>
+
+</select>
 
             <div class="mb-3">
                 <label asp-for="WarrantyExpirationDate"
@@ -99,13 +115,13 @@
                           class="form-control"></textarea>
             </div>
 
-            <button type="submit" class="btn btn-success">
-                Save Changes
-            </button>
+           <button type="submit" class="btn btn-success">
+    @Localizer["SaveChanges"]
+</button>
 
-            <a asp-action="Index" class="btn btn-secondary">
-                Back
-            </a>
+<a asp-action="Index" class="btn btn-secondary">
+    @Localizer["Back"]
+</a>
         </form>
     </div>
 </div>

@@ -1,0 +1,1265 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+
+  <resheader name="reader">
+    <value>
+      System.Resources.ResXResourceReader,
+      System.Windows.Forms,
+      Version=4.0.0.0,
+      Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    </value>
+  </resheader>
+
+  <resheader name="writer">
+    <value>
+      System.Resources.ResXResourceWriter,
+      System.Windows.Forms,
+      Version=4.0.0.0,
+      Culture=neutral,
+      PublicKeyToken=b77a5c561934e089
+    </value>
+  </resheader>
+
+  <data name="AssetManagement" xml:space="preserve">
+    <value>Demirbaş Yönetimi</value>
+  </data>
+
+  <data name="Organization" xml:space="preserve">
+    <value>Organizasyon</value>
+  </data>
+
+  <data name="MunicipalityName" xml:space="preserve">
+    <value>Gaziantep Büyükşehir Belediyesi</value>
+  </data>
+
+  <data name="SystemName" xml:space="preserve">
+    <value>GBB Demirbaş Yönetim Sistemi</value>
+  </data>
+
+  <data name="Login" xml:space="preserve">
+    <value>Giriş Yap</value>
+  </data>
+
+  <data name="Language" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+
+  <data name="English" xml:space="preserve">
+    <value>İngilizce</value>
+  </data>
+
+  <data name="Turkish" xml:space="preserve">
+    <value>Türkçe</value>
+  </data>
+
+  <data name="Home" xml:space="preserve">
+    <value>Ana Sayfa</value>
+  </data>
+
+  <data name="Inventory" xml:space="preserve">
+    <value>Envanter</value>
+  </data>
+
+  <data name="Assets" xml:space="preserve">
+    <value>Demirbaşlar</value>
+  </data>
+
+  <data name="Assignments" xml:space="preserve">
+    <value>Zimmetler</value>
+  </data>
+
+  <data name="Rooms" xml:space="preserve">
+    <value>Odalar</value>
+  </data>
+
+  <data name="Departments" xml:space="preserve">
+    <value>Departmanlar</value>
+  </data>
+
+  <data name="Categories" xml:space="preserve">
+    <value>Kategoriler</value>
+  </data>
+
+  <data name="Users" xml:space="preserve">
+    <value>Kullanıcılar</value>
+  </data>
+
+  <data name="Available" xml:space="preserve">
+    <value>Kullanılabilir</value>
+  </data>
+
+  <data name="Lost" xml:space="preserve">
+    <value>Kayıp</value>
+  </data>
+
+  <data name="Disposed" xml:space="preserve">
+    <value>Elden Çıkarılmış</value>
+  </data>
+
+  <data name="Save" xml:space="preserve">
+    <value>Kaydet</value>
+  </data>
+
+  <data name="SaveChanges" xml:space="preserve">
+    <value>Değişiklikleri Kaydet</value>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>Geri</value>
+  </data>
+
+  <data name="Edit" xml:space="preserve">
+    <value>Düzenle</value>
+  </data>
+
+  <data name="Delete" xml:space="preserve">
+    <value>Sil</value>
+  </data>
+
+  <data name="Details" xml:space="preserve">
+    <value>Detaylar</value>
+  </data>
+
+  <data name="Clear" xml:space="preserve">
+    <value>Temizle</value>
+  </data>
+
+  <data name="Logout" xml:space="preserve">
+    <value>Çıkış Yap</value>
+  </data>
+
+  <data name="AddAsset" xml:space="preserve">
+    <value>Demirbaş Ekle</value>
+  </data>
+
+  <data name="AssetSearchPlaceholder" xml:space="preserve">
+    <value>Kod, ad, kategori, marka, model, seri numarası veya duruma göre ara...</value>
+  </data>
+
+  <data name="NoAssetsAdded" xml:space="preserve">
+    <value>Henüz demirbaş eklenmedi.</value>
+  </data>
+
+  <data name="AssetCode" xml:space="preserve">
+    <value>Demirbaş Kodu</value>
+  </data>
+
+  <data name="Category" xml:space="preserve">
+    <value>Kategori</value>
+  </data>
+
+  <data name="Brand" xml:space="preserve">
+    <value>Marka</value>
+  </data>
+
+  <data name="Model" xml:space="preserve">
+    <value>Model</value>
+  </data>
+
+  <data name="Dispose" xml:space="preserve">
+    <value>Elden Çıkar</value>
+  </data>
+
+  <data name="SerialNumber" xml:space="preserve">
+    <value>Seri Numarası</value>
+  </data>
+
+  <data name="CategoryName" xml:space="preserve">
+    <value>Kategori Adı</value>
+  </data>
+
+  <data name="CategoryCode" xml:space="preserve">
+    <value>Kategori Kodu</value>
+  </data>
+
+  <data name="AddCategory" xml:space="preserve">
+    <value>Kategori Ekle</value>
+  </data>
+
+  <data name="EditCategory" xml:space="preserve">
+    <value>Kategoriyi Düzenle</value>
+  </data>
+
+  <data name="DeleteCategory" xml:space="preserve">
+    <value>Kategoriyi Sil</value>
+  </data>
+
+  <data name="ExampleCategoryCode" xml:space="preserve">
+    <value>Örnek: PC, PRN, FUR</value>
+  </data>
+
+  <data name="CategoryDescriptionPlaceholder" xml:space="preserve">
+    <value>Kısa bir kategori açıklaması girin</value>
+  </data>
+
+  <data name="NoCategoriesAdded" xml:space="preserve">
+    <value>Henüz kategori eklenmedi.</value>
+  </data>
+
+  <data name="DeleteCategoryConfirmation" xml:space="preserve">
+    <value>Bu kategoriyi silmek istediğinize emin misiniz?</value>
+  </data>
+  <data name="CategoryCreated" xml:space="preserve">
+  <value>Kategori başarıyla oluşturuldu.</value>
+</data>
+
+<data name="CategoryUpdated" xml:space="preserve">
+  <value>Kategori başarıyla güncellendi.</value>
+</data>
+
+<data name="CategoryDeleted" xml:space="preserve">
+  <value>Kategori başarıyla silindi.</value>
+</data>
+
+<data name="CategoryContainsAssets" xml:space="preserve">
+  <value>Bu kategoriye bağlı demirbaşlar bulunduğu için silinemez.</value>
+</data>
+<data name="InvalidLoginAttempt" xml:space="preserve">
+  <value>Kullanıcı adı, e-posta veya şifre geçersiz.</value>
+</data>
+
+<data name="AccountTemporarilyLocked" xml:space="preserve">
+  <value>Hesabınız geçici olarak kilitlendi. Lütfen daha sonra tekrar deneyin.</value>
+</data>
+
+<data name="AccountNotAllowed" xml:space="preserve">
+  <value>Bu hesabın oturum açmasına izin verilmiyor.</value>
+</data>
+
+<data name="LogoutSuccessful" xml:space="preserve">
+  <value>Başarıyla çıkış yaptınız.</value>
+</data>
+
+<data name="ApplicationName" xml:space="preserve">
+  <value>GBB Demirbaş Yönetim Sistemi</value>
+</data>
+
+<data name="SignInToContinue" xml:space="preserve">
+  <value>Devam etmek için giriş yapın</value>
+</data>
+
+<data name="EnterUsernameOrEmail" xml:space="preserve">
+  <value>Kullanıcı adınızı veya e-posta adresinizi girin</value>
+</data>
+
+<data name="ForgotPassword" xml:space="preserve">
+  <value>Şifremi Unuttum</value>
+</data>
+
+<data name="HidePassword" xml:space="preserve">
+  <value>Şifreyi gizle</value>
+  </data>
+  <data name="UsernameOrEmail" xml:space="preserve">
+  <value>Kullanıcı Adı veya E-posta</value>
+</data>
+
+<data name="UsernameOrEmailRequired" xml:space="preserve">
+  <value>Kullanıcı adı veya e-posta zorunludur.</value>
+</data>
+
+<data name="Password" xml:space="preserve">
+  <value>Şifre</value>
+</data>
+
+<data name="PasswordRequired" xml:space="preserve">
+  <value>Şifre zorunludur.</value>
+</data>
+
+<data name="RememberMe" xml:space="preserve">
+  <value>Beni Hatırla</value>
+</data>
+<data name="SendResetLink" xml:space="preserve">
+  <value>Sıfırlama Bağlantısı Gönder</value>
+</data>
+
+<data name="EnterYourEmail" xml:space="preserve">
+  <value>E-posta adresinizi giriniz</value>
+</data>
+<data name="ForgotPasswordDescription" xml:space="preserve">
+  <value>E-posta adresinizi girin, size şifre sıfırlama bağlantısı gönderelim.</value>
+</data>
+
+<data name="BackToLogin" xml:space="preserve">
+  <value>Giriş Sayfasına Dön</value>
+</data>
+<data name="CreateNewPassword" xml:space="preserve">
+  <value>Hesabınız için yeni bir şifre oluşturun.</value>
+</data>
+
+<data name="ConfirmPassword" xml:space="preserve">
+  <value>Şifreyi Onayla</value>
+</data>
+
+<data name="PasswordsDoNotMatch" xml:space="preserve">
+  <value>Şifreler eşleşmiyor.</value>
+</data>
+
+<data name="PasswordResetSuccessful" xml:space="preserve">
+  <value>Şifreniz başarıyla sıfırlandı.</value>
+</data>
+<data name="EmailSent" xml:space="preserve">
+  <value>E-posta Gönderildi</value>
+</data>
+
+<data name="PasswordResetEmailSentDescription" xml:space="preserve">
+  <value>Bu e-posta adresine ait bir hesap varsa, şifre sıfırlama bağlantısı gönderildi.</value>
+</data>
+<data name="PasswordResetLinkCouldNotBeCreated" xml:space="preserve">
+  <value>Şifre sıfırlama bağlantısı oluşturulamadı.</value>
+</data>
+
+<data name="PasswordResetEmailSubject" xml:space="preserve">
+  <value>Şifre Sıfırlama Talebi</value>
+</data>
+
+<data name="PasswordResetEmailTitle" xml:space="preserve">
+  <value>Şifrenizi Sıfırlayın</value>
+</data>
+
+<data name="ResetPassword" xml:space="preserve">
+  <value>Şifreyi Sıfırla</value>
+</data>
+
+<data name="PasswordResetEmailIgnoreMessage" xml:space="preserve">
+  <value>Şifre sıfırlama talebinde bulunmadıysanız bu e-postayı dikkate almayabilirsiniz.</value>
+</data>
+<data name="PasswordResetSuccessfulDescription" xml:space="preserve">
+  <value>Artık yeni şifrenizle giriş yapabilirsiniz.</value>
+</data>
+
+<data name="ConfirmPasswordRequired" xml:space="preserve">
+  <value>Lütfen şifrenizi tekrar giriniz.</value>
+</data>
+
+<data name="ResetPasswordEmailSubject" xml:space="preserve">
+  <value>Şifre Sıfırlama Talebi</value>
+</data>
+
+<data name="ResetPasswordEmailTitle" xml:space="preserve">
+  <value>Şifrenizi Sıfırlayın</value>
+</data>
+
+<data name="PasswordResetEmailDescription" xml:space="preserve">
+  <value>Şifrenizi sıfırlamak için aşağıdaki butona tıklayın.</value>
+</data>
+
+
+<data name="PasswordResetLinkExpiration" xml:space="preserve">
+  <value>Bu şifre sıfırlama bağlantısı güvenlik nedeniyle 1 saat boyunca geçerlidir ve yalnızca bir kez kullanılabilir. Süresi dolarsa lütfen yeni bir şifre sıfırlama bağlantısı talep edin.</value>
+</data>
+
+<data name="CreateNewPasswordDescription" xml:space="preserve">
+  <value>Hesabınız için yeni bir şifre oluşturun.</value>
+</data>
+
+<data name="NewPassword" xml:space="preserve">
+  <value>Yeni Şifre</value>
+</data>
+
+<data name="EnterNewPassword" xml:space="preserve">
+  <value>Yeni şifrenizi girin</value>
+</data>
+
+<data name="ConfirmNewPassword" xml:space="preserve">
+  <value>Yeni Şifreyi Onayla</value>
+</data>
+
+<data name="InvalidResetPasswordLink" xml:space="preserve">
+  <value>Şifre sıfırlama bağlantısı geçersiz.</value>
+</data>
+
+<data name="ResetPasswordLinkExpired" xml:space="preserve">
+  <value>Bu şifre sıfırlama bağlantısının süresi dolmuş veya daha önce kullanılmıştır. Lütfen yeni bir bağlantı talep edin.</value>
+</data>
+
+
+<data name="PasswordResetFailed" xml:space="preserve">
+  <value>Şifre değiştirilemedi. Lütfen tekrar deneyin.</value>
+</data>
+
+<data name="ShowOrHidePassword" xml:space="preserve">
+  <value>Şifreyi Göster/Gizle</value>
+</data>
+<data name="ResetPasswordRecentlyRequested" xml:space="preserve">
+  <value>Şifre sıfırlama bağlantısı zaten gönderildi. Lütfen yeniden istemeden önce 60 saniye bekleyin.</value>
+</data>
+
+<data name="ResendAvailableIn" xml:space="preserve">
+  <value>Yeni bir e-posta talep edebilmenize kalan süre:</value>
+</data>
+
+<data name="Seconds" xml:space="preserve">
+  <value>saniye.</value>
+</data>
+
+<data name="Sending" xml:space="preserve">
+  <value>Gönderiliyor...</value>
+</data>
+
+<data name="PasswordResetEmailCouldNotBeSent" xml:space="preserve">
+  <value>Şifre sıfırlama e-postası gönderilemedi. Lütfen tekrar deneyin.</value>
+</data>
+<data name="ManageUserAccountsDescription" xml:space="preserve">
+  <value>Yönetici ve departman kullanıcı hesaplarını yönetin.</value>
+</data>
+
+<data name="ArchivedUsers" xml:space="preserve">
+  <value>Arşivlenmiş Kullanıcılar</value>
+</data>
+
+<data name="CreateNewUser" xml:space="preserve">
+  <value>Yeni Kullanıcı Oluştur</value>
+</data>
+
+<data name="Name" xml:space="preserve">
+  <value>Ad Soyad</value>
+</data>
+
+<data name="Username" xml:space="preserve">
+  <value>Kullanıcı Adı</value>
+</data>
+
+<data name="Email" xml:space="preserve">
+  <value>E-posta</value>
+</data>
+
+<data name="Department" xml:space="preserve">
+  <value>Departman</value>
+</data>
+
+<data name="Role" xml:space="preserve">
+  <value>Rol</value>
+</data>
+
+<data name="Actions" xml:space="preserve">
+  <value>İşlemler</value>
+</data>
+
+<data name="Admin" xml:space="preserve">
+  <value>Yönetici</value>
+</data>
+
+<data name="DepartmentUser" xml:space="preserve">
+  <value>Departman Kullanıcısı</value>
+</data>
+
+<data name="Protected" xml:space="preserve">
+  <value>Korumalı</value>
+</data>
+
+<data name="Archive" xml:space="preserve">
+  <value>Arşivle</value>
+</data>
+
+<data name="ArchiveUser" xml:space="preserve">
+  <value>Kullanıcıyı Arşivle</value>
+</data>
+
+<data name="ArchiveThisUser" xml:space="preserve">
+  <value>Bu kullanıcı arşivlensin mi?</value>
+</data>
+
+<data name="ArchiveUserDescription" xml:space="preserve">
+  <value>Aşağıdaki kullanıcı hesabı arşivlenecektir:</value>
+</data>
+
+<data name="ArchivedUserCannotSignIn" xml:space="preserve">
+  <value>Hesap tekrar etkinleştirilene kadar kullanıcı sisteme giriş yapamayacaktır.</value>
+</data>
+
+<data name="Cancel" xml:space="preserve">
+  <value>İptal</value>
+</data>
+
+<data name="NoActiveUsers" xml:space="preserve">
+  <value>Aktif Kullanıcı Yok</value>
+</data>
+
+<data name="NoActiveUsersDescription" xml:space="preserve">
+  <value>Aktif kullanıcı hesabı bulunamadı.</value>
+</data>
+
+<data name="ArchivedUsersDescription" xml:space="preserve">
+  <value>Arşivlenmiş departman kullanıcılarını görüntüleyin ve yeniden etkinleştirin.</value>
+</data>
+
+<data name="BackToUsers" xml:space="preserve">
+  <value>Kullanıcılara Dön</value>
+</data>
+
+<data name="User" xml:space="preserve">
+  <value>Kullanıcı</value>
+</data>
+
+<data name="ArchivedAccount" xml:space="preserve">
+  <value>Arşivlenmiş hesap</value>
+</data>
+
+<data name="Activate" xml:space="preserve">
+  <value>Etkinleştir</value>
+</data>
+
+<data name="ActivateUser" xml:space="preserve">
+  <value>Kullanıcıyı Etkinleştir</value>
+</data>
+
+<data name="ActivateThisUser" xml:space="preserve">
+  <value>Bu kullanıcı etkinleştirilsin mi?</value>
+</data>
+
+<data name="ActivateUserDescription" xml:space="preserve">
+  <value>Aşağıdaki hesap etkinleştirilecek ve kullanıcı tekrar sisteme giriş yapabilecektir:</value>
+</data>
+
+<data name="NoArchivedUsers" xml:space="preserve">
+  <value>Arşivlenmiş Kullanıcı Yok</value>
+</data>
+
+<data name="NoArchivedUsersDescription" xml:space="preserve">
+  <value>Arşivlenen departman kullanıcı hesapları bu sayfada görünecektir.</value>
+</data>
+
+<data name="ViewActiveUsers" xml:space="preserve">
+  <value>Aktif Kullanıcıları Görüntüle</value>
+</data>
+
+<data name="CreateNewDepartmentUser" xml:space="preserve">
+  <value>Yeni Departman Kullanıcısı Oluştur</value>
+</data>
+
+<data name="CreateDepartmentUserDescription" xml:space="preserve">
+  <value>Yeni bir kullanıcı hesabı oluşturun ve bir departmana atayın.</value>
+</data>
+
+<data name="FirstName" xml:space="preserve">
+  <value>Ad</value>
+</data>
+
+<data name="LastName" xml:space="preserve">
+  <value>Soyad</value>
+</data>
+
+<data name="PasswordRequirements" xml:space="preserve">
+  <value>Şifre en az 8 karakter olmalı; 1 büyük harf, 1 küçük harf, 1 rakam ve 1 özel karakter içermelidir.</value>
+</data>
+
+<data name="CreateUser" xml:space="preserve">
+  <value>Kullanıcı Oluştur</value>
+</data>
+
+<data name="ShowPassword" xml:space="preserve">
+  <value>Şifreyi göster</value>
+</data>
+
+<data name="AssetAssignments" xml:space="preserve">
+  <value>Zimmet İşlemleri</value>
+</data>
+
+<data name="AssetAssignmentsDescription" xml:space="preserve">
+  <value>Personellere veya odalara zimmetlenen demirbaşları görüntüleyin ve yönetin.</value>
+</data>
+
+<data name="NewAssignment" xml:space="preserve">
+  <value>Yeni Zimmet</value>
+</data>
+
+<data name="SearchAssignments" xml:space="preserve">
+  <value>Zimmetlerde Ara</value>
+</data>
+
+<data name="SearchAssignmentsPlaceholder" xml:space="preserve">
+  <value>Demirbaş, personel, departman veya oda ile arayın...</value>
+</data>
+
+<data name="Search" xml:space="preserve">
+  <value>Ara</value>
+</data>
+<data name="Asset" xml:space="preserve">
+  <value>Demirbaş</value>
+</data>
+
+<data name="AssignmentType" xml:space="preserve">
+  <value>Zimmet Türü</value>
+</data>
+
+<data name="AssignedTo" xml:space="preserve">
+  <value>Zimmetlenen Yer veya Kişi</value>
+</data>
+
+<data name="AssignmentDate" xml:space="preserve">
+  <value>Zimmet Tarihi</value>
+</data>
+
+<data name="ExpectedReturn" xml:space="preserve">
+  <value>Beklenen İade</value>
+</data>
+
+<data name="ExpectedReturnDate" xml:space="preserve">
+  <value>Beklenen İade Tarihi</value>
+</data>
+
+<data name="Status" xml:space="preserve">
+  <value>Durum</value>
+</data>
+
+<data name="Personnel" xml:space="preserve">
+  <value>Personel</value>
+</data>
+
+<data name="Room" xml:space="preserve">
+  <value>Oda</value>
+</data>
+
+<data name="Active" xml:space="preserve">
+  <value>Aktif</value>
+</data>
+
+<data name="Returned" xml:space="preserve">
+  <value>İade Edildi</value>
+</data>
+
+<data name="Return" xml:space="preserve">
+  <value>İade Et</value>
+</data>
+
+<data name="NoAssignmentsFound" xml:space="preserve">
+  <value>Zimmet Kaydı Bulunamadı</value>
+</data>
+
+<data name="NoAssignmentsFoundDescription" xml:space="preserve">
+  <value>Aramanızla eşleşen bir zimmet kaydı bulunamadı.</value>
+</data>
+
+<data name="CreateFirstAssignment" xml:space="preserve">
+  <value>İlk Zimmeti Oluştur</value>
+</data>
+
+<data name="NewAssetAssignment" xml:space="preserve">
+  <value>Yeni Demirbaş Zimmeti</value>
+</data>
+
+<data name="NewAssetAssignmentDescription" xml:space="preserve">
+  <value>Uygun durumdaki bir demirbaşı personele veya odaya zimmetleyin.</value>
+</data>
+
+<data name="SelectAsset" xml:space="preserve">
+  <value>Demirbaş Seçin</value>
+</data>
+
+<data name="SelectDepartment" xml:space="preserve">
+  <value>Departman Seçin</value>
+</data>
+
+<data name="SelectPersonnel" xml:space="preserve">
+  <value>Personel Seçin</value>
+</data>
+
+<data name="SelectRoom" xml:space="preserve">
+  <value>Oda Seçin</value>
+</data>
+
+<data name="DeliveredBy" xml:space="preserve">
+  <value>Teslim Eden</value>
+</data>
+
+<data name="ReceivedBy" xml:space="preserve">
+  <value>Teslim Alan</value>
+</data>
+
+<data name="DeliveredByPlaceholder" xml:space="preserve">
+  <value>Demirbaşı teslim eden kişinin adını girin</value>
+</data>
+
+<data name="ReceivedByPlaceholder" xml:space="preserve">
+  <value>Demirbaşı teslim alan kişinin adını girin</value>
+</data>
+
+<data name="Notes" xml:space="preserve">
+  <value>Notlar</value>
+</data>
+
+<data name="AssignmentNotesPlaceholder" xml:space="preserve">
+  <value>Zimmetle ilgili ek bilgileri girin</value>
+</data>
+
+<data name="AssignAsset" xml:space="preserve">
+  <value>Demirbaşı Zimmetle</value>
+</data>
+
+<data name="AssignmentDetails" xml:space="preserve">
+  <value>Zimmet Detayları</value>
+</data>
+
+<data name="AssignmentDetailsDescription" xml:space="preserve">
+  <value>Bu demirbaş zimmetine ait tüm bilgileri görüntüleyin.</value>
+</data>
+
+<data name="ReturnDate" xml:space="preserve">
+  <value>İade Tarihi</value>
+</data>
+
+<data name="NoNotes" xml:space="preserve">
+  <value>Herhangi bir not eklenmedi.</value>
+</data>
+
+<data name="ReturnAsset" xml:space="preserve">
+  <value>Demirbaşı İade Et</value>
+</data>
+
+<data name="ReturnAssetDescription" xml:space="preserve">
+  <value>Demirbaşın iade bilgilerini ve durumunu kaydedin.</value>
+</data>
+
+<data name="ReturnReceivedByPlaceholder" xml:space="preserve">
+  <value>İade edilen demirbaşı teslim alan kişinin adını girin</value>
+</data>
+
+<data name="Condition" xml:space="preserve">
+  <value>Durum</value>
+</data>
+
+<data name="Good" xml:space="preserve">
+  <value>İyi</value>
+</data>
+
+<data name="Damaged" xml:space="preserve">
+  <value>Hasarlı</value>
+</data>
+
+<data name="MissingParts" xml:space="preserve">
+  <value>Eksik Parçalı</value>
+</data>
+
+<data name="DamageDescription" xml:space="preserve">
+  <value>Hasar Açıklaması</value>
+</data>
+
+<data name="DamageDescriptionPlaceholder" xml:space="preserve">
+  <value>Hasarı veya eksik parçaları açıklayın</value>
+</data>
+
+<data name="ReturnNotesPlaceholder" xml:space="preserve">
+  <value>İade işlemiyle ilgili ek bilgileri girin</value>
+</data>
+
+<data name="ReturnAssetWarning" xml:space="preserve">
+  <value>Onaylandıktan sonra bu zimmet kaydı iade edildi olarak işaretlenecektir.</value>
+</data>
+
+<data name="ConfirmReturn" xml:space="preserve">
+  <value>İadeyi Onayla</value>
+</data>
+
+<data name="Close" xml:space="preserve">
+  <value>Kapat</value>
+</data>
+<data name="AssetRequired" xml:space="preserve">
+  <value>Lütfen bir demirbaş seçiniz.</value>
+</data>
+
+<data name="DeliveredByRequired" xml:space="preserve">
+  <value>Teslim eden kişi bilgisi zorunludur.</value>
+</data>
+
+<data name="ReceivedByRequired" xml:space="preserve">
+  <value>Teslim alan kişi bilgisi zorunludur.</value>
+</data>
+
+<data name="PersonnelRequired" xml:space="preserve">
+  <value>Lütfen bir personel seçiniz.</value>
+</data>
+
+<data name="RoomRequired" xml:space="preserve">
+  <value>Lütfen bir oda seçiniz.</value>
+</data>
+
+<data name="InvalidValue" xml:space="preserve">
+  <value>Seçilen değer geçersizdir.</value>
+</data>
+
+<data name="AssignmentDateRequired" xml:space="preserve">
+  <value>Zimmet tarihi zorunludur.</value>
+</data>
+
+<data name="ConditionRequired" xml:space="preserve">
+  <value>Demirbaş durumu zorunludur.</value>
+</data>
+
+<data name="ReturnDateRequired" xml:space="preserve">
+  <value>İade tarihi zorunludur.</value>
+</data>
+<data name="HomePageDescription" xml:space="preserve">
+  <value>Sık kullanılan bölümlere hızlıca erişin.</value>
+</data>
+
+<data name="InventoryDescription" xml:space="preserve">
+  <value>Envanter dağılımını görüntüleyin.</value>
+</data>
+
+<data name="AssetsDescription" xml:space="preserve">
+  <value>Demirbaşları görüntüleyin ve yönetin.</value>
+</data>
+
+<data name="AssignmentsDescription" xml:space="preserve">
+  <value>Demirbaş zimmetleme ve iade işlemlerini yönetin.</value>
+</data>
+
+<data name="PersonnelDescription" xml:space="preserve">
+  <value>Departman personelini görüntüleyin.</value>
+</data>
+
+<data name="RoomsDescription" xml:space="preserve">
+  <value>Odaları ve konumları görüntüleyin.</value>
+</data>
+
+<data name="UsersDescription" xml:space="preserve">
+  <value>Sistem kullanıcılarını yönetin.</value>
+</data>
+
+<data name="CategoriesDescription" xml:space="preserve">
+  <value>Demirbaş kategorilerini yönetin.</value>
+</data>
+
+<data name="DepartmentsDescription" xml:space="preserve">
+  <value>Departmanları yönetin.</value>
+</data>
+
+<data name="PrivacyPolicy" xml:space="preserve">
+  <value>Gizlilik Politikası</value>
+</data>
+
+<data name="PrivacyPolicyDescription" xml:space="preserve">
+  <value>Sistemin gizliliği ve kullanımı hakkında bilgiler.</value>
+</data>
+
+<data name="PrivacyPolicyContent" xml:space="preserve">
+  <value>Bu sayfa GBB Demirbaş Yönetim Sistemi'nin gizlilik politikası hakkında bilgi vermektedir.</value>
+</data>
+<data name="PersonnelPageDescription" xml:space="preserve">
+  <value>Departman personel kayıtlarını görüntüleyin ve yönetin.</value>
+</data>
+
+<data name="AddPersonnel" xml:space="preserve">
+  <value>Personel Ekle</value>
+</data>
+
+<data name="AddPersonnelDescription" xml:space="preserve">
+  <value>Yeni bir personel kaydı oluşturun ve bir departmana atayın.</value>
+</data>
+
+<data name="EditPersonnel" xml:space="preserve">
+  <value>Personeli Düzenle</value>
+</data>
+
+<data name="EditPersonnelDescription" xml:space="preserve">
+  <value>Personel bilgilerini ve departman atamasını güncelleyin.</value>
+</data>
+
+<data name="DeletePersonnel" xml:space="preserve">
+  <value>Personeli Sil</value>
+</data>
+
+<data name="DeletePersonnelDescription" xml:space="preserve">
+  <value>Kaydı silmeden önce personel bilgilerini kontrol edin.</value>
+</data>
+
+<data name="DeletePersonnelConfirmation" xml:space="preserve">
+  <value>Bu personel kaydını silmek istediğinize emin misiniz?</value>
+</data>
+
+<data name="PersonnelDetails" xml:space="preserve">
+  <value>Personel Detayları</value>
+</data>
+
+<data name="RegistrationNumber" xml:space="preserve">
+  <value>Sicil Numarası</value>
+</data>
+
+<data name="NationalIdentityNumber" xml:space="preserve">
+  <value>T.C. Kimlik Numarası</value>
+</data>
+
+<data name="FullName" xml:space="preserve">
+  <value>Ad Soyad</value>
+</data>
+
+<data name="PhoneNumber" xml:space="preserve">
+  <value>Telefon Numarası</value>
+</data>
+
+<data name="NoPersonnelFound" xml:space="preserve">
+  <value>Personel Bulunamadı</value>
+</data>
+
+<data name="NoPersonnelFoundDescription" xml:space="preserve">
+  <value>Henüz personel kaydı eklenmedi.</value>
+</data>
+
+<data name="TotalAssignments" xml:space="preserve">
+  <value>Toplam Zimmet</value>
+</data>
+
+<data name="ActiveAssets" xml:space="preserve">
+  <value>Aktif Demirbaşlar</value>
+</data>
+
+<data name="ComputerAssignments" xml:space="preserve">
+  <value>Bilgisayar Zimmetleri</value>
+</data>
+
+<data name="FurnitureAssignments" xml:space="preserve">
+  <value>Mobilya Zimmetleri</value>
+</data>
+
+<data name="AssignmentHistory" xml:space="preserve">
+  <value>Zimmet Geçmişi</value>
+</data>
+
+<data name="NoPersonnelAssignments" xml:space="preserve">
+  <value>Bu personele henüz herhangi bir demirbaş zimmetlenmemiştir.</value>
+</data>
+
+<data name="View" xml:space="preserve">
+  <value>Görüntüle</value>
+</data>
+<data name="FirstNameRequired" xml:space="preserve">
+  <value>Ad alanı zorunludur.</value>
+</data>
+
+<data name="LastNameRequired" xml:space="preserve">
+  <value>Soyad alanı zorunludur.</value>
+</data>
+
+<data name="RegistrationNumberRequired" xml:space="preserve">
+  <value>Sicil numarası zorunludur.</value>
+</data>
+
+<data name="NationalIdentityNumberRequired" xml:space="preserve">
+  <value>T.C. kimlik numarası zorunludur.</value>
+</data>
+
+<data name="EmailRequired" xml:space="preserve">
+  <value>E-posta adresi zorunludur.</value>
+</data>
+
+<data name="PhoneNumberRequired" xml:space="preserve">
+  <value>Telefon numarası zorunludur.</value>
+</data>
+
+<data name="DepartmentRequired" xml:space="preserve">
+  <value>Lütfen bir departman seçiniz.</value>
+</data>
+
+<data name="InvalidEmail" xml:space="preserve">
+  <value>Lütfen geçerli bir e-posta adresi giriniz.</value>
+</data>
+
+<data name="NationalIdentityNumberLength" xml:space="preserve">
+  <value>T.C. kimlik numarası 11 haneli olmalıdır.</value>
+</data>
+
+<data name="PhoneNumberLength" xml:space="preserve">
+  <value>Telefon numarası 11 haneli olmalıdır.</value>
+</data>
+<data name="RoomsPageDescription" xml:space="preserve">
+  <value>Odaları ve bağlı oldukları departman konumlarını görüntüleyin ve yönetin.</value>
+</data>
+
+<data name="AddRoom" xml:space="preserve">
+  <value>Oda Ekle</value>
+</data>
+
+<data name="AddRoomDescription" xml:space="preserve">
+  <value>Yeni bir oda oluşturun ve bir departmana atayın.</value>
+</data>
+
+<data name="EditRoom" xml:space="preserve">
+  <value>Odayı Düzenle</value>
+</data>
+
+<data name="EditRoomDescription" xml:space="preserve">
+  <value>Oda bilgilerini ve departman atamasını güncelleyin.</value>
+</data>
+
+<data name="DeleteRoom" xml:space="preserve">
+  <value>Odayı Sil</value>
+</data>
+
+<data name="DeleteRoomDescription" xml:space="preserve">
+  <value>Kaydı silmeden önce oda bilgilerini kontrol edin.</value>
+</data>
+
+<data name="DeleteRoomConfirmation" xml:space="preserve">
+  <value>Bu oda kaydını silmek istediğinize emin misiniz?</value>
+</data>
+
+<data name="RoomName" xml:space="preserve">
+  <value>Oda Adı</value>
+</data>
+
+<data name="RoomNumber" xml:space="preserve">
+  <value>Oda Numarası</value>
+</data>
+
+<data name="Building" xml:space="preserve">
+  <value>Bina</value>
+</data>
+
+<data name="Floor" xml:space="preserve">
+  <value>Kat</value>
+</data>
+
+<data name="NoRoomsFound" xml:space="preserve">
+  <value>Oda Bulunamadı</value>
+</data>
+
+<data name="NoRoomsFoundDescription" xml:space="preserve">
+  <value>Henüz herhangi bir oda kaydı eklenmedi.</value>
+</data>
+<data name="RoomNameRequired" xml:space="preserve">
+  <value>Oda adı zorunludur.</value>
+</data>
+
+<data name="RoomNumberRequired" xml:space="preserve">
+  <value>Oda numarası zorunludur.</value>
+</data>
+<data name="Description" xml:space="preserve">
+  <value>Açıklama</value>
+</data>
+
+<data name="DepartmentsPageDescription" xml:space="preserve">
+  <value>Belediye departmanlarını görüntüleyin ve yönetin.</value>
+</data>
+
+<data name="AddDepartment" xml:space="preserve">
+  <value>Departman Ekle</value>
+</data>
+
+<data name="AddDepartmentDescription" xml:space="preserve">
+  <value>Sisteme yeni bir departman ekleyin.</value>
+</data>
+
+<data name="EditDepartment" xml:space="preserve">
+  <value>Departmanı Düzenle</value>
+</data>
+
+<data name="EditDepartmentDescription" xml:space="preserve">
+  <value>Departman adını ve açıklamasını güncelleyin.</value>
+</data>
+
+<data name="DeleteDepartment" xml:space="preserve">
+  <value>Departmanı Sil</value>
+</data>
+
+<data name="DeleteDepartmentDescription" xml:space="preserve">
+  <value>Silmeden önce departman bilgilerini kontrol edin.</value>
+</data>
+
+<data name="DeleteDepartmentConfirmation" xml:space="preserve">
+  <value>Bu departmanı silmek istediğinize emin misiniz?</value>
+</data>
+
+<data name="NoDepartmentsFound" xml:space="preserve">
+  <value>Departman Bulunamadı</value>
+</data>
+
+<data name="NoDepartmentsFoundDescription" xml:space="preserve">
+  <value>Henüz herhangi bir departman kaydı eklenmedi.</value>
+</data>
+
+<data name="DepartmentSavedSuccessfully" xml:space="preserve">
+  <value>Departman başarıyla kaydedildi.</value>
+</data>
+
+<data name="DepartmentUpdatedSuccessfully" xml:space="preserve">
+  <value>Departman başarıyla güncellendi.</value>
+</data>
+
+<data name="DepartmentDeletedSuccessfully" xml:space="preserve">
+  <value>Departman başarıyla silindi.</value>
+</data>
+
+<data name="DepartmentNameRequired" xml:space="preserve">
+  <value>Departman adı zorunludur.</value>
+</data>
+<data name="InventoryPageDescription" xml:space="preserve">
+  <value>Demirbaş dağılımını, kullanılabilirlik ve zimmet bilgilerini görüntüleyin.</value>
+</data>
+
+<data name="TotalAssets" xml:space="preserve">
+  <value>Toplam Demirbaş</value>
+</data>
+
+
+<data name="Assigned" xml:space="preserve">
+  <value>Zimmetli</value>
+</data>
+
+<data name="Maintenance" xml:space="preserve">
+  <value>Bakımda</value>
+</data>
+
+<data name="Total" xml:space="preserve">
+  <value>Toplam</value>
+</data>
+
+<data name="CategoryDistribution" xml:space="preserve">
+  <value>Kategori Dağılımı</value>
+</data>
+
+<data name="BackToInventory" xml:space="preserve">
+  <value>Envantere Dön</value>
+</data>
+
+<data name="TopAssignedModels" xml:space="preserve">
+  <value>En Çok Zimmetlenen Modeller</value>
+</data>
+
+<data name="NoAssignmentHistoryFound" xml:space="preserve">
+  <value>Herhangi bir zimmet geçmişi bulunamadı.</value>
+</data>
+
+<data name="DepartmentDistribution" xml:space="preserve">
+  <value>Departman Dağılımı</value>
+</data>
+
+<data name="RoomDistribution" xml:space="preserve">
+  <value>Oda Dağılımı</value>
+</data>
+
+<data name="AssetCount" xml:space="preserve">
+  <value>Demirbaş Sayısı</value>
+</data>
+
+<data name="Percentage" xml:space="preserve">
+  <value>Yüzde</value>
+</data>
+
+<data name="NoDepartmentAssignmentFound" xml:space="preserve">
+  <value>Bu kategori için departman zimmeti bulunamadı.</value>
+</data>
+
+<data name="NoRoomAssignmentFound" xml:space="preserve">
+  <value>Bu kategori için oda zimmeti bulunamadı.</value>
+</data>
+
+<data name="Filters" xml:space="preserve">
+  <value>Filtreler</value>
+</data>
+
+<data name="InventorySearchPlaceholder" xml:space="preserve">
+  <value>Kod, ad, marka veya model ile ara...</value>
+</data>
+
+<data name="AllStatuses" xml:space="preserve">
+  <value>Tüm Durumlar</value>
+</data>
+
+<data name="AllDepartments" xml:space="preserve">
+  <value>Tüm Departmanlar</value>
+</data>
+
+<data name="AllRooms" xml:space="preserve">
+  <value>Tüm Odalar</value>
+</data>
+
+<data name="ApplyFilters" xml:space="preserve">
+  <value>Filtreleri Uygula</value>
+</data>
+
+<data name="ClearFilters" xml:space="preserve">
+  <value>Filtreleri Temizle</value>
+</data>
+
+<data name="Results" xml:space="preserve">
+  <value>sonuç</value>
+</data>
+
+<data name="NoAssetsFound" xml:space="preserve">
+  <value>Demirbaş Bulunamadı</value>
+</data>
+
+<data name="NoAssetsMatchFilters" xml:space="preserve">
+  <value>Seçilen filtrelere uygun demirbaş bulunamadı.</value>
+</data>
+
+<data name="BrandModel" xml:space="preserve">
+  <value>Marka / Model</value>
+</data>
+
+<data name="RoomLocation" xml:space="preserve">
+  <value>Oda / Konum</value>
+</data>
+
+<data name="Action" xml:space="preserve">
+  <value>İşlem</value>
+</data>
+<data name="AssetDetails" xml:space="preserve">
+  <value>Demirbaş Detayları</value>
+</data>
+
+<data name="AssetInformation" xml:space="preserve">
+  <value>Demirbaş Bilgileri</value>
+</data>
+
+<data name="PurchaseDate" xml:space="preserve">
+  <value>Satın Alma Tarihi</value>
+</data>
+
+<data name="PurchasePrice" xml:space="preserve">
+  <value>Satın Alma Fiyatı</value>
+</data>
+
+<data name="WarrantyExpiration" xml:space="preserve">
+  <value>Garanti Bitiş Tarihi</value>
+</data>
+
+<data name="AssetNeverAssigned" xml:space="preserve">
+  <value>Bu demirbaş daha önce hiç zimmetlenmemiştir.</value>
+</data>
+
+<data name="Type" xml:space="preserve">
+  <value>Tür</value>
+</data>
+
+<data name="AssetReturnedSuccessfully" xml:space="preserve">
+  <value>Demirbaş başarıyla iade edildi.</value>
+</data>
+<data name="EditAsset" xml:space="preserve">
+  <value>Demirbaşı Düzenle</value>
+</data>
+<data name="GBBAssets" xml:space="preserve">
+  <value>GBB Demirbaş</value>
+</data>
+<data name="CheckSpamFolder" xml:space="preserve">
+    <value>E-posta gelmediyse spam veya gereksiz klasörünü kontrol edin.</value>
+</data>
+<data name="PasswordTooShort" xml:space="preserve">
+  <value>Şifre en az 6 karakter olmalıdır.</value>
+</data>
+
+<data name="PasswordRequiresUppercase" xml:space="preserve">
+  <value>Şifre en az bir büyük harf içermelidir.</value>
+</data>
+
+<data name="PasswordRequiresSpecialCharacter" xml:space="preserve">
+  <value>Şifre en az bir özel karakter içermelidir.</value>
+</data>
+<data name="WarrantyExpirationDate" xml:space="preserve">
+  <value>Garanti Bitiş Tarihi</value>
+</data>
+<data name="AssetCodeAutoGenerated" xml:space="preserve">
+  <value>Demirbaş kodu seçilen kategoriye göre otomatik olarak oluşturulacaktır.</value>
+</data>
+
+<data name="SelectCategory" xml:space="preserve">
+  <value>Kategori Seçiniz</value>
+  </data>
+</root>

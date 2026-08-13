@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using GBBassetManagementSystem.Data.Context;
+using GBBassetManagementSystem.Entity.Entities;
 using GBBassetManagementSystem.Entity.Enums;
 using GBBassetManagementSystem.Web.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -6,87 +9,134 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GBBassetManagementSystem.Web.Controllers;
 
+[Authorize(Roles = "Admin,DepartmentUser")]
 public class InventoryController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public InventoryController(ApplicationDbContext context)
+    public InventoryController(
+        ApplicationDbContext context,
+        UserManager<ApplicationUser> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
-    // Inventory ana sayfası
-    // Genel durum özeti ve kategori dağılımı
+    // Inventory main page.
+    // Admin sees all assets.
+    // DepartmentUser sees assets actively assigned to their department.
     public async Task<IActionResult> Index()
-{
-    var assets = await _context.Assets
-        .AsNoTracking()
-        .Include(asset => asset.Category)
-        .ToListAsync();
-
-    var model = new InventoryViewModel
     {
-        TotalAssets = assets.Count,
+        var userDepartmentId =
+            await GetCurrentDepartmentIdAsync();
 
-        AvailableAssets = assets.Count(
-            asset => asset.Status == AssetStatus.Available),
+        if (User.IsInRole("DepartmentUser") &&
+            !userDepartmentId.HasValue)
+        {
+            return Forbid();
+        }
 
-        AssignedAssets = assets.Count(
-            asset => asset.Status == AssetStatus.Assigned),
+        var assetsQuery = _context.Assets
+            .AsNoTracking()
+            .Include(asset => asset.Category)
+            .AsQueryable();
 
-       MaintenanceAssets = assets.Count(
-    asset => asset.Status == AssetStatus.Maintenance),
+        if (User.IsInRole("DepartmentUser"))
+        {
+            var departmentId = userDepartmentId!.Value;
 
-        LostAssets = assets.Count(
-            asset => asset.Status == AssetStatus.Lost),
-        DisposedAssets = assets.Count(
-           asset => asset.Status == AssetStatus.Disposed),
+            var departmentAssetIds =
+                _context.AssetAssignments
+                    .AsNoTracking()
+                    .Where(assignment =>
+                        assignment.IsActive &&
+                        (
+                            assignment.Personnel != null &&
+                            assignment.Personnel.DepartmentId ==
+                            departmentId
+                            ||
+                            assignment.Room != null &&
+                            assignment.Room.DepartmentId ==
+                            departmentId
+                        ))
+                    .Select(assignment => assignment.AssetId)
+                    .Distinct();
 
-        Categories = assets
-            .Where(asset => asset.Category != null)
-            .GroupBy(asset => new
-            {
-                asset.CategoryId,
-                CategoryName = asset.Category!.Name
-            })
-            .Select(group => new InventoryCategorySummaryViewModel
-            {
-                CategoryId = group.Key.CategoryId,
-                CategoryName = group.Key.CategoryName,
+            assetsQuery = assetsQuery.Where(asset =>
+                departmentAssetIds.Contains(asset.Id));
+        }
 
-                Total = group.Count(),
+        var assets = await assetsQuery.ToListAsync();
 
-                Available = group.Count(
-                    asset => asset.Status == AssetStatus.Available),
+        var model = new InventoryViewModel
+        {
+            TotalAssets = assets.Count,
 
-                Assigned = group.Count(
-                    asset => asset.Status == AssetStatus.Assigned),
+            AvailableAssets = assets.Count(asset =>
+                asset.Status == AssetStatus.Available),
 
-                Maintenance = group.Count(
-                asset => asset.Status == AssetStatus.Maintenance),
+            AssignedAssets = assets.Count(asset =>
+                asset.Status == AssetStatus.Assigned),
 
-                Lost = group.Count(
-                    asset => asset.Status == AssetStatus.Lost),
-                 Disposed = group.Count(
-    asset => asset.Status == AssetStatus.Disposed)   
-                    
-            })
-            .OrderBy(category => category.CategoryName)
-            .ToList()
-    };
+            MaintenanceAssets = assets.Count(asset =>
+                asset.Status == AssetStatus.Maintenance),
 
-    return View(model);
-}
+            LostAssets = assets.Count(asset =>
+                asset.Status == AssetStatus.Lost),
 
-    // Örnek:
-    // Inventory/CategoryDetails/CATEGORY_ID
-    //
-    // Bu sayfada:
-    // - kategori özeti
-    // - departman dağılımı
-    // - oda dağılımı
-    // - demirbaş listesi
-    // - filtreler
+            DisposedAssets = assets.Count(asset =>
+                asset.Status == AssetStatus.Disposed),
+
+            Categories = assets
+                .Where(asset => asset.Category != null)
+                .GroupBy(asset => new
+                {
+                    asset.CategoryId,
+                    CategoryName = asset.Category!.Name
+                })
+                .Select(group =>
+                    new InventoryCategorySummaryViewModel
+                    {
+                        CategoryId =
+                            group.Key.CategoryId,
+
+                        CategoryName =
+                            group.Key.CategoryName,
+
+                        Total = group.Count(),
+
+                        Available = group.Count(asset =>
+                            asset.Status ==
+                            AssetStatus.Available),
+
+                        Assigned = group.Count(asset =>
+                            asset.Status ==
+                            AssetStatus.Assigned),
+
+                        Maintenance = group.Count(asset =>
+                            asset.Status ==
+                            AssetStatus.Maintenance),
+
+                        Lost = group.Count(asset =>
+                            asset.Status ==
+                            AssetStatus.Lost),
+
+                        Disposed = group.Count(asset =>
+                            asset.Status ==
+                            AssetStatus.Disposed)
+                    })
+                .OrderBy(category =>
+                    category.CategoryName)
+                .ToList()
+        };
+
+        return View(model);
+    }
+
+    // Category inventory detail page.
+    // Admin sees all departments.
+    // DepartmentUser sees only their own department.
     public async Task<IActionResult> CategoryDetails(
         Guid id,
         AssetStatus? status,
@@ -94,67 +144,159 @@ public class InventoryController : Controller
         Guid? roomId,
         string? search)
     {
+        var userDepartmentId =
+            await GetCurrentDepartmentIdAsync();
+
+        if (User.IsInRole("DepartmentUser"))
+        {
+            if (!userDepartmentId.HasValue)
+            {
+                return Forbid();
+            }
+
+            // Prevent access to another department by changing the URL.
+            if (departmentId.HasValue &&
+                departmentId.Value !=
+                userDepartmentId.Value)
+            {
+                return Forbid();
+            }
+        }
+
         var category = await _context.Categories
             .AsNoTracking()
-            .FirstOrDefaultAsync(category => category.Id == id);
+            .FirstOrDefaultAsync(category =>
+                category.Id == id);
 
-        if (category == null)
+        if (category is null)
         {
             return NotFound();
         }
 
-        var categoryAssets = await _context.Assets
-            .AsNoTracking()
-            .Where(asset => asset.CategoryId == id)
-            .OrderBy(asset => asset.AssetCode)
-            .ToListAsync();
+        var categoryAssetsQuery =
+            _context.Assets
+                .AsNoTracking()
+                .Where(asset =>
+                    asset.CategoryId == id);
+
+        if (User.IsInRole("DepartmentUser"))
+        {
+            var currentDepartmentId =
+                userDepartmentId!.Value;
+
+            var departmentAssetIds =
+                _context.AssetAssignments
+                    .AsNoTracking()
+                    .Where(assignment =>
+                        assignment.IsActive &&
+                        (
+                            assignment.Personnel != null &&
+                            assignment.Personnel.DepartmentId ==
+                            currentDepartmentId
+                            ||
+                            assignment.Room != null &&
+                            assignment.Room.DepartmentId ==
+                            currentDepartmentId
+                        ))
+                    .Select(assignment =>
+                        assignment.AssetId)
+                    .Distinct();
+
+            categoryAssetsQuery =
+                categoryAssetsQuery.Where(asset =>
+                    departmentAssetIds.Contains(asset.Id));
+        }
+
+        var categoryAssets =
+            await categoryAssetsQuery
+                .OrderBy(asset => asset.AssetCode)
+                .ToListAsync();
 
         var assetIds = categoryAssets
             .Select(asset => asset.Id)
             .ToList();
 
-        var activeAssignments = await _context.AssetAssignments
-            .AsNoTracking()
-            .Include(assignment => assignment.Personnel)
-                .ThenInclude(personnel => personnel!.Department)
-            .Include(assignment => assignment.Room)
-                .ThenInclude(room => room!.Department)
-            .Where(assignment =>
-                assignment.IsActive &&
-                assetIds.Contains(assignment.AssetId))
-            .OrderByDescending(assignment => assignment.AssignmentDate)
-            .ToListAsync();
+        var activeAssignmentsQuery =
+            _context.AssetAssignments
+                .AsNoTracking()
+                .Include(assignment =>
+                    assignment.Personnel)
+                    .ThenInclude(personnel =>
+                        personnel!.Department)
+                .Include(assignment =>
+                    assignment.Room)
+                    .ThenInclude(room =>
+                        room!.Department)
+               .Where(assignment =>
+    assignment.IsActive &&
+    assignment.AssetId.HasValue &&
+    assetIds.Contains(
+        assignment.AssetId.Value));
 
-        var assetRows = new List<InventoryAssetRowViewModel>();
+        if (User.IsInRole("DepartmentUser"))
+        {
+            var currentDepartmentId =
+                userDepartmentId!.Value;
+
+            activeAssignmentsQuery =
+                activeAssignmentsQuery.Where(
+                    assignment =>
+                        (
+                            assignment.Personnel != null &&
+                            assignment.Personnel.DepartmentId ==
+                            currentDepartmentId
+                        )
+                        ||
+                        (
+                            assignment.Room != null &&
+                            assignment.Room.DepartmentId ==
+                            currentDepartmentId
+                        ));
+        }
+
+        var activeAssignments =
+            await activeAssignmentsQuery
+                .OrderByDescending(assignment =>
+                    assignment.AssignmentDate)
+                .ToListAsync();
+
+        var assetRows =
+            new List<InventoryAssetRowViewModel>();
 
         foreach (var asset in categoryAssets)
         {
-            // Aynı demirbaşa yanlışlıkla birden fazla aktif zimmet
-            // kaydedilmişse en yeni olanı kullanır.
-            var activeAssignment = activeAssignments
-                .FirstOrDefault(assignment =>
-                    assignment.AssetId == asset.Id);
+            // If multiple active assignments accidentally exist,
+            // use the most recent one.
+            var activeAssignment =
+                activeAssignments.FirstOrDefault(
+                    assignment =>
+                        assignment.AssetId == asset.Id);
 
-            var row = new InventoryAssetRowViewModel
-            {
-                AssetId = asset.Id,
-                AssetCode = asset.AssetCode,
-                Name = asset.Name,
-                Brand = asset.Brand,
-                Model = asset.Model,
-                SerialNumber = asset.SerialNumber,
-                Status = asset.Status,
-                AssignedTo = "—",
-                DepartmentName = "—",
-                DepartmentId = null,
-                RoomName = "—",
-                RoomId = null,
-               
-            };
+            var row =
+                new InventoryAssetRowViewModel
+                {
+                    AssetId = asset.Id,
+                    AssetCode = asset.AssetCode,
+                    Name = asset.Name,
+                    Brand = asset.Brand,
+                    Model = asset.Model,
+                    SerialNumber = asset.SerialNumber,
+                    Status = asset.Status,
+
+                    AssignedTo = "—",
+
+                    DepartmentName = "—",
+                    DepartmentId = null,
+
+                    RoomName = "—",
+                    RoomId = null,
+
+                    Location = "—"
+                };
 
             if (activeAssignment != null)
             {
-                // Personele zimmetli demirbaş
+                // Asset assigned to personnel.
                 if (activeAssignment.Personnel != null)
                 {
                     row.AssignedTo =
@@ -165,176 +307,343 @@ public class InventoryController : Controller
                         activeAssignment.Personnel.DepartmentId;
 
                     row.DepartmentName =
-                        activeAssignment.Personnel.Department?.Name ?? "—";
+                        activeAssignment.Personnel
+                            .Department?.Name ?? "—";
                 }
 
-                // Odaya zimmetli demirbaş
+                // Asset assigned to a room.
                 if (activeAssignment.Room != null)
                 {
-                    row.RoomId = activeAssignment.Room.Id;
+                    row.AssignedTo =
+                        BuildRoomDisplayName(
+                            activeAssignment.Room.Name,
+                            activeAssignment.Room.RoomNumber,
+                            activeAssignment.Room.Building);
 
-                    row.RoomName = BuildRoomDisplayName(
-                        activeAssignment.Room.Name,
-                        activeAssignment.Room.RoomNumber,
-                        activeAssignment.Room.Building);
+                    row.RoomId =
+                        activeAssignment.Room.Id;
+
+                    row.RoomName =
+                        BuildRoomDisplayName(
+                            activeAssignment.Room.Name,
+                            activeAssignment.Room.RoomNumber,
+                            activeAssignment.Room.Building);
 
                     row.DepartmentId =
                         activeAssignment.Room.DepartmentId;
 
                     row.DepartmentName =
-                        activeAssignment.Room.Department?.Name ?? "—";
+                        activeAssignment.Room
+                            .Department?.Name ?? "—";
 
                     row.Location = row.RoomName;
                 }
                 else if (activeAssignment.Personnel != null)
                 {
-                    // Personele atanmış fakat oda bilgisi yoksa
-                    // konum olarak personelin departmanını gösterir.
-                    row.Location = row.DepartmentName;
+                    // If the asset is assigned to personnel
+                    // without room information, use department
+                    // as the location.
+                    row.Location =
+                        row.DepartmentName;
                 }
             }
 
             assetRows.Add(row);
         }
 
-        // Dağılımlar, filtre uygulanmadan önce bütün kategori üzerinden
-        // hesaplanır.
-        var departmentSummaries = assetRows
-            .Where(asset =>
-                asset.DepartmentId.HasValue &&
-                asset.DepartmentName != "—")
-            .GroupBy(asset => new
-            {
-                DepartmentId = asset.DepartmentId!.Value,
-                asset.DepartmentName
-            })
-            .Select(group => new InventoryDepartmentSummaryViewModel
-            {
-                DepartmentId = group.Key.DepartmentId,
-                DepartmentName = group.Key.DepartmentName,
-                AssetCount = group.Count()
-            })
-            .OrderByDescending(summary => summary.AssetCount)
-            .ThenBy(summary => summary.DepartmentName)
-            .ToList();
- 
+        // Extra in-memory protection.
+        if (User.IsInRole("DepartmentUser"))
+        {
+            var currentDepartmentId =
+                userDepartmentId!.Value;
 
-        var roomSummaries = assetRows
-            .Where(asset =>
-                asset.RoomId.HasValue &&
-                asset.RoomName != "—")
-            .GroupBy(asset => new
-            {
-                RoomId = asset.RoomId!.Value,
-                asset.RoomName,
-                asset.DepartmentName
-            })
-            .Select(group => new InventoryRoomSummaryViewModel
-            {
-                RoomId = group.Key.RoomId,
-                RoomName = group.Key.RoomName,
-                DepartmentName = group.Key.DepartmentName,
-                AssetCount = group.Count()
-            })
-            .OrderByDescending(summary => summary.AssetCount)
-            .ThenBy(summary => summary.RoomName)
-            .ToList();
+            assetRows = assetRows
+                .Where(asset =>
+                    asset.DepartmentId ==
+                    currentDepartmentId)
+                .ToList();
+        }
 
+        // Distribution summaries are calculated before
+        // user-selected filters are applied.
+        var departmentSummaries =
+            assetRows
+                .Where(asset =>
+                    asset.DepartmentId.HasValue &&
+                    asset.DepartmentName != "—")
+                .GroupBy(asset => new
+                {
+                    DepartmentId =
+                        asset.DepartmentId!.Value,
 
-                  // Top 3 most assigned models in this category
-var topAssignedModels = await _context.AssetAssignments
-    .AsNoTracking()
-    .Include(x => x.Asset)
-    .Where(x =>
-        x.Asset != null &&
-        x.Asset.CategoryId == id)
-    .GroupBy(x => new
-    {
-        Brand = x.Asset!.Brand,
-        Model = x.Asset!.Model
-    })
-    .Select(group => new TopAssignedModelViewModel
-    {
-        Brand = group.Key.Brand,
-        Model = group.Key.Model,
-        AssignmentCount = group.Count()
-    })
-    .OrderByDescending(model => model.AssignmentCount)
-    .Take(3)
-    .ToListAsync();
+                    asset.DepartmentName
+                })
+                .Select(group =>
+                    new InventoryDepartmentSummaryViewModel
+                    {
+                        DepartmentId =
+                            group.Key.DepartmentId,
 
-        IEnumerable<InventoryAssetRowViewModel> filteredAssets =
-            assetRows;
+                        DepartmentName =
+                            group.Key.DepartmentName,
+
+                        AssetCount =
+                            group.Count()
+                    })
+                .OrderByDescending(summary =>
+                    summary.AssetCount)
+                .ThenBy(summary =>
+                    summary.DepartmentName)
+                .ToList();
+
+        var roomSummaries =
+            assetRows
+                .Where(asset =>
+                    asset.RoomId.HasValue &&
+                    asset.RoomName != "—")
+                .GroupBy(asset => new
+                {
+                    RoomId =
+                        asset.RoomId!.Value,
+
+                    asset.RoomName,
+                    asset.DepartmentName
+                })
+                .Select(group =>
+                    new InventoryRoomSummaryViewModel
+                    {
+                        RoomId =
+                            group.Key.RoomId,
+
+                        RoomName =
+                            group.Key.RoomName,
+
+                        DepartmentName =
+                            group.Key.DepartmentName,
+
+                        AssetCount =
+                            group.Count()
+                    })
+                .OrderByDescending(summary =>
+                    summary.AssetCount)
+                .ThenBy(summary =>
+                    summary.RoomName)
+                .ToList();
+
+        var topAssignedModelsQuery =
+            _context.AssetAssignments
+                .AsNoTracking()
+                .Where(assignment =>
+                    assignment.Asset != null &&
+                    assignment.Asset.CategoryId == id);
+
+        if (User.IsInRole("DepartmentUser"))
+        {
+            var currentDepartmentId =
+                userDepartmentId!.Value;
+
+            topAssignedModelsQuery =
+                topAssignedModelsQuery.Where(
+                    assignment =>
+                        (
+                            assignment.Personnel != null &&
+                            assignment.Personnel.DepartmentId ==
+                            currentDepartmentId
+                        )
+                        ||
+                        (
+                            assignment.Room != null &&
+                            assignment.Room.DepartmentId ==
+                            currentDepartmentId
+                        ));
+        }
+
+        var topAssignedModels =
+            await topAssignedModelsQuery
+                .GroupBy(assignment => new
+                {
+                    Brand =
+                        assignment.Asset!.Brand,
+
+                    Model =
+                        assignment.Asset!.Model
+                })
+                .Select(group =>
+                    new TopAssignedModelViewModel
+                    {
+                        Brand =
+                            group.Key.Brand,
+
+                        Model =
+                            group.Key.Model,
+
+                        AssignmentCount =
+                            group.Count()
+                    })
+                .OrderByDescending(model =>
+                    model.AssignmentCount)
+                .Take(3)
+                .ToListAsync();
+
+        IEnumerable<InventoryAssetRowViewModel>
+            filteredAssets = assetRows;
 
         if (status.HasValue)
         {
-            filteredAssets = filteredAssets.Where(
-                asset => asset.Status == status.Value);
+            filteredAssets =
+                filteredAssets.Where(asset =>
+                    asset.Status == status.Value);
         }
 
-        if (departmentId.HasValue)
+        Guid? effectiveDepartmentId = departmentId;
+
+        if (User.IsInRole("DepartmentUser"))
         {
-            filteredAssets = filteredAssets.Where(
-                asset => asset.DepartmentId == departmentId.Value);
+            effectiveDepartmentId =
+                userDepartmentId!.Value;
+        }
+
+        if (effectiveDepartmentId.HasValue)
+        {
+            filteredAssets =
+                filteredAssets.Where(asset =>
+                    asset.DepartmentId ==
+                    effectiveDepartmentId.Value);
         }
 
         if (roomId.HasValue)
         {
-            filteredAssets = filteredAssets.Where(
-                asset => asset.RoomId == roomId.Value);
+            var selectedRoom =
+                await _context.Rooms
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(room =>
+                        room.Id == roomId.Value);
+
+            if (selectedRoom is null)
+            {
+                return NotFound();
+            }
+
+            if (User.IsInRole("DepartmentUser") &&
+                selectedRoom.DepartmentId !=
+                userDepartmentId!.Value)
+            {
+                return Forbid();
+            }
+
+            filteredAssets =
+                filteredAssets.Where(asset =>
+                    asset.RoomId == roomId.Value);
         }
 
         if (!string.IsNullOrWhiteSpace(search))
         {
             var searchValue = search.Trim();
 
-            filteredAssets = filteredAssets.Where(asset =>
-                ContainsText(asset.AssetCode, searchValue) ||
-                ContainsText(asset.Name, searchValue) ||
-                ContainsText(asset.Brand, searchValue) ||
-                ContainsText(asset.Model, searchValue) ||
-                ContainsText(asset.SerialNumber, searchValue) ||
-                ContainsText(asset.AssignedTo, searchValue) ||
-                ContainsText(asset.DepartmentName, searchValue) ||
-                ContainsText(asset.RoomName, searchValue) ||
-                ContainsText(asset.Location, searchValue));
+            filteredAssets =
+                filteredAssets.Where(asset =>
+                    ContainsText(
+                        asset.AssetCode,
+                        searchValue)
+                    ||
+                    ContainsText(
+                        asset.Name,
+                        searchValue)
+                    ||
+                    ContainsText(
+                        asset.Brand,
+                        searchValue)
+                    ||
+                    ContainsText(
+                        asset.Model,
+                        searchValue)
+                    ||
+                    ContainsText(
+                        asset.SerialNumber,
+                        searchValue)
+                    ||
+                    ContainsText(
+                        asset.AssignedTo,
+                        searchValue)
+                    ||
+                    ContainsText(
+                        asset.DepartmentName,
+                        searchValue)
+                    ||
+                    ContainsText(
+                        asset.RoomName,
+                        searchValue)
+                    ||
+                    ContainsText(
+                        asset.Location,
+                        searchValue));
         }
 
-      var model = new InventoryCategoryDetailsViewModel
-{
-    CategoryId = category.Id,
-    CategoryName = category.Name,
+        var model =
+            new InventoryCategoryDetailsViewModel
+            {
+                CategoryId = category.Id,
+                CategoryName = category.Name,
 
-    Total = assetRows.Count,
+                Total = assetRows.Count,
 
-    Available = assetRows.Count(
-        asset => asset.Status == AssetStatus.Available),
+                Available = assetRows.Count(asset =>
+                    asset.Status ==
+                    AssetStatus.Available),
 
-    Assigned = assetRows.Count(
-        asset => asset.Status == AssetStatus.Assigned),
+                Assigned = assetRows.Count(asset =>
+                    asset.Status ==
+                    AssetStatus.Assigned),
 
-   
+                Maintenance = assetRows.Count(asset =>
+                    asset.Status ==
+                    AssetStatus.Maintenance),
 
-    Lost = assetRows.Count(
-        asset => asset.Status == AssetStatus.Lost),
-        Disposed = assetRows.Count(
-    asset => asset.Status == AssetStatus.Disposed),
+                Lost = assetRows.Count(asset =>
+                    asset.Status ==
+                    AssetStatus.Lost),
 
-    Search = search,
-    SelectedStatus = status,
-    SelectedDepartmentId = departmentId,
-    SelectedRoomId = roomId,
+                Disposed = assetRows.Count(asset =>
+                    asset.Status ==
+                    AssetStatus.Disposed),
 
-    Assets = filteredAssets
-        .OrderBy(asset => asset.AssetCode)
-        .ToList(),
+                Search = search,
+                SelectedStatus = status,
 
-    Departments = departmentSummaries,
-    Rooms = roomSummaries,
-    TopAssignedModels = topAssignedModels
-};
+                SelectedDepartmentId =
+                    effectiveDepartmentId,
+
+                SelectedRoomId = roomId,
+
+                Assets = filteredAssets
+                    .OrderBy(asset =>
+                        asset.AssetCode)
+                    .ToList(),
+
+                Departments =
+                    departmentSummaries,
+
+                Rooms =
+                    roomSummaries,
+
+                TopAssignedModels =
+                    topAssignedModels
+            };
 
         return View(model);
+    }
+
+    private async Task<Guid?> GetCurrentDepartmentIdAsync()
+    {
+        if (User.IsInRole("Admin"))
+        {
+            return null;
+        }
+
+        var currentUser =
+            await _userManager.GetUserAsync(User);
+
+        return currentUser?.DepartmentId;
     }
 
     private static string BuildRoomDisplayName(

@@ -1,68 +1,172 @@
 @model IEnumerable<GBBassetManagementSystem.Entity.Entities.Room>
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<GBBassetManagementSystem.Web.SharedResource> Localizer
 
 @{
-    ViewData["Title"] = "Rooms";
+    ViewData["Title"] = Localizer["Rooms"];
 }
 
-@if (TempData["SuccessMessage"] is not null)
-{
-    <div class="alert alert-success">
-        @TempData["SuccessMessage"]
+<div class="container-xxl flex-grow-1 container-p-y">
+
+    @if (TempData["SuccessMessage"] is string successMessage)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="icon-base ti tabler-circle-check me-2"></i>
+            @successMessage
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+        </div>
+    }
+
+    <div class="card">
+
+        <div class="card-header border-bottom">
+
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="avatar">
+                        <span class="avatar-initial rounded bg-label-secondary">
+                            <i class="icon-base ti tabler-door"></i>
+                        </span>
+                    </div>
+
+                    <div>
+                        <h4 class="mb-1">
+                            @Localizer["Rooms"]
+                        </h4>
+
+                        <p class="text-muted mb-0">
+                            @Localizer["RoomsPageDescription"]
+                        </p>
+                    </div>
+
+                </div>
+
+                <a asp-controller="Rooms"
+                   asp-action="Create"
+                   class="btn btn-primary">
+
+                    <i class="icon-base ti tabler-plus me-1"></i>
+                    @Localizer["AddRoom"]
+                </a>
+
+            </div>
+
+        </div>
+
+        @if (!Model.Any())
+        {
+            <div class="card-body">
+
+                <div class="text-center py-5">
+
+                    <div class="avatar avatar-xl mx-auto mb-3">
+                        <span class="avatar-initial rounded-circle bg-label-secondary">
+                            <i class="icon-base ti tabler-door-off fs-2"></i>
+                        </span>
+                    </div>
+
+                    <h5 class="mb-2">
+                        @Localizer["NoRoomsFound"]
+                    </h5>
+
+                    <p class="text-muted mb-0">
+                        @Localizer["NoRoomsFoundDescription"]
+                    </p>
+
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+
+                <table class="table table-hover">
+
+                    <thead class="table-light">
+                        <tr>
+                            <th>@Localizer["RoomName"]</th>
+                            <th>@Localizer["RoomNumber"]</th>
+                            <th>@Localizer["Building"]</th>
+                            <th>@Localizer["Floor"]</th>
+                            <th>@Localizer["Department"]</th>
+                            <th class="text-end">
+                                @Localizer["Actions"]
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var room in Model)
+                        {
+                            <tr>
+
+                                <td class="fw-medium">
+                                    @room.Name
+                                </td>
+
+                                <td>
+                                    @room.RoomNumber
+                                </td>
+
+                                <td>
+                                    @(string.IsNullOrWhiteSpace(room.Building)
+                                        ? "-"
+                                        : room.Building)
+                                </td>
+
+                                <td>
+                                    @room.Floor
+                                </td>
+
+                                <td>
+                                    @(room.Department?.Name ?? "-")
+                                </td>
+
+                                <td class="text-end">
+
+                                    <div class="d-inline-flex gap-1">
+
+                                        <a asp-action="Edit"
+                                           asp-route-id="@room.Id"
+                                           class="btn btn-sm btn-label-warning">
+
+                                            <i class="icon-base ti tabler-edit me-1"></i>
+                                            @Localizer["Edit"]
+                                        </a>
+
+                                        <a asp-action="Delete"
+                                           asp-route-id="@room.Id"
+                                           class="btn btn-sm btn-label-danger">
+
+                                            <i class="icon-base ti tabler-trash me-1"></i>
+                                            @Localizer["Delete"]
+                                        </a>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
     </div>
-}
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Rooms</h1>
-
-    <a asp-action="Create" class="btn btn-primary">
-        Add Room
-    </a>
 </div>
-
-@if (!Model.Any())
-{
-    <div class="alert alert-info">
-        No rooms have been added yet.
-    </div>
-}
-else
-{
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Room Name</th>
-                <th>Room Number</th>
-                <th>Building</th>
-                <th>Floor</th>
-                <th>Department</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            @foreach (var room in Model)
-            {
-                <tr>
-                    <td>@room.Name</td>
-                    <td>@room.RoomNumber</td>
-                    <td>@room.Building</td>
-                    <td>@room.Floor</td>
-                    <td>@room.Department?.Name</td>
-                    <td>
-                        <a asp-action="Edit"
-                           asp-route-id="@room.Id"
-                           class="btn btn-warning btn-sm">
-                            Edit
-                        </a>
-
-                        <a asp-action="Delete"
-                           asp-route-id="@room.Id"
-                           class="btn btn-danger btn-sm">
-                            Delete
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}

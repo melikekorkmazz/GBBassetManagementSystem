@@ -1,7 +1,7 @@
 @model IEnumerable<GBBassetManagementSystem.Entity.Entities.Category>
 
 @{
-    ViewData["Title"] = "Categories";
+    ViewData["Title"] = Localizer["Categories"];
 }
 
 @if (TempData["SuccessMessage"] is not null)
@@ -19,55 +19,53 @@
 }
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h1>Categories</h1>
+    <h1>@Localizer["Categories"]</h1>
 
     <a asp-action="Create" class="btn btn-primary">
-        Add Category
+        @Localizer["AddCategory"]
     </a>
 </div>
 
 @if (!Model.Any())
 {
     <div class="alert alert-info">
-        No categories have been added yet.
+        @Localizer["NoCategoriesAdded"]
     </div>
 }
 else
 {
     <table class="table table-bordered table-striped">
         <thead>
-    <tr>
-        <th>Name</th>
-         <th>Code</th>
-         <th>Description</th>
-        <th>Actions</th>
-    </tr>
-</thead>
+            <tr>
+                <th>@Localizer["CategoryName"]</th>
+                <th>@Localizer["CategoryCode"]</th>
+                <th>@Localizer["Description"]</th>
+                <th>@Localizer["Actions"]</th>
+            </tr>
+        </thead>
 
-       <tbody>
-    @foreach (var category in Model)
-    {
-        <tr>
-            <td>@category.Name</td>
-            <td>@category.Code</td>
-            <td>@category.Description</td>
-            <td>
-                <a asp-action="Edit"
-                   asp-route-id="@category.Id"
-                   class="btn btn-warning btn-sm">
-                    Edit
-                </a>
-                
-                 <a asp-action="Delete"
-                 asp-route-id="@category.Id"
-                 class="btn btn-danger btn-sm">
-                 Delete
-                 </a>
-            </td>
+        <tbody>
+        @foreach (var category in Model)
+        {
+            <tr>
+                <td>@category.Name</td>
+                <td>@category.Code</td>
+                <td>@category.Description</td>
+                <td>
+                    <a asp-action="Edit"
+                       asp-route-id="@category.Id"
+                       class="btn btn-warning btn-sm">
+                        @Localizer["Edit"]
+                    </a>
 
-
-        </tr>
-    }
-</tbody>
+                    <a asp-action="Delete"
+                       asp-route-id="@category.Id"
+                       class="btn btn-danger btn-sm">
+                        @Localizer["Delete"]
+                    </a>
+                </td>
+            </tr>
+        }
+        </tbody>
     </table>
 }

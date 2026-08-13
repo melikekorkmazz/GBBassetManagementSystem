@@ -1,157 +1,327 @@
 @model GBBassetManagementSystem.Entity.Entities.AssetAssignment
 
+@using GBBassetManagementSystem.Entity.Enums
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<GBBassetManagementSystem.Web.SharedResource> Localizer
+
 @{
-    ViewData["Title"] = "New Asset Assignment";
+    ViewData["Title"] = Localizer["NewAssetAssignment"];
 }
 
-<h1>New Asset Assignment</h1>
+<div class="container-xxl flex-grow-1 container-p-y">
 
-<hr />
+    <div class="row justify-content-center">
 
-<div class="row">
-    <div class="col-md-7">
-        <form asp-action="Create" method="post">
+        <div class="col-lg-9 col-xl-8">
 
-            <div asp-validation-summary="All"
-                 class="text-danger">
+            <div class="card">
+
+                <div class="card-header border-bottom">
+
+                    <div class="d-flex align-items-center gap-3">
+
+                        <div class="avatar">
+                            <span class="avatar-initial rounded bg-label-primary">
+                                <i class="icon-base ti tabler-arrows-exchange"></i>
+                            </span>
+                        </div>
+
+                        <div>
+
+                            <h4 class="mb-1">
+                                @Localizer["NewAssetAssignment"]
+                            </h4>
+
+                            <p class="text-muted mb-0">
+                                @Localizer["NewAssetAssignmentDescription"]
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="card-body pt-4">
+
+                    <form asp-controller="AssetAssignments"
+                          asp-action="Create"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        @if (!ViewData.ModelState.IsValid)
+                        {
+                            <div asp-validation-summary="All"
+                                 class="alert alert-danger"
+                                 role="alert">
+                            </div>
+                        }
+
+                        <div class="mb-3">
+
+                            <label asp-for="AssetId"
+                                   class="form-label">
+
+                                @Localizer["Asset"]
+                            </label>
+
+                            <select asp-for="AssetId"
+                                    asp-items="ViewBag.Assets"
+                                    class="form-select">
+
+                                <option value="">
+                                    @Localizer["SelectAsset"]
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="AssetId"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="AssignmentType"
+                                   class="form-label">
+
+                                @Localizer["AssignmentType"]
+                            </label>
+
+                            <select asp-for="AssignmentType"
+                                    id="assignmentType"
+                                    class="form-select">
+
+                                <option value="@((int)AssignmentType.Personnel)">
+                                    @Localizer["Personnel"]
+                                </option>
+
+                                <option value="@((int)AssignmentType.Room)">
+                                    @Localizer["Room"]
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="AssignmentType"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <div class="mb-3"
+                             id="departmentSection">
+
+                            <label for="departmentSelect"
+                                   class="form-label">
+
+                                @Localizer["Department"]
+                            </label>
+
+                            <select id="departmentSelect"
+                                    class="form-select"
+                                    asp-items="ViewBag.Departments">
+
+                                <option value="">
+                                    @Localizer["SelectDepartment"]
+                                </option>
+
+                            </select>
+
+                        </div>
+
+                        <div class="mb-3"
+                             id="personnelSection">
+
+                            <label asp-for="PersonnelId"
+                                   class="form-label">
+
+                                @Localizer["Personnel"]
+                            </label>
+
+                            <select asp-for="PersonnelId"
+                                    id="personnelSelect"
+                                    asp-items="ViewBag.Personnel"
+                                    class="form-select">
+
+                                <option value="">
+                                    @Localizer["SelectPersonnel"]
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="PersonnelId"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <div class="mb-3"
+                             id="roomSection"
+                             style="display:none;">
+
+                            <label asp-for="RoomId"
+                                   class="form-label">
+
+                                @Localizer["Room"]
+                            </label>
+
+                            <select asp-for="RoomId"
+                                    id="roomSelect"
+                                    asp-items="ViewBag.Rooms"
+                                    class="form-select">
+
+                                <option value="">
+                                    @Localizer["SelectRoom"]
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="RoomId"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="DeliveredBy"
+                                       class="form-label">
+
+                                    @Localizer["DeliveredBy"]
+                                </label>
+
+                                <input asp-for="DeliveredBy"
+                                       class="form-control"
+                                       placeholder="@Localizer["DeliveredByPlaceholder"]" />
+
+                                <span asp-validation-for="DeliveredBy"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="ReceivedBy"
+                                       class="form-label">
+
+                                    @Localizer["ReceivedBy"]
+                                </label>
+
+                                <input asp-for="ReceivedBy"
+                                       class="form-control"
+                                       placeholder="@Localizer["ReceivedByPlaceholder"]" />
+
+                                <span asp-validation-for="ReceivedBy"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="AssignmentDate"
+                                       class="form-label">
+
+                                    @Localizer["AssignmentDate"]
+                                </label>
+<input asp-for="AssignmentDate"
+       type="text"
+       id="assignmentDate"
+       class="form-control"
+       autocomplete="off" />
+
+                                <span asp-validation-for="AssignmentDate"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+
+                                <label asp-for="ExpectedReturnDate"
+                                       class="form-label">
+
+                                    @Localizer["ExpectedReturnDate"]
+                                </label>
+
+                               <input asp-for="ExpectedReturnDate"
+       type="text"
+       id="expectedReturnDate"
+       class="form-control"
+       autocomplete="off" />
+
+                                <span asp-validation-for="ExpectedReturnDate"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label asp-for="Notes"
+                                   class="form-label">
+
+                                @Localizer["Notes"]
+                            </label>
+
+                            <textarea asp-for="Notes"
+                                      rows="4"
+                                      class="form-control"
+                                      placeholder="@Localizer["AssignmentNotesPlaceholder"]"></textarea>
+
+                            <span asp-validation-for="Notes"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2">
+
+                            <a asp-controller="AssetAssignments"
+                               asp-action="Index"
+                               class="btn btn-label-secondary">
+
+                                <i class="icon-base ti tabler-arrow-left me-1"></i>
+                                @Localizer["Back"]
+                            </a>
+
+                            <button type="submit"
+                                    class="btn btn-primary">
+
+                                <i class="icon-base ti tabler-check me-1"></i>
+                                @Localizer["AssignAsset"]
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
             </div>
 
-            <div class="mb-3">
-                <label asp-for="AssetId"
-                       class="form-label">
-                    Asset
-                </label>
+        </div>
 
-                <select asp-for="AssetId"
-                        asp-items="ViewBag.Assets"
-                        class="form-select">
-                    <option value="">Select Asset</option>
-                </select>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="AssignmentType"
-                       class="form-label">
-                    Assignment Type
-                </label>
-
-                <select asp-for="AssignmentType"
-                        id="assignmentType"
-                        class="form-select">
-                    <option value="1">Personnel</option>
-                    <option value="2">Room</option>
-                </select>
-            </div>
-
-            <div class="mb-3"
-     id="departmentSection">
-
-    <label class="form-label">
-        Department
-    </label>
-
-    <select id="departmentSelect"
-            class="form-select"
-            asp-items="ViewBag.Departments">
-
-        <option value="">Select Department</option>
-
-    </select>
-
-</div>
-
-            <div class="mb-3"
-                 id="personnelSection">
-
-                <label asp-for="PersonnelId"
-                       class="form-label">
-                    Personnel
-                </label>
-
-                <select asp-for="PersonnelId"
-                  id="personnelSelect"
-                asp-items="ViewBag.Personnel"
-               class="form-select">
-                    <option value="">Select Personnel</option>
-                </select>
-            </div>
-
-            <div class="mb-3"
-                 id="roomSection"
-                 style="display:none;">
-
-                <label asp-for="RoomId"
-                       class="form-label">
-                    Room
-                </label>
-
-                  <select asp-for="RoomId"
-                 id="roomSelect"
-                asp-items="ViewBag.Rooms"
-                 class="form-select">
-                <option value="">Select Room</option>
-                 </select>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="DeliveredBy"
-                       class="form-label"></label>
-
-                <input asp-for="DeliveredBy"
-                       class="form-control" />
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="ReceivedBy"
-                       class="form-label"></label>
-
-                <input asp-for="ReceivedBy"
-                       class="form-control" />
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="AssignmentDate"
-                       class="form-label"></label>
-
-                <input asp-for="AssignmentDate"
-                       type="date"
-                       class="form-control" />
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="ExpectedReturnDate"
-                       class="form-label"></label>
-
-                <input asp-for="ExpectedReturnDate"
-                       type="date"
-                       class="form-control" />
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="Notes"
-                       class="form-label"></label>
-
-                <textarea asp-for="Notes"
-                          rows="4"
-                          class="form-control"></textarea>
-            </div>
-
-            <button type="submit"
-                    class="btn btn-success">
-                Assign
-            </button>
-
-            <a asp-action="Index"
-               class="btn btn-secondary">
-                Back
-            </a>
-
-        </form>
     </div>
-</div>
 
+</div>
 @section Scripts
 {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script src="~/vuexy/vendor/libs/flatpickr/flatpickr.js"></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
 
@@ -173,16 +343,49 @@
             const roomSelect =
                 document.getElementById("roomSelect");
 
+            const personnelTypeValue =
+                "@((int)AssignmentType.Personnel)";
+
+            const roomTypeValue =
+                "@((int)AssignmentType.Room)";
+
+            const selectPersonnelText =
+                @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                    Localizer["SelectPersonnel"].Value));
+
+            const selectRoomText =
+                @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                    Localizer["SelectRoom"].Value));
+
+            const personnelUrl =
+                '@Url.Action("GetPersonnelByDepartment", "AssetAssignments")';
+
+            const roomsUrl =
+                '@Url.Action("GetRoomsByDepartment", "AssetAssignments")';
+
+            function resetSelect(selectElement, defaultText) {
+
+                selectElement.innerHTML = "";
+
+                const option =
+                    document.createElement("option");
+
+                option.value = "";
+                option.textContent = defaultText;
+
+                selectElement.appendChild(option);
+            }
+
             function updateAssignmentFields() {
 
-                if (assignmentType.value === "2") {
+                if (assignmentType.value === roomTypeValue) {
 
                     personnelSection.style.display = "none";
                     roomSection.style.display = "block";
 
                     personnelSelect.value = "";
-
-                } else {
+                }
+                else {
 
                     personnelSection.style.display = "block";
                     roomSection.style.display = "none";
@@ -201,67 +404,193 @@
 
                     const departmentId = this.value;
 
-                    personnelSelect.innerHTML =
-                        '<option value="">Select Personnel</option>';
+                    resetSelect(
+                        personnelSelect,
+                        selectPersonnelText);
 
-                    roomSelect.innerHTML =
-                        '<option value="">Select Room</option>';
+                    resetSelect(
+                        roomSelect,
+                        selectRoomText);
 
-                    if (departmentId === "") {
+                    if (!departmentId) {
                         return;
                     }
 
+                    personnelSelect.disabled = true;
+                    roomSelect.disabled = true;
+
                     try {
+
                         const personnelResponse = await fetch(
-                            `/AssetAssignments/GetPersonnelByDepartment?departmentId=${departmentId}`
+                            `${personnelUrl}?departmentId=${encodeURIComponent(departmentId)}`
                         );
 
-                        if (!personnelResponse.ok) {
-                            throw new Error(
-                                "Personnel could not be loaded.");
+                        if (personnelResponse.ok) {
+
+                            const personnel =
+                                await personnelResponse.json();
+
+                            personnel.forEach(function (person) {
+
+                                const option =
+                                    document.createElement("option");
+
+                                option.value = person.id;
+                                option.textContent = person.fullName;
+
+                                personnelSelect.appendChild(option);
+                            });
                         }
-
-                        const personnel =
-                            await personnelResponse.json();
-
-                        personnel.forEach(person => {
-                            const option =
-                                document.createElement("option");
-
-                            option.value = person.id;
-                            option.textContent = person.fullName;
-
-                            personnelSelect.appendChild(option);
-                        });
 
                         const roomResponse = await fetch(
-                            `/AssetAssignments/GetRoomsByDepartment?departmentId=${departmentId}`
+                            `${roomsUrl}?departmentId=${encodeURIComponent(departmentId)}`
                         );
 
-                        if (!roomResponse.ok) {
-                            throw new Error(
-                                "Rooms could not be loaded.");
+                        if (roomResponse.ok) {
+
+                            const rooms =
+                                await roomResponse.json();
+
+                            rooms.forEach(function (room) {
+
+                                const option =
+                                    document.createElement("option");
+
+                                option.value = room.id;
+                                option.textContent = room.name;
+
+                                roomSelect.appendChild(option);
+                            });
                         }
+                    }
+                    catch (error) {
 
-                        const rooms =
-                            await roomResponse.json();
+                        console.error(
+                            "Assignment target data could not be loaded.",
+                            error);
+                    }
+                    finally {
 
-                        rooms.forEach(room => {
-                            const option =
-                                document.createElement("option");
-
-                            option.value = room.id;
-                            option.textContent = room.name;
-
-                            roomSelect.appendChild(option);
-                        });
-
-                    } catch (error) {
-                        console.error(error);
+                        personnelSelect.disabled = false;
+                        roomSelect.disabled = false;
                     }
                 });
 
             updateAssignmentFields();
+
+            const currentLanguage =
+                document.documentElement.lang
+                    .toLowerCase();
+
+            const isTurkish =
+                currentLanguage.startsWith("tr");
+
+            const turkishLocale = {
+                weekdays: {
+                    shorthand: [
+                        "Paz",
+                        "Pzt",
+                        "Sal",
+                        "Çar",
+                        "Per",
+                        "Cum",
+                        "Cmt"
+                    ],
+                    longhand: [
+                        "Pazar",
+                        "Pazartesi",
+                        "Salı",
+                        "Çarşamba",
+                        "Perşembe",
+                        "Cuma",
+                        "Cumartesi"
+                    ]
+                },
+                months: {
+                    shorthand: [
+                        "Oca",
+                        "Şub",
+                        "Mar",
+                        "Nis",
+                        "May",
+                        "Haz",
+                        "Tem",
+                        "Ağu",
+                        "Eyl",
+                        "Eki",
+                        "Kas",
+                        "Ara"
+                    ],
+                    longhand: [
+                        "Ocak",
+                        "Şubat",
+                        "Mart",
+                        "Nisan",
+                        "Mayıs",
+                        "Haziran",
+                        "Temmuz",
+                        "Ağustos",
+                        "Eylül",
+                        "Ekim",
+                        "Kasım",
+                        "Aralık"
+                    ]
+                },
+                firstDayOfWeek: 1,
+                rangeSeparator: " - ",
+                weekAbbreviation: "Hf",
+                scrollTitle: "Artırmak için kaydırın",
+                toggleTitle: "Değiştirmek için tıklayın",
+                time_24hr: true
+            };
+
+            const selectedLocale =
+                isTurkish
+                    ? turkishLocale
+                    : "default";
+
+            const displayedDateFormat =
+                isTurkish
+                    ? "d.m.Y"
+                    : "m/d/Y";
+
+            if (typeof flatpickr !== "undefined") {
+
+                const assignmentDateInput =
+                    document.getElementById("assignmentDate");
+
+                const expectedReturnDateInput =
+                    document.getElementById("expectedReturnDate");
+
+                if (assignmentDateInput) {
+
+                    flatpickr(assignmentDateInput, {
+                        locale: selectedLocale,
+                        dateFormat: "Y-m-d",
+                        altInput: true,
+                        altFormat: displayedDateFormat,
+                        allowInput: true,
+                        disableMobile: true
+                    });
+                }
+
+                if (expectedReturnDateInput) {
+
+                    flatpickr(expectedReturnDateInput, {
+                        locale: selectedLocale,
+                        dateFormat: "Y-m-d",
+                        altInput: true,
+                        altFormat: displayedDateFormat,
+                        allowInput: true,
+                        disableMobile: true
+                    });
+                }
+            }
+            else {
+
+                console.error(
+                    "Flatpickr could not be loaded. Check the flatpickr.js file path.");
+            }
         });
     </script>
 }

@@ -1,100 +1,322 @@
 @model GBBassetManagementSystem.Entity.Entities.AssetAssignment
 
 @using GBBassetManagementSystem.Entity.Enums
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<GBBassetManagementSystem.Web.SharedResource> Localizer
 
 @{
-    ViewData["Title"] = "Assignment Details";
+    ViewData["Title"] = Localizer["AssignmentDetails"];
+
+    var assignedTo =
+        Model.AssignmentType == AssignmentType.Personnel
+            ? $"{Model.Personnel?.FirstName} {Model.Personnel?.LastName}"
+            : $"{Model.Room?.Name} ({Model.Room?.RoomNumber})";
+
+    var departmentName =
+        Model.Personnel?.Department?.Name
+        ?? Model.Room?.Department?.Name
+        ?? "-";
 }
 
-<h1>Assignment Details</h1>
+<div class="container-xxl flex-grow-1 container-p-y">
 
-<hr />
+    <div class="row justify-content-center">
 
-<dl class="row">
-    <dt class="col-sm-3">Asset</dt>
-    <dd class="col-sm-9">
-        @Model.Asset?.AssetCode - @Model.Asset?.Name
-    </dd>
+        <div class="col-xl-9">
 
-    <dt class="col-sm-3">Assignment Type</dt>
-    <dd class="col-sm-9">
-        @Model.AssignmentType
-    </dd>
+            <div class="card">
 
-    <dt class="col-sm-3">Assigned To</dt>
-    <dd class="col-sm-9">
-        @if (Model.AssignmentType == AssignmentType.Personnel)
-        {
-            @($"{Model.Personnel?.FirstName} {Model.Personnel?.LastName}")
-        }
-        else
-        {
-            @($"{Model.Room?.Name} ({Model.Room?.RoomNumber})")
-        }
-    </dd>
+                <div class="card-header border-bottom">
 
-    <dt class="col-sm-3">Department</dt>
-    <dd class="col-sm-9">
-        @if (Model.Personnel != null)
-        {
-            @(Model.Personnel.Department?.Name ?? "-")
-        }
-        else if (Model.Room != null)
-        {
-            @(Model.Room.Department?.Name ?? "-")
-        }
-        else
-        {
-            <span>-</span>
-        }
-    </dd>
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
 
-    <dt class="col-sm-3">Delivered By</dt>
-    <dd class="col-sm-9">
-        @Model.DeliveredBy
-    </dd>
+                        <div class="d-flex align-items-center gap-3">
 
-    <dt class="col-sm-3">Received By</dt>
-    <dd class="col-sm-9">
-        @Model.ReceivedBy
-    </dd>
+                            <div class="avatar">
+                                <span class="avatar-initial rounded bg-label-info">
+                                    <i class="icon-base ti tabler-file-description"></i>
+                                </span>
+                            </div>
 
-    <dt class="col-sm-3">Assignment Date</dt>
-    <dd class="col-sm-9">
-        @Model.AssignmentDate.ToString("dd.MM.yyyy")
-    </dd>
+                            <div>
 
-    <dt class="col-sm-3">Expected Return</dt>
-    <dd class="col-sm-9">
-        @Model.ExpectedReturnDate?.ToString("dd.MM.yyyy")
-    </dd>
+                                <h4 class="mb-1">
+                                    @Localizer["AssignmentDetails"]
+                                </h4>
 
-    <dt class="col-sm-3">Return Date</dt>
-    <dd class="col-sm-9">
-        @Model.ReturnDate?.ToString("dd.MM.yyyy")
-    </dd>
+                                <p class="text-muted mb-0">
+                                    @Localizer["AssignmentDetailsDescription"]
+                                </p>
 
-    <dt class="col-sm-3">Status</dt>
-    <dd class="col-sm-9">
-        @(Model.IsActive ? "Active" : "Returned")
-    </dd>
+                            </div>
 
-    <dt class="col-sm-3">Notes</dt>
-    <dd class="col-sm-9">
-        @Model.Notes
-    </dd>
-</dl>
+                        </div>
 
-@if (Model.IsActive)
-{
-    <a asp-action="Return"
-       asp-route-id="@Model.Id"
-       class="btn btn-success">
-        Return Asset
-    </a>
-}
+                        @if (Model.IsActive)
+                        {
+                            <span class="badge bg-label-success">
 
-<a asp-action="Index"
-   class="btn btn-secondary">
-    Back
-</a>
+                                <i class="icon-base ti tabler-circle-check me-1"></i>
+                                @Localizer["Active"]
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-label-secondary">
+
+                                <i class="icon-base ti tabler-arrow-back-up me-1"></i>
+                                @Localizer["Returned"]
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+                <div class="card-body pt-4">
+
+                    <div class="row g-4">
+
+                        <div class="col-md-6">
+
+                            <div class="border rounded p-3 h-100">
+
+                                <small class="text-muted d-block mb-1">
+                                    @Localizer["Asset"]
+                                </small>
+
+                                <div class="d-flex align-items-center gap-3">
+
+                                    <div class="avatar avatar-sm">
+                                        <span class="avatar-initial rounded bg-label-primary">
+                                            <i class="icon-base ti tabler-device-desktop"></i>
+                                        </span>
+                                    </div>
+
+                                    <div>
+
+                                        <div class="fw-medium">
+                                            @Model.Asset?.Name
+                                        </div>
+
+                                        <small class="text-muted">
+                                            @Model.Asset?.AssetCode
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="border rounded p-3 h-100">
+
+                                <small class="text-muted d-block mb-1">
+                                    @Localizer["AssignmentType"]
+                                </small>
+
+                                @if (Model.AssignmentType == AssignmentType.Personnel)
+                                {
+                                    <span class="badge bg-label-info">
+
+                                        <i class="icon-base ti tabler-user me-1"></i>
+                                        @Localizer["Personnel"]
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-label-warning">
+
+                                        <i class="icon-base ti tabler-door me-1"></i>
+                                        @Localizer["Room"]
+                                    </span>
+                                }
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="border rounded p-3 h-100">
+
+                                <small class="text-muted d-block mb-1">
+                                    @Localizer["AssignedTo"]
+                                </small>
+
+                                <span class="fw-medium">
+                                    @assignedTo
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="border rounded p-3 h-100">
+
+                                <small class="text-muted d-block mb-1">
+                                    @Localizer["Department"]
+                                </small>
+
+                                <span class="fw-medium">
+                                    @departmentName
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="border rounded p-3 h-100">
+
+                                <small class="text-muted d-block mb-1">
+                                    @Localizer["DeliveredBy"]
+                                </small>
+
+                                <span class="fw-medium">
+                                    @(string.IsNullOrWhiteSpace(Model.DeliveredBy)
+                                        ? "-"
+                                        : Model.DeliveredBy)
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="border rounded p-3 h-100">
+
+                                <small class="text-muted d-block mb-1">
+                                    @Localizer["ReceivedBy"]
+                                </small>
+
+                                <span class="fw-medium">
+                                    @(string.IsNullOrWhiteSpace(Model.ReceivedBy)
+                                        ? "-"
+                                        : Model.ReceivedBy)
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <div class="border rounded p-3 h-100">
+
+                                <small class="text-muted d-block mb-1">
+                                    @Localizer["AssignmentDate"]
+                                </small>
+
+                                <span class="fw-medium">
+                                    @Model.AssignmentDate.ToString("dd.MM.yyyy")
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <div class="border rounded p-3 h-100">
+
+                                <small class="text-muted d-block mb-1">
+                                    @Localizer["ExpectedReturn"]
+                                </small>
+
+                                <span class="fw-medium">
+
+                                    @(Model.ExpectedReturnDate.HasValue
+                                        ? Model.ExpectedReturnDate.Value.ToString("dd.MM.yyyy")
+                                        : "-")
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-4">
+
+                            <div class="border rounded p-3 h-100">
+
+                                <small class="text-muted d-block mb-1">
+                                    @Localizer["ReturnDate"]
+                                </small>
+
+                                <span class="fw-medium">
+
+                                    @(Model.ReturnDate.HasValue
+                                        ? Model.ReturnDate.Value.ToString("dd.MM.yyyy")
+                                        : "-")
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-12">
+
+                            <div class="border rounded p-3">
+
+                                <small class="text-muted d-block mb-2">
+                                    @Localizer["Notes"]
+                                </small>
+
+                                <p class="mb-0">
+
+                                    @(string.IsNullOrWhiteSpace(Model.Notes)
+                                        ? Localizer["NoNotes"].Value
+                                        : Model.Notes)
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="card-footer border-top">
+
+                    <div class="d-flex flex-wrap justify-content-end gap-2">
+
+                        <a asp-controller="AssetAssignments"
+                           asp-action="Index"
+                           class="btn btn-label-secondary">
+
+                            <i class="icon-base ti tabler-arrow-left me-1"></i>
+                            @Localizer["Back"]
+                        </a>
+
+                        @if (Model.IsActive)
+                        {
+                            <a asp-controller="AssetAssignments"
+                               asp-action="Return"
+                               asp-route-id="@Model.Id"
+                               class="btn btn-success">
+
+                                <i class="icon-base ti tabler-arrow-back-up me-1"></i>
+                                @Localizer["ReturnAsset"]
+                            </a>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

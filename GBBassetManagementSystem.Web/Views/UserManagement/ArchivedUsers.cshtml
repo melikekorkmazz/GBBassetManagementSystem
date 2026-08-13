@@ -1,0 +1,355 @@
+@model IEnumerable<GBBassetManagementSystem.Web.Models.UserListViewModel>
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<GBBassetManagementSystem.Web.SharedResource> Localizer
+
+@{
+    ViewData["Title"] = Localizer["ArchivedUsers"];
+}
+
+<div class="container-xxl flex-grow-1 container-p-y">
+
+    @if (TempData["SuccessMessage"] is string successMessage)
+    {
+        <div class="alert alert-success alert-dismissible fade show"
+             role="alert">
+
+            <i class="icon-base ti tabler-circle-check me-2"></i>
+            @successMessage
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] is string errorMessage)
+    {
+        <div class="alert alert-danger alert-dismissible fade show"
+             role="alert">
+
+            <i class="icon-base ti tabler-alert-circle me-2"></i>
+            @errorMessage
+
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close">
+            </button>
+        </div>
+    }
+
+    <div class="card">
+
+        <div class="card-header border-bottom">
+
+            <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+
+                <div class="d-flex align-items-center gap-3">
+
+                    <div class="avatar">
+                        <span class="avatar-initial rounded bg-label-primary">
+                            <i class="icon-base ti tabler-archive"></i>
+                        </span>
+                    </div>
+
+                    <div>
+                        <h4 class="mb-1">
+                            @Localizer["ArchivedUsers"]
+                        </h4>
+
+                        <p class="text-muted mb-0">
+                            @Localizer["ArchivedUsersDescription"]
+                        </p>
+                    </div>
+
+                </div>
+
+                <a asp-controller="UserManagement"
+                   asp-action="Index"
+                   class="btn btn-label-primary">
+
+                    <i class="icon-base ti tabler-arrow-left me-1"></i>
+                    @Localizer["BackToUsers"]
+                </a>
+
+            </div>
+
+        </div>
+
+        @if (Model.Any())
+        {
+            <div class="card-datatable table-responsive">
+
+                <table class="table table-hover">
+
+                    <thead class="table-light">
+                        <tr>
+                            <th>@Localizer["User"]</th>
+                            <th>@Localizer["Username"]</th>
+                            <th>@Localizer["Email"]</th>
+                            <th>@Localizer["Department"]</th>
+                            <th>@Localizer["Role"]</th>
+                            <th class="text-end">
+                                @Localizer["Actions"]
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+
+                                <td>
+                                    <div class="d-flex align-items-center gap-3">
+
+                                        <div class="avatar avatar-sm">
+                                            <span class="avatar-initial rounded-circle bg-label-secondary">
+                                                @GetInitials(user.FullName)
+                                            </span>
+                                        </div>
+
+                                        <div class="d-flex flex-column">
+
+                                            <span class="fw-medium">
+                                                @user.FullName
+                                            </span>
+
+                                            <small class="text-muted">
+                                                @Localizer["ArchivedAccount"]
+                                            </small>
+
+                                        </div>
+
+                                    </div>
+                                </td>
+
+                                <td>
+                                    @user.UserName
+                                </td>
+
+                                <td>
+                                    <a href="mailto:@user.Email"
+                                       class="text-body">
+                                        @user.Email
+                                    </a>
+                                </td>
+
+                                <td>
+                                    @user.DepartmentName
+                                </td>
+
+                                <td>
+                                    <span class="badge bg-label-primary">
+                                        @Localizer["DepartmentUser"]
+                                    </span>
+                                </td>
+
+                                <td class="text-end">
+
+                                    <button type="button"
+                                            class="btn btn-sm btn-label-success activate-user-button"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#activateUserModal"
+                                            data-user-id="@user.Id"
+                                            data-user-name="@user.FullName">
+
+                                        <i class="icon-base ti tabler-user-check me-1"></i>
+                                        @Localizer["Activate"]
+                                    </button>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="card-body">
+
+                <div class="text-center py-5">
+
+                    <div class="avatar avatar-xl mx-auto mb-4">
+                        <span class="avatar-initial rounded-circle bg-label-primary">
+                            <i class="icon-base ti tabler-archive-off fs-2"></i>
+                        </span>
+                    </div>
+
+                    <h5 class="mb-2">
+                        @Localizer["NoArchivedUsers"]
+                    </h5>
+
+                    <p class="text-muted mb-4">
+                        @Localizer["NoArchivedUsersDescription"]
+                    </p>
+
+                    <a asp-controller="UserManagement"
+                       asp-action="Index"
+                       class="btn btn-primary">
+
+                        <i class="icon-base ti tabler-users me-1"></i>
+                        @Localizer["ViewActiveUsers"]
+                    </a>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>
+
+<!-- Activate User Modal -->
+<div class="modal fade"
+     id="activateUserModal"
+     tabindex="-1"
+     aria-labelledby="activateUserModalLabel"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title"
+                    id="activateUserModalLabel">
+
+                    <i class="icon-base ti tabler-user-check text-success me-2"></i>
+                    @Localizer["ActivateUser"]
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <div class="text-center py-2">
+
+                    <div class="avatar avatar-xl mx-auto mb-4">
+                        <span class="avatar-initial rounded-circle bg-label-success">
+                            <i class="icon-base ti tabler-user-check fs-2"></i>
+                        </span>
+                    </div>
+
+                    <h5 class="mb-2">
+                        @Localizer["ActivateThisUser"]
+                    </h5>
+
+                    <p class="text-muted mb-2">
+                        @Localizer["ActivateUserDescription"]
+                    </p>
+
+                    <p class="fw-medium mb-0"
+                       id="activateUserName">
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer justify-content-center">
+
+                <button type="button"
+                        class="btn btn-label-secondary"
+                        data-bs-dismiss="modal">
+
+                    <i class="icon-base ti tabler-x me-1"></i>
+                    @Localizer["Cancel"]
+                </button>
+
+                <form asp-controller="UserManagement"
+                      asp-action="Activate"
+                      method="post"
+                      class="d-inline">
+
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden"
+                           name="id"
+                           id="activateUserId" />
+
+                    <button type="submit"
+                            class="btn btn-success">
+
+                        <i class="icon-base ti tabler-user-check me-1"></i>
+                        @Localizer["ActivateUser"]
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const activateButtons =
+                document.querySelectorAll(".activate-user-button");
+
+            const activateUserId =
+                document.getElementById("activateUserId");
+
+            const activateUserName =
+                document.getElementById("activateUserName");
+
+            activateButtons.forEach(function (button) {
+                button.addEventListener("click", function () {
+                    activateUserId.value =
+                        button.dataset.userId ?? "";
+
+                    activateUserName.textContent =
+                        button.dataset.userName ?? "";
+                });
+            });
+        });
+    </script>
+}
+
+@functions
+{
+    private static string GetInitials(string fullName)
+    {
+        if (string.IsNullOrWhiteSpace(fullName))
+        {
+            return "?";
+        }
+
+        string[] names = fullName.Split(
+            ' ',
+            StringSplitOptions.RemoveEmptyEntries);
+
+        if (names.Length == 1)
+        {
+            return names[0][0]
+                .ToString()
+                .ToUpperInvariant();
+        }
+
+        return string.Concat(
+            names[0][0],
+            names[^1][0])
+            .ToUpperInvariant();
+    }
+}

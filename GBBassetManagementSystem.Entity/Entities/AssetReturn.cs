@@ -10,8 +10,7 @@ public class AssetReturn : EntityBase
 
     public DateTime ReturnDate { get; set; } = DateTime.UtcNow;
 
-    public string ReceivedBy { get; set; } = string.Empty;
-
+     public string? ReceivedBy { get; set; }
     public string Condition { get; set; } = string.Empty;
 
     public string? DamageDescription { get; set; }

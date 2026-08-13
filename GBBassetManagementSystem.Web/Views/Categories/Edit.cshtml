@@ -1,10 +1,10 @@
 @model GBBassetManagementSystem.Entity.Entities.Category
 
 @{
-    ViewData["Title"] = "Edit Category";
+    ViewData["Title"] = Localizer["EditCategory"];
 }
 
-<h1>Edit Category</h1>
+<h1>@Localizer["EditCategory"]</h1>
 
 <hr />
 
@@ -19,9 +19,12 @@
             </div>
 
             <div class="mb-3">
-                <label asp-for="Name" class="form-label"></label>
+                <label asp-for="Name" class="form-label">
+                    @Localizer["CategoryName"]
+                </label>
 
-                <input asp-for="Name" class="form-control" />
+                <input asp-for="Name"
+                       class="form-control" />
 
                 <span asp-validation-for="Name"
                       class="text-danger">
@@ -29,35 +32,29 @@
             </div>
 
             <div class="mb-3">
-    <label asp-for="Code" class="form-label"></label>
-    <input asp-for="Code"
-           class="form-control"
-           maxlength="10"
-           style="text-transform: uppercase;" />
+                <label asp-for="Code" class="form-label">
+                    @Localizer["CategoryCode"]
+                </label>
 
-    <span asp-validation-for="Code" class="text-danger"></span>
-</div>
+                <input asp-for="Code"
+                       class="form-control"
+                       maxlength="10"
+                       style="text-transform: uppercase;" />
 
-<div class="mb-3">
-    <label asp-for="Description" class="form-label"></label>
-
-    <textarea asp-for="Description"
-              class="form-control"
-              rows="3"></textarea>
-
-    <span asp-validation-for="Description"
-          class="text-danger"></span>
-</div>
+                <span asp-validation-for="Code"
+                      class="text-danger">
+                </span>
+            </div>
 
             <div class="mb-3">
-                <label asp-for="Description"
-                       class="form-label">
+                <label asp-for="Description" class="form-label">
+                    @Localizer["Description"]
                 </label>
 
                 <textarea asp-for="Description"
                           class="form-control"
-                          rows="4">
-                </textarea>
+                          rows="3"
+                          placeholder="@Localizer["CategoryDescriptionPlaceholder"]"></textarea>
 
                 <span asp-validation-for="Description"
                       class="text-danger">
@@ -65,13 +62,20 @@
             </div>
 
             <button type="submit" class="btn btn-success">
-                Save Changes
+                @Localizer["SaveChanges"]
             </button>
 
             <a asp-action="Index"
                class="btn btn-secondary">
-                Back
+                @Localizer["Back"]
             </a>
+
         </form>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

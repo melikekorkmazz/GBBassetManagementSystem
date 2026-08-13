@@ -1,67 +1,81 @@
 @model GBBassetManagementSystem.Entity.Entities.Category
 
 @{
-    ViewData["Title"] = "Add Category";
+    ViewData["Title"] = Localizer["AddCategory"];
 }
 
-<h1>Add Category</h1>
+<h1>@Localizer["AddCategory"]</h1>
 
 <hr />
 
 <div class="row">
     <div class="col-md-6">
         <form asp-action="Create" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="mb-3">
-                <label asp-for="Name" class="form-label"></label>
-
-                <input asp-for="Name" class="form-control" />
-
-                <span asp-validation-for="Name" class="text-danger"></span>
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger">
             </div>
 
             <div class="mb-3">
-    <label asp-for="Code" class="form-label"></label>
-    <input asp-for="Code"
-           class="form-control"
-           placeholder="Example: PC, PRN, FUR"
-           maxlength="10"
-           style="text-transform: uppercase;" />
+                <label asp-for="Name" class="form-label">
+                    @Localizer["CategoryName"]
+                </label>
 
-    <span asp-validation-for="Code" class="text-danger"></span>
-</div>
+                <input asp-for="Name"
+                       class="form-control" />
 
-<div class="mb-3">
-    <label asp-for="Description" class="form-label"></label>
-
-    <textarea asp-for="Description"
-              class="form-control"
-              rows="3"
-              placeholder="Enter a short category description"></textarea>
-
-    <span asp-validation-for="Description"
-          class="text-danger"></span>
-</div>
+                <span asp-validation-for="Name"
+                      class="text-danger">
+                </span>
+            </div>
 
             <div class="mb-3">
-                <label asp-for="Description" class="form-label"></label>
+                <label asp-for="Code" class="form-label">
+                    @Localizer["CategoryCode"]
+                </label>
+
+                <input asp-for="Code"
+                       class="form-control"
+                       placeholder="@Localizer["ExampleCategoryCode"]"
+                       maxlength="10"
+                       style="text-transform: uppercase;" />
+
+                <span asp-validation-for="Code"
+                      class="text-danger">
+                </span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">
+                    @Localizer["Description"]
+                </label>
 
                 <textarea asp-for="Description"
                           class="form-control"
-                          rows="4"></textarea>
+                          rows="3"
+                          placeholder="@Localizer["CategoryDescriptionPlaceholder"]"></textarea>
 
                 <span asp-validation-for="Description"
-                      class="text-danger"></span>
+                      class="text-danger">
+                </span>
             </div>
 
-            <button type="submit" class="btn btn-success">
-                Save
+            <button type="submit"
+                    class="btn btn-success">
+                @Localizer["Save"]
             </button>
 
-            <a asp-action="Index" class="btn btn-secondary">
-                Back
+            <a asp-action="Index"
+               class="btn btn-secondary">
+                @Localizer["Back"]
             </a>
+
         </form>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
